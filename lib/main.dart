@@ -794,7 +794,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 const SizedBox(height: 7),
                 Align(alignment: AlignmentDirectional.centerEnd,
-                  child: Text(t('progress') + ': ' + progress.toString() + '%',
+                  child: Text('${t('progress')}: $progress%',
                     style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: forest))),
               ],
             ],
@@ -824,15 +824,15 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(height: 18),
               Text(t('fiveDaily'), style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w900, color: forest)),
               const SizedBox(height: 10),
-              infoTile(Icons.wb_twilight_rounded, t('fajr'), t('daily') + ': ' + dailyTarget.toString()),
+              infoTile(Icons.wb_twilight_rounded, t('fajr'), '${t('daily')}: $dailyTarget'),
               const SizedBox(height: 9),
-              infoTile(Icons.wb_sunny_outlined, t('dhuhr'), t('daily') + ': ' + dailyTarget.toString()),
+              infoTile(Icons.wb_sunny_outlined, t('dhuhr'), '${t('daily')}: $dailyTarget'),
               const SizedBox(height: 9),
-              infoTile(Icons.wb_sunny_rounded, t('asr'), t('daily') + ': ' + dailyTarget.toString()),
+              infoTile(Icons.wb_sunny_rounded, t('asr'), '${t('daily')}: $dailyTarget'),
               const SizedBox(height: 9),
-              infoTile(Icons.nights_stay_outlined, t('maghrib'), t('daily') + ': ' + dailyTarget.toString()),
+              infoTile(Icons.nights_stay_outlined, t('maghrib'), '${t('daily')}: $dailyTarget'),
               const SizedBox(height: 9),
-              infoTile(Icons.dark_mode_outlined, t('isha'), t('daily') + ': ' + dailyTarget.toString()),
+              infoTile(Icons.dark_mode_outlined, t('isha'), '${t('daily')}: $dailyTarget'),
               const SizedBox(height: 16),
             ] else if (isStats) ...[
               Row(children: [
@@ -845,7 +845,7 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(height: 16),
               infoTile(Icons.calendar_month_rounded, t('years'), years.toString()),
               const SizedBox(height: 9),
-              infoTile(Icons.flag_outlined, t('daily'), dailyTarget.toString() + ' ' + t('prayers')),
+              infoTile(Icons.flag_outlined, t('daily'), '$dailyTarget ${t('prayers')}'),
               const SizedBox(height: 16),
             ] else if (isEncouragement) ...[
               Container(
