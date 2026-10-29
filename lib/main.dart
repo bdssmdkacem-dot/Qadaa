@@ -406,7 +406,7 @@ class QadaaSceneryPainter extends CustomPainter {
       final p = Path()..moveTo(bx - 6, by)..quadraticBezierTo(bx - 2, by - 5, bx, by)..quadraticBezierTo(bx + 3, by - 5, bx + 7, by);
       canvas.drawPath(p, birds);
     }
-    final shade = Paint()..shader = LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Colors.transparent, const Color(0x22FFFFFF)]).createShader(rect);
+    final shade = Paint()..shader = const LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Colors.transparent, Color(0x22FFFFFF)]).createShader(rect);
     canvas.drawRect(rect, shade);
   }
 
