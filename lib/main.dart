@@ -219,7 +219,7 @@ class _HomePageState extends State<HomePage> {
   int years = 0;
   int legacyCompleted = 0;
   List<PrayerRecord> records = [];
-  int get completed => legacyCompleted + records.length;
+  int get completed => (legacyCompleted + records.length).clamp(0, total).toInt();
   int dailyTarget = 5;
   bool loading = true;
 
