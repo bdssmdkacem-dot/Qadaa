@@ -16,8 +16,10 @@ void main() {
       'fr' => 'Français',
       _ => 'Deutsch',
     };
-    await tester.tap(find.text(label));
+    await tester.ensureVisible(find.text(label).first);
+    await tester.tap(find.text(label).first);
     await tester.pumpAndSettle();
+    await tester.ensureVisible(find.text(button));
     await tester.tap(find.text(button));
     await tester.pumpAndSettle();
   }
