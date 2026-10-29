@@ -85,7 +85,11 @@ void main() {
     await tester.pumpWidget(const QadaaApp());
     await tester.pumpAndSettle();
 
-    await tester.ensureVisible(find.text('Log a completed prayer'));
+    await tester.scrollUntilVisible(
+      find.text('Log a completed prayer'),
+      300,
+      scrollable: find.byType(Scrollable).first,
+    );
     await tester.tap(find.text('Log a completed prayer'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Fajr'));
