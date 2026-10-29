@@ -169,4 +169,30 @@ void main() {
     expect(find.textContaining('Completed: 1'), findsOneWidget);
   });
 
+
+  testWidgets('redesigned plan screen shows all five daily prayers', (tester) async {
+    SharedPreferences.setMockInitialValues({'qadaa.language': 'en'});
+    await tester.pumpWidget(const QadaaApp());
+    await tester.pumpAndSettle();
+    await tester.tap(find.descendant(
+      of: find.byType(NavigationBar),
+      matching: find.text('Daily plan'),
+    ));
+    await tester.pumpAndSettle();
+    expect(find.text('The five daily prayers'), findsOneWidget);
+    expect(find.text('Fajr'), findsOneWidget);
+    expect(find.text('Dhuhr'), findsOneWidget);
+    expect(find.text('Asr'), findsOneWidget);
+    expect(find.text('Maghrib'), findsOneWidget);
+    expect(find.text('Isha'), findsOneWidget);
+  });
+
+  testWidgets('redesigned home contains the custom vector brand mark', (tester) async {
+    SharedPreferences.setMockInitialValues({'qadaa.language': 'ar'});
+    await tester.pumpWidget(const QadaaApp());
+    await tester.pumpAndSettle();
+    expect(find.byType(CustomPaint), findsWidgets);
+    expect(find.text('الصلوات الفائتة'), findsOneWidget);
+  });
+
 }
