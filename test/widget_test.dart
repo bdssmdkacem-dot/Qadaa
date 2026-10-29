@@ -77,4 +77,26 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Language'), findsOneWidget);
   });
+  testWidgets('logging a qadaa prayer stores its type and timestamp', (tester) async {
+    SharedPreferences.setMockInitialValues({
+      'qadaa.language': 'en',
+      'qadaa.years': 1,
+    });
+    await tester.pumpWidget(const QadaaApp());
+    await tester.pumpAndSettle();
+
+    await tester.ensureVisible(find.text('Log a completed prayer'));
+    await tester.tap(find.text('Log a completed prayer'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Fajr'));
+    await tester.pumpAndSettle();
+
+    final prefs = await SharedPreferences.getInstance();
+    final records = prefs.getString('qadaa.prayerRecords');
+    expect(records, isNotNull);
+    expect(records, contains('"prayer":"fajr"'));
+    expect(records, contains('completedAt'));
+    expect(prefs.getInt('qadaa.completed'), 1);
+  });
+
 }
