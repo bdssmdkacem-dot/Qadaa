@@ -132,7 +132,10 @@ class _LanguagePageState extends State<LanguagePage> {
                         borderRadius: BorderRadius.circular(30),
                         border: Border.all(color: gold, width: 2),
                       ),
-                      child: const Icon(Icons.mosque_rounded, color: Color(0xFFFFE8A8), size: 60),
+                      child: const Padding(
+                        padding: EdgeInsets.all(18),
+                        child: CustomPaint(painter: QadaaMarkPainter()),
+                      ),
                     ),
                     const SizedBox(height: 22),
                     Text(t('welcome'), textAlign: TextAlign.center,
