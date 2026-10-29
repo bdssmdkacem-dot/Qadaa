@@ -411,113 +411,281 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _home() => CustomScrollView(slivers: [
-    SliverToBoxAdapter(
-      child: SizedBox(
-        height: 248,
-        child: ClipRRect(
-          borderRadius: const BorderRadius.vertical(bottom: Radius.circular(28)),
-          child: Stack(fit: StackFit.expand, children: [
-            const CustomPaint(painter: SceneryPainter()),
-            Positioned(top: 8, left: 12, right: 12, child: Row(children: [
-              IconButton(onPressed: () => setState(() => tab = 4), icon: const Icon(Icons.settings_outlined, color: forest)),
-              const Spacer(),
-              IconButton(onPressed: () => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(t('notifications')))),
-                  icon: const Icon(Icons.notifications_none_rounded, color: forest)),
-            ])),
-            Positioned(left: 18, right: 18, bottom: 22, child: Row(children: [
-              Container(width: 66, height: 66, decoration: BoxDecoration(color: forest, borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: gold, width: 2)),
-                  child: const Padding(
-                    padding: EdgeInsets.all(9),
-                    child: CustomPaint(painter: QadaaMarkPainter()),
+  Widget _home() => CustomScrollView(
+    physics: const BouncingScrollPhysics(),
+    slivers: [
+      SliverToBoxAdapter(
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              colors: [Color(0xFF103F35), Color(0xFF17634E), Color(0xFF28765C)],
+            ),
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(32)),
+          ),
+          child: SafeArea(
+            bottom: false,
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Row(children: [
+                Container(
+                  width: 48, height: 48,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: .10),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: gold.withValues(alpha: .8)),
+                  ),
+                  padding: const EdgeInsets.all(8),
+                  child: const CustomPaint(painter: QadaaMarkPainter()),
+                ),
+                const SizedBox(width: 12),
+                Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text('قضاء | Qadaa', style: const TextStyle(
+                    color: Colors.white, fontSize: 21, fontWeight: FontWeight.w900,
                   )),
+                  const SizedBox(height: 3),
+                  Text(t('welcomeBack'), style: const TextStyle(
+                    color: Color(0xFFD8E9DE), fontSize: 13,
+                  )),
+                ])),
+                IconButton(
+                  tooltip: t('settings'),
+                  onPressed: () => setState(() => tab = 4),
+                  icon: const Icon(Icons.settings_outlined, color: Colors.white),
+                ),
+              ]),
+              const SizedBox(height: 24),
+              Text(t('missed'), style: const TextStyle(
+                color: Color(0xFFE7F0E8), fontSize: 14, fontWeight: FontWeight.w700,
+              )),
+              const SizedBox(height: 8),
+              Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text(_format(remaining), style: const TextStyle(
+                    color: Colors.white, fontSize: 36, height: 1.1, fontWeight: FontWeight.w900,
+                  )),
+                  const SizedBox(height: 6),
+                  Text(t('remaining'), style: const TextStyle(
+                    color: Color(0xFFD8E9DE), fontSize: 13,
+                  )),
+                  const SizedBox(height: 14),
+                  Wrap(spacing: 8, runSpacing: 8, children: [
+                    _heroPill(Icons.check_circle_outline, '${_format(completed)} ${t('completed')}'),
+                    _heroPill(Icons.flag_outlined, '${dailyTarget} ${t('daily')}'),
+                  ]),
+                ])),
+                const SizedBox(width: 14),
+                SizedBox(
+                  width: 112, height: 112,
+                  child: Stack(alignment: Alignment.center, children: [
+                    SizedBox.expand(child: CircularProgressIndicator(
+                      value: progress / 100, strokeWidth: 9,
+                      strokeCap: StrokeCap.round,
+                      backgroundColor: Colors.white.withValues(alpha: .18),
+                      valueColor: const AlwaysStoppedAnimation(Color(0xFFF0CE7C)),
+                    )),
+                    Column(mainAxisSize: MainAxisSize.min, children: [
+                      Text('$progress%', style: const TextStyle(
+                        color: Colors.white, fontSize: 25, fontWeight: FontWeight.w900,
+                      )),
+                      Text(t('progress'), style: const TextStyle(
+                        color: Color(0xFFD8E9DE), fontSize: 10,
+                      )),
+                    ]),
+                  ]),
+                ),
+              ]),
+            ]),
+          ),
+        ),
+      ),
+      SliverPadding(
+        padding: const EdgeInsets.fromLTRB(18, 20, 18, 30),
+        sliver: SliverList(delegate: SliverChildListDelegate([
+          Row(children: [
+            Expanded(child: _homeMetric(
+              t('total'), _format(total), Icons.layers_outlined, const Color(0xFFECE7D9),
+            )),
+            const SizedBox(width: 10),
+            Expanded(child: _homeMetric(
+              t('completed'), _format(completed), Icons.task_alt_rounded, const Color(0xFFE0EEE4),
+            )),
+            const SizedBox(width: 10),
+            Expanded(child: _homeMetric(
+              t('remaining'), _format(remaining), Icons.hourglass_bottom_rounded, const Color(0xFFFFEED8),
+            )),
+          ]),
+          const SizedBox(height: 22),
+          Row(children: [
+            Expanded(child: Text(t('fiveDaily'), style: const TextStyle(
+              color: forest, fontSize: 18, fontWeight: FontWeight.w900,
+            ))),
+            TextButton.icon(
+              onPressed: _logPrayer,
+              icon: const Icon(Icons.add_rounded, size: 18),
+              label: Text(t('log')),
+              style: TextButton.styleFrom(foregroundColor: green),
+            ),
+          ]),
+          const SizedBox(height: 8),
+          _prayerRow('fajr', Icons.wb_twilight_rounded, const Color(0xFFE8EDF8)),
+          _prayerRow('dhuhr', Icons.wb_sunny_outlined, const Color(0xFFFFF0D5)),
+          _prayerRow('asr', Icons.sunny_snowing, const Color(0xFFFFE8D9)),
+          _prayerRow('maghrib', Icons.wb_twilight, const Color(0xFFF1E8F6)),
+          _prayerRow('isha', Icons.nights_stay_outlined, const Color(0xFFE5EAF5)),
+          const SizedBox(height: 16),
+          Container(
+            padding: const EdgeInsets.all(18),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF5F0E3),
+              borderRadius: BorderRadius.circular(22),
+              border: Border.all(color: const Color(0xFFE8DFC9)),
+            ),
+            child: Row(children: [
+              Container(
+                width: 46, height: 46,
+                decoration: BoxDecoration(color: const Color(0xFFE8D8B2), borderRadius: BorderRadius.circular(15)),
+                child: const Icon(Icons.flag_rounded, color: forest, size: 24),
+              ),
               const SizedBox(width: 12),
               Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                const Text('قضاء | Qadaa', style: TextStyle(fontSize: 27, fontWeight: FontWeight.w900, color: forest)),
-                Text(t('subtitle'), style: const TextStyle(color: ink, fontSize: 12)),
+                Text(t('daily'), style: const TextStyle(
+                  color: forest, fontWeight: FontWeight.w900, fontSize: 15,
+                )),
+                const SizedBox(height: 4),
+                Text('$dailyTarget ${t('prayers')} · ${(remaining / dailyTarget / 365).toStringAsFixed(1)} ${t('years')}',
+                  style: const TextStyle(color: ink, fontSize: 12)),
               ])),
-            ])),
+              IconButton(
+                tooltip: t('edit'),
+                onPressed: _editPlan,
+                icon: const Icon(Icons.tune_rounded, color: forest),
+              ),
+            ]),
+          ),
+          if (years == 0) ...[
+            const SizedBox(height: 12),
+            Material(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(18),
+              child: InkWell(
+                onTap: _editEstimate,
+                borderRadius: BorderRadius.circular(18),
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Row(children: [
+                    const Icon(Icons.calculate_outlined, color: gold, size: 26),
+                    const SizedBox(width: 12),
+                    Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                      Text(t('estimate'), style: const TextStyle(color: forest, fontWeight: FontWeight.w900)),
+                      const SizedBox(height: 3),
+                      Text(t('noData'), style: const TextStyle(color: ink, fontSize: 11)),
+                    ])),
+                    const Icon(Icons.chevron_right_rounded, color: green),
+                  ]),
+                ),
+              ),
+            ),
+          ],
+          if (records.isNotEmpty) ...[
+            const SizedBox(height: 22),
+            Text(t('recentRecords'), style: const TextStyle(
+              color: forest, fontSize: 17, fontWeight: FontWeight.w900,
+            )),
+            const SizedBox(height: 8),
+            for (final record in records.take(3))
+              Container(
+                margin: const EdgeInsets.only(bottom: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
+                decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: const Color(0xFFECE9DF)),
+                ),
+                child: Row(children: [
+                  const Icon(Icons.check_circle_rounded, color: green, size: 21),
+                  const SizedBox(width: 10),
+                  Expanded(child: Text(t(record.prayer), style: const TextStyle(
+                    color: forest, fontWeight: FontWeight.w800,
+                  ))),
+                  Text(record.completedAt.toLocal().toString().substring(0, 16),
+                    style: const TextStyle(color: Colors.black54, fontSize: 10)),
+                ]),
+              ),
+          ],
+          const SizedBox(height: 10),
+          Text(t('note'), textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 11, color: Colors.black54)),
+        ])),
+      ),
+    ],
+  );
+
+  Widget _heroPill(IconData icon, String label) => Container(
+    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+    decoration: BoxDecoration(
+      color: Colors.white.withValues(alpha: .12),
+      borderRadius: BorderRadius.circular(30),
+      border: Border.all(color: Colors.white.withValues(alpha: .18)),
+    ),
+    child: Row(mainAxisSize: MainAxisSize.min, children: [
+      Icon(icon, size: 14, color: const Color(0xFFF0CE7C)),
+      const SizedBox(width: 5),
+      Text(label, style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w700)),
+    ]),
+  );
+
+  Widget _homeMetric(String label, String value, IconData icon, Color tint) => Container(
+    constraints: const BoxConstraints(minHeight: 112),
+    padding: const EdgeInsets.all(11),
+    decoration: BoxDecoration(
+      color: Colors.white, borderRadius: BorderRadius.circular(19),
+      border: Border.all(color: const Color(0xFFECE9DF)),
+      boxShadow: const [BoxShadow(color: Color(0x08000000), blurRadius: 12, offset: Offset(0, 4))],
+    ),
+    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Container(width: 32, height: 32,
+        decoration: BoxDecoration(color: tint, borderRadius: BorderRadius.circular(10)),
+        child: Icon(icon, size: 18, color: forest)),
+      const SizedBox(height: 9),
+      Text(value, maxLines: 1, overflow: TextOverflow.ellipsis,
+        style: const TextStyle(color: forest, fontSize: 17, fontWeight: FontWeight.w900)),
+      const SizedBox(height: 3),
+      Text(label, maxLines: 1, overflow: TextOverflow.ellipsis,
+        style: const TextStyle(color: Color(0xFF68756C), fontSize: 10)),
+    ]),
+  );
+
+  Widget _prayerRow(String prayer, IconData icon, Color tint) => Padding(
+    padding: const EdgeInsets.only(bottom: 8),
+    child: Material(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(17),
+      child: InkWell(
+        onTap: _logPrayer,
+        borderRadius: BorderRadius.circular(17),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 12),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(17),
+            border: Border.all(color: const Color(0xFFECE9DF)),
+          ),
+          child: Row(children: [
+            Container(width: 40, height: 40,
+              decoration: BoxDecoration(color: tint, borderRadius: BorderRadius.circular(13)),
+              child: Icon(icon, color: forest, size: 21)),
+            const SizedBox(width: 12),
+            Expanded(child: Text(t(prayer), style: const TextStyle(
+              color: forest, fontWeight: FontWeight.w800, fontSize: 14,
+            ))),
+            Text(t('log'), style: const TextStyle(color: green, fontSize: 11, fontWeight: FontWeight.w800)),
+            const SizedBox(width: 5),
+            const Icon(Icons.add_circle_outline_rounded, color: green, size: 20),
           ]),
         ),
       ),
     ),
-    SliverPadding(
-      padding: const EdgeInsets.all(16),
-      sliver: SliverList(delegate: SliverChildListDelegate([
-        Container(padding: const EdgeInsets.all(16), decoration: BoxDecoration(color: const Color(0xFFEAF0E0), borderRadius: BorderRadius.circular(20)),
-          child: Row(children: [
-            const Icon(Icons.auto_awesome_rounded, color: green, size: 28),
-            const SizedBox(width: 10),
-            Expanded(child: Text(t('verse'), style: const TextStyle(fontWeight: FontWeight.w800, color: forest))),
-            Text(t('verseRef'), style: const TextStyle(fontSize: 11, color: ink)),
-          ])),
-        const SizedBox(height: 14),
-        Container(padding: const EdgeInsets.all(16), decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(22),
-            border: Border.all(color: const Color(0xFFE9E5D9))),
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(t('missed'), style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: forest)),
-            const SizedBox(height: 14),
-            Row(children: [
-              SizedBox(width: 84, height: 84, child: Stack(alignment: Alignment.center, children: [
-                SizedBox.expand(child: CircularProgressIndicator(value: progress / 100, strokeWidth: 8, color: green,
-                    backgroundColor: const Color(0xFFE9E9DF))),
-                Text('$progress%', style: const TextStyle(fontWeight: FontWeight.w900, color: forest, fontSize: 20)),
-              ])),
-              const SizedBox(width: 12),
-              Expanded(child: Column(children: [
-                _metric(t('total'), _format(total)),
-                _metric(t('completed'), _format(completed)),
-                _metric(t('remaining'), _format(remaining)),
-              ])),
-            ]),
-            if (years == 0) Padding(padding: const EdgeInsets.only(top: 8), child: Text(t('noData'), style: const TextStyle(color: ink, fontSize: 12))),
-            const SizedBox(height: 8),
-            Text('${t('years')}: $years', style: const TextStyle(color: ink, fontSize: 12)),
-          ])),
-        const SizedBox(height: 12),
-        Row(children: [
-          Expanded(child: _action(t('estimate'), Icons.calculate_rounded, const Color(0xFFFAF0DC), gold, _editEstimate)),
-          const SizedBox(width: 10),
-          Expanded(child: _action(t('plan'), Icons.event_available_rounded, const Color(0xFFDDF1E7), green, _editPlan)),
-        ]),
-        const SizedBox(height: 12),
-        Row(children: [
-          Expanded(child: _action(t('stats'), Icons.insights_rounded, const Color(0xFFECE7FA), const Color(0xFF7057C9), () => setState(() => tab = 2))),
-          const SizedBox(width: 10),
-          Expanded(child: _action(t('encouragement'), Icons.volunteer_activism_rounded, const Color(0xFFE1F1F8), const Color(0xFF258DB1), () => setState(() => tab = 3))),
-        ]),
-        const SizedBox(height: 14),
-        Container(padding: const EdgeInsets.all(18), decoration: BoxDecoration(
-            gradient: const LinearGradient(colors: [forest, Color(0xFF247D63)]), borderRadius: BorderRadius.circular(22)),
-          child: Row(children: [
-            const Icon(Icons.spa_rounded, color: Color(0xFFE5C77B), size: 34),
-            const SizedBox(width: 12),
-            Expanded(child: Text(t('motivation'), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800))),
-          ])),
-        const SizedBox(height: 12),
-        OutlinedButton.icon(onPressed: _logPrayer, icon: const Icon(Icons.check_circle_outline), label: Text(t('log')),
-            style: OutlinedButton.styleFrom(foregroundColor: forest, padding: const EdgeInsets.all(14))),
-        if (records.isNotEmpty) ...[
-          const SizedBox(height: 14),
-          Text(t('recentRecords'), style: const TextStyle(
-            fontSize: 16, fontWeight: FontWeight.w900, color: forest,
-          )),
-          const SizedBox(height: 6),
-          for (final record in records.take(3))
-            ListTile(
-              contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-              leading: const Icon(Icons.check_circle, color: green),
-              title: Text(t(record.prayer)),
-              subtitle: Text(record.completedAt.toLocal().toString().substring(0, 16)),
-              dense: true,
-            ),
-        ],
-        const SizedBox(height: 8),
-        Text(t('note'), textAlign: TextAlign.center, style: const TextStyle(fontSize: 11, color: Colors.black54)),
-      ])),
-    ),
-  ]);
+  );
 
   String _format(int number) => number.toString().replaceAllMapped(RegExp(r'\B(?=(\d{3})+(?!\d))'), (_) => ',');
 
