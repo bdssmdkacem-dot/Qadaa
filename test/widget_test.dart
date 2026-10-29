@@ -187,6 +187,30 @@ void main() {
     }
   });
 
+
+  testWidgets('home dashboard exposes five prayer shortcuts and records from a shortcut', (tester) async {
+    SharedPreferences.setMockInitialValues({
+      'qadaa.language': 'en',
+      'qadaa.years': 1,
+    });
+    await tester.pumpWidget(const QadaaApp());
+    await tester.pumpAndSettle();
+
+    for (final prayer in ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha']) {
+      expect(find.text(prayer), findsWidgets);
+    }
+
+    await tester.tap(find.text('Fajr').first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Fajr').last);
+    await tester.pumpAndSettle();
+
+    final prefs = await SharedPreferences.getInstance();
+    expect(prefs.getString('qadaa.prayerRecords'), contains('"prayer":"fajr"'));
+    expect(prefs.getInt('qadaa.completed'), 1);
+  });
+
+
   testWidgets('redesigned home contains the custom vector brand mark', (tester) async {
     SharedPreferences.setMockInitialValues({'qadaa.language': 'ar'});
     await tester.pumpWidget(const QadaaApp());
