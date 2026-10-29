@@ -411,7 +411,7 @@ class _HomePageState extends State<HomePage> {
   Widget _home() => CustomScrollView(slivers: [
     SliverToBoxAdapter(
       child: SizedBox(
-        height: 230,
+        height: 248,
         child: ClipRRect(
           borderRadius: const BorderRadius.vertical(bottom: Radius.circular(28)),
           child: Stack(fit: StackFit.expand, children: [
@@ -425,7 +425,10 @@ class _HomePageState extends State<HomePage> {
             Positioned(left: 18, right: 18, bottom: 22, child: Row(children: [
               Container(width: 66, height: 66, decoration: BoxDecoration(color: forest, borderRadius: BorderRadius.circular(20),
                   border: Border.all(color: gold, width: 2)),
-                  child: const Icon(Icons.mosque_rounded, color: Color(0xFFFFE8A8), size: 42)),
+                  child: const Padding(
+                    padding: EdgeInsets.all(9),
+                    child: CustomPaint(painter: QadaaMarkPainter()),
+                  )),
               const SizedBox(width: 12),
               Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 const Text('قضاء | Qadaa', style: TextStyle(fontSize: 27, fontWeight: FontWeight.w900, color: forest)),
@@ -736,6 +739,39 @@ class _HomePageState extends State<HomePage> {
         style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: forest)),
     ]),
   );
+}
+
+class QadaaMarkPainter extends CustomPainter {
+  const QadaaMarkPainter();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final goldPaint = Paint()..color = const Color(0xFFFFE8A8)..style = PaintingStyle.stroke..strokeWidth = 2.2..strokeCap = StrokeCap.round..strokeJoin = StrokeJoin.round;
+    final fillPaint = Paint()..color = const Color(0xFFFFE8A8);
+    final arch = Path()
+      ..moveTo(size.width * .16, size.height * .86)
+      ..lineTo(size.width * .16, size.height * .39)
+      ..quadraticBezierTo(size.width * .5, -size.height * .08, size.width * .84, size.height * .39)
+      ..lineTo(size.width * .84, size.height * .86);
+    canvas.drawPath(arch, goldPaint);
+    canvas.drawLine(Offset(size.width * .08, size.height * .87), Offset(size.width * .92, size.height * .87), goldPaint);
+    final dome = Path()
+      ..moveTo(size.width * .29, size.height * .57)
+      ..quadraticBezierTo(size.width * .5, size.height * .28, size.width * .71, size.height * .57)
+      ..lineTo(size.width * .71, size.height * .78)
+      ..lineTo(size.width * .29, size.height * .78)
+      ..close();
+    canvas.drawPath(dome, fillPaint);
+    canvas.drawRect(Rect.fromLTWH(size.width * .46, size.height * .62, size.width * .08, size.height * .16),
+        Paint()..color = forest);
+    canvas.drawLine(Offset(size.width * .5, size.height * .29), Offset(size.width * .5, size.height * .17), goldPaint);
+    canvas.drawCircle(Offset(size.width * .5, size.height * .14), size.width * .045, fillPaint);
+    canvas.drawArc(Rect.fromCircle(center: Offset(size.width * .55, size.height * .13), radius: size.width * .065),
+        .7, 4.9, false, Paint()..color = forest..style = PaintingStyle.stroke..strokeWidth = 2.5);
+  }
+
+  @override
+  bool shouldRepaint(covariant QadaaMarkPainter oldDelegate) => false;
 }
 
 class SceneryPainter extends CustomPainter {
