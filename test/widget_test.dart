@@ -123,4 +123,37 @@ void main() {
     expect(prefs.getInt('qadaa.completed'), 1);
   });
 
+  testWidgets('prayer record survives closing and reopening the app', (tester) async {
+    SharedPreferences.setMockInitialValues({
+      'qadaa.language': 'en',
+      'qadaa.years': 1,
+    });
+    await tester.pumpWidget(const QadaaApp());
+    await tester.pumpAndSettle();
+
+    await tester.scrollUntilVisible(
+      find.text('Log a completed prayer'),
+      300,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.tap(find.text('Log a completed prayer'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Dhuhr'));
+    await tester.pumpAndSettle();
+
+    // Dispose the whole widget tree, then start a fresh app against the same
+    // persisted SharedPreferences store to model a relaunch.
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pumpAndSettle();
+    await tester.pumpWidget(const QadaaApp());
+    await tester.pumpAndSettle();
+
+    expect(find.text('Recent prayer records'), findsOneWidget);
+    expect(find.text('Dhuhr'), findsOneWidget);
+    expect(find.text('Completed'), findsOneWidget);
+    expect(find.text('1'), findsWidgets);
+    final prefs = await SharedPreferences.getInstance();
+    expect(prefs.getString('qadaa.prayerRecords'), contains('"prayer":"dhuhr"'));
+  });
+
 }
