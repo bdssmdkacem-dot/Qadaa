@@ -155,10 +155,15 @@ void main() {
     );
     expect(find.text('Recent prayer records'), findsOneWidget);
     expect(find.text('Dhuhr'), findsOneWidget);
-    expect(find.text('Completed'), findsOneWidget);
-    expect(find.text('1'), findsWidgets);
     final prefs = await SharedPreferences.getInstance();
     expect(prefs.getString('qadaa.prayerRecords'), contains('"prayer":"dhuhr"'));
+    expect(prefs.getInt('qadaa.completed'), 1);
+
+    // Verify the aggregate survives relaunch on the statistics screen. The
+    // home-page metric is above the recent-record section and may be offscreen.
+    await tester.tap(find.text('Statistics'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('Completed: 1'), findsOneWidget);
   });
 
 }
