@@ -219,7 +219,7 @@ class _HomePageState extends State<HomePage> {
   int years = 0;
   int legacyCompleted = 0;
   List<PrayerRecord> records = [];
-  int get completed => (legacyCompleted + records.length).clamp(0, total).toInt();
+  int get completed => legacyCompleted + records.length;
   int dailyTarget = 5;
   bool loading = true;
 
@@ -338,7 +338,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _logPrayer() async {
-    if (remaining <= 0) return;
+    // Prayer history is factual data and must remain recordable even before
+    // the user enters an estimated backlog total.
     final prayer = await showModalBottomSheet<String>(
       context: context,
       backgroundColor: cream,
