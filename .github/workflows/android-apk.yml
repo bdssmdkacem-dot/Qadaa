@@ -25,6 +25,7 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
+      - run: flutter create --platforms=android --project-name qadaa --org com.qadaa .
       - run: flutter pub get
       - run: flutter analyze
       - run: flutter test
