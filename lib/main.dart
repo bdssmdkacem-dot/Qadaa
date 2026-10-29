@@ -334,7 +334,7 @@ class _HomeShellState extends State<HomeShell> {
         Text(title, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 14, color: ink)),
         const SizedBox(height: 7),
         Text(description, style: const TextStyle(fontSize: 11, height: 1.55, color: ink)),
-        const Spacer(),
+        const SizedBox(height: 8),
         Align(alignment: Alignment.bottomLeft, child: Icon(Icons.arrow_back_rounded, color: accent)),
       ]),
     )),
