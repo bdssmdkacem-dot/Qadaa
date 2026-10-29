@@ -537,20 +537,204 @@ class _HomePageState extends State<HomePage> {
     )),
   );
 
-  Widget _simple(String title, IconData icon, String heading, String value, String body, VoidCallback action) => Center(
-    child: SingleChildScrollView(padding: const EdgeInsets.all(24), child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      CircleAvatar(radius: 44, backgroundColor: const Color(0xFFE4EFE5), child: Icon(icon, color: forest, size: 44)),
-      const SizedBox(height: 20),
-      Text(title, textAlign: TextAlign.center, style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w900, color: forest)),
-      const SizedBox(height: 16),
-      Text(heading, textAlign: TextAlign.center, style: const TextStyle(color: ink)),
-      const SizedBox(height: 8),
-      Text(value, textAlign: TextAlign.center, style: const TextStyle(fontSize: 21, fontWeight: FontWeight.w900, color: green)),
-      const SizedBox(height: 10),
-      Text(body, textAlign: TextAlign.center, style: const TextStyle(height: 1.6, color: ink)),
-      const SizedBox(height: 22),
-      FilledButton(onPressed: action, style: FilledButton.styleFrom(backgroundColor: forest), child: Text(t('edit'))),
-    ])),
+  Widget _simple(String title, IconData icon, String heading, String value, String body, VoidCallback action) {
+    final isStats = title == t('stats');
+    final isPlan = title == t('plan');
+    final isEncouragement = title == t('encouragement');
+    final isSettings = title == t('settings');
+    final accent = isStats
+        ? const Color(0xFF6D5CC6)
+        : isEncouragement
+            ? const Color(0xFFB77A28)
+            : forest;
+
+    Widget infoTile(IconData leading, String label, String detail) => Container(
+      padding: const EdgeInsets.all(15),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: const Color(0xFFE9E5D9)),
+      ),
+      child: Row(children: [
+        Container(
+          width: 42, height: 42,
+          decoration: BoxDecoration(color: const Color(0xFFEAF2E9), borderRadius: BorderRadius.circular(13)),
+          child: Icon(leading, color: forest, size: 22),
+        ),
+        const SizedBox(width: 12),
+        Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(label, style: const TextStyle(fontSize: 13, color: Color(0xFF68756C))),
+          const SizedBox(height: 4),
+          Text(detail, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: forest)),
+        ])),
+        const Icon(Icons.chevron_right_rounded, color: Color(0xFF9AA69B)),
+      ]),
+    );
+
+    return Scaffold(
+      backgroundColor: cream,
+      body: CustomScrollView(slivers: [
+        SliverToBoxAdapter(child: Container(
+          padding: const EdgeInsets.fromLTRB(22, 20, 22, 26),
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topRight, end: Alignment.bottomLeft,
+              colors: [Color(0xFFE9F0E2), Color(0xFFFFF9E9), Color(0xFFF4E5C8)],
+            ),
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(30)),
+          ),
+          child: SafeArea(bottom: false, child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(children: [
+                Container(
+                  width: 52, height: 52,
+                  decoration: BoxDecoration(
+                    color: forest, borderRadius: BorderRadius.circular(17),
+                    border: Border.all(color: gold, width: 1.5),
+                    boxShadow: const [BoxShadow(color: Color(0x1F173E34), blurRadius: 12, offset: Offset(0, 5))],
+                  ),
+                  child: Icon(icon, color: const Color(0xFFFFE8A8), size: 27),
+                ),
+                const SizedBox(width: 13),
+                Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text(title, style: const TextStyle(fontSize: 24, height: 1.2, fontWeight: FontWeight.w900, color: forest)),
+                  const SizedBox(height: 4),
+                  Text(t('subtitle'), style: const TextStyle(fontSize: 12, color: ink)),
+                ])),
+              ]),
+              const SizedBox(height: 24),
+              Text(heading, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: ink)),
+              const SizedBox(height: 7),
+              Text(value, style: TextStyle(fontSize: isStats ? 32 : 25, height: 1.25, fontWeight: FontWeight.w900, color: accent)),
+              const SizedBox(height: 9),
+              Text(body, style: const TextStyle(fontSize: 13, height: 1.6, color: ink)),
+              if (isStats) ...[
+                const SizedBox(height: 18),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: LinearProgressIndicator(
+                    value: progress / 100, minHeight: 9,
+                    backgroundColor: const Color(0xFFD9E2D5), color: green,
+                  ),
+                ),
+                const SizedBox(height: 7),
+                Align(alignment: AlignmentDirectional.centerEnd,
+                  child: Text(t('progress') + ': ' + progress.toString() + '%',
+                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: forest))),
+              ],
+            ],
+          )),
+        )),
+        SliverPadding(
+          padding: const EdgeInsets.fromLTRB(18, 20, 18, 28),
+          sliver: SliverList(delegate: SliverChildListDelegate([
+            if (isPlan) ...[
+              Container(
+                padding: const EdgeInsets.all(18),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(colors: [forest, Color(0xFF26745D)]),
+                  borderRadius: BorderRadius.circular(22),
+                ),
+                child: Row(children: [
+                  const Icon(Icons.flag_rounded, color: Color(0xFFFFE2A0), size: 30),
+                  const SizedBox(width: 13),
+                  Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    Text(t('daily'), style: const TextStyle(color: Colors.white70, fontSize: 13)),
+                    const SizedBox(height: 5),
+                    Text(value, style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w900)),
+                  ])),
+                  const Icon(Icons.edit_calendar_rounded, color: Color(0xFFFFE2A0), size: 26),
+                ]),
+              ),
+              const SizedBox(height: 18),
+              Text(t('fiveDaily'), style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w900, color: forest)),
+              const SizedBox(height: 10),
+              infoTile(Icons.wb_twilight_rounded, t('fajr'), t('daily') + ': ' + dailyTarget.toString()),
+              const SizedBox(height: 9),
+              infoTile(Icons.wb_sunny_outlined, t('dhuhr'), t('daily') + ': ' + dailyTarget.toString()),
+              const SizedBox(height: 9),
+              infoTile(Icons.sunny_snowing, t('asr'), t('daily') + ': ' + dailyTarget.toString()),
+              const SizedBox(height: 9),
+              infoTile(Icons.nights_stay_outlined, t('maghrib'), t('daily') + ': ' + dailyTarget.toString()),
+              const SizedBox(height: 9),
+              infoTile(Icons.dark_mode_outlined, t('isha'), t('daily') + ': ' + dailyTarget.toString()),
+              const SizedBox(height: 16),
+            ] else if (isStats) ...[
+              Row(children: [
+                Expanded(child: _summaryMetric(t('completed'), _format(completed), Icons.check_circle_outline, const Color(0xFFE0F1E5))),
+                const SizedBox(width: 10),
+                Expanded(child: _summaryMetric(t('remaining'), _format(remaining), Icons.hourglass_bottom_rounded, const Color(0xFFFFEED4))),
+              ]),
+              const SizedBox(height: 12),
+              _summaryMetric(t('total'), _format(total), Icons.format_list_numbered_rounded, const Color(0xFFE8E5F7)),
+              const SizedBox(height: 16),
+              infoTile(Icons.calendar_month_rounded, t('years'), years.toString()),
+              const SizedBox(height: 9),
+              infoTile(Icons.flag_outlined, t('daily'), dailyTarget.toString() + ' ' + t('prayers')),
+              const SizedBox(height: 16),
+            ] else if (isEncouragement) ...[
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(22),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFEAF1E4),
+                  borderRadius: BorderRadius.circular(22),
+                  border: Border.all(color: const Color(0xFFD7E4D2)),
+                ),
+                child: Column(children: [
+                  const Icon(Icons.auto_awesome_rounded, color: gold, size: 34),
+                  const SizedBox(height: 14),
+                  Text(t('verse'), textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 20, height: 1.8, fontWeight: FontWeight.w900, color: forest)),
+                  const SizedBox(height: 8),
+                  Text(t('verseRef'), style: const TextStyle(color: ink, fontWeight: FontWeight.w700)),
+                ]),
+              ),
+              const SizedBox(height: 14),
+              infoTile(Icons.spa_rounded, t('motivation'), t('subtitle')),
+              const SizedBox(height: 16),
+            ] else if (isSettings) ...[
+              infoTile(Icons.translate_rounded, t('language'), value),
+              const SizedBox(height: 9),
+              infoTile(Icons.shield_outlined, t('note'), t('intro')),
+              const SizedBox(height: 16),
+            ] else ...[
+              infoTile(icon, heading, value),
+              const SizedBox(height: 16),
+            ],
+            SizedBox(
+              width: double.infinity, height: 54,
+              child: FilledButton.icon(
+                onPressed: action,
+                icon: Icon(isSettings ? Icons.translate_rounded : isPlan ? Icons.tune_rounded : isStats ? Icons.edit_note_rounded : Icons.arrow_forward_rounded),
+                label: Text(isSettings ? t('language') : isPlan ? t('edit') : isStats ? t('estimate') : isEncouragement ? t('home') : t('edit')),
+                style: FilledButton.styleFrom(
+                  backgroundColor: forest, foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(17)),
+                  textStyle: const TextStyle(fontWeight: FontWeight.w800, fontSize: 15),
+                ),
+              ),
+            ),
+          ])),
+        ),
+      ]),
+    );
+  }
+
+  Widget _summaryMetric(String label, String value, IconData icon, Color tint) => Container(
+    padding: const EdgeInsets.all(15),
+    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20),
+      border: Border.all(color: const Color(0xFFE9E5D9))),
+    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Container(width: 38, height: 38, decoration: BoxDecoration(color: tint, borderRadius: BorderRadius.circular(12)),
+        child: Icon(icon, color: forest, size: 21)),
+      const SizedBox(height: 12),
+      Text(label, style: const TextStyle(fontSize: 12, color: Color(0xFF68756C))),
+      const SizedBox(height: 5),
+      Text(value, maxLines: 1, overflow: TextOverflow.ellipsis,
+        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: forest)),
+    ]),
   );
 }
 
