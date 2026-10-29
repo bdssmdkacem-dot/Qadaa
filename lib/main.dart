@@ -654,7 +654,7 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(height: 9),
               infoTile(Icons.wb_sunny_outlined, t('dhuhr'), t('daily') + ': ' + dailyTarget.toString()),
               const SizedBox(height: 9),
-              infoTile(Icons.sunny_snowing, t('asr'), t('daily') + ': ' + dailyTarget.toString()),
+              infoTile(Icons.wb_sunny_rounded, t('asr'), t('daily') + ': ' + dailyTarget.toString()),
               const SizedBox(height: 9),
               infoTile(Icons.nights_stay_outlined, t('maghrib'), t('daily') + ': ' + dailyTarget.toString()),
               const SizedBox(height: 9),
