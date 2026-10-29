@@ -342,12 +342,13 @@ class _HomePageState extends State<HomePage> {
     final prayer = await showModalBottomSheet<String>(
       context: context,
       backgroundColor: cream,
+      isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
       ),
       builder: (ctx) => SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -358,6 +359,8 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(height: 12),
               for (final id in const ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'])
                 ListTile(
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 4),
+                  visualDensity: VisualDensity.compact,
                   leading: const Icon(Icons.check_circle_outline, color: green),
                   title: Text(t(id)),
                   onTap: () => Navigator.pop(ctx, id),
