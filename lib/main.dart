@@ -790,9 +790,9 @@ class SceneryPainter extends CustomPainter {
     final sunCenter = Offset(size.width * .72, size.height * .30);
     canvas.drawCircle(sunCenter, size.height * .19, Paint()
       ..shader = RadialGradient(colors: [
-        const Color(0xFFFFF5C9).withOpacity(.88),
-        const Color(0xFFFFF5C9).withOpacity(.28),
-        const Color(0xFFFFF5C9).withOpacity(0),
+        const Color(0xFFFFF5C9).withValues(alpha: .88),
+        const Color(0xFFFFF5C9).withValues(alpha: .28),
+        const Color(0xFFFFF5C9).withValues(alpha: 0),
       ]).createShader(Rect.fromCircle(center: sunCenter, radius: size.height * .19)));
     canvas.drawCircle(sunCenter, size.height * .065, Paint()..color = const Color(0xFFFFF4C7));
 
@@ -895,7 +895,7 @@ class SceneryPainter extends CustomPainter {
     }
 
     // Fine geometric corner ornament; subtle enough to keep text legible.
-    final ornament = Paint()..color = const Color(0xFFB68C43).withOpacity(.25)..style = PaintingStyle.stroke..strokeWidth = 1;
+    final ornament = Paint()..color = const Color(0xFFB68C43).withValues(alpha: .25)..style = PaintingStyle.stroke..strokeWidth = 1;
     for (int i = 0; i < 6; i++) {
       final d = 13.0 + i * 12;
       final path = Path()
