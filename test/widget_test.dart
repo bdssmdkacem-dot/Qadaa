@@ -103,4 +103,24 @@ void main() {
     expect(prefs.getInt('qadaa.completed'), 1);
   });
 
+  testWidgets('prayer history can be recorded before estimating missed prayers', (tester) async {
+    SharedPreferences.setMockInitialValues({'qadaa.language': 'en'});
+    await tester.pumpWidget(const QadaaApp());
+    await tester.pumpAndSettle();
+
+    await tester.scrollUntilVisible(
+      find.text('Log a completed prayer'),
+      300,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.tap(find.text('Log a completed prayer'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Isha'));
+    await tester.pumpAndSettle();
+
+    final prefs = await SharedPreferences.getInstance();
+    expect(prefs.getString('qadaa.prayerRecords'), contains('"prayer":"isha"'));
+    expect(prefs.getInt('qadaa.completed'), 1);
+  });
+
 }
