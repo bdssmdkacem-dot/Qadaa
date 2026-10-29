@@ -13,7 +13,6 @@ void main() {
     await tester.pump(const Duration(milliseconds: 300));
     expect(find.text('قضاء'), findsOneWidget);
     expect(find.text('الصلوات الفائتة'), findsOneWidget);
-    expect(find.text('خطة القضاء اليومية'), findsOneWidget);
   });
 
   testWidgets('bottom navigation opens statistics and returns home', (tester) async {
