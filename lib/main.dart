@@ -708,7 +708,7 @@ class _HomePageState extends State<HomePage> {
               child: FilledButton.icon(
                 onPressed: action,
                 icon: Icon(isSettings ? Icons.translate_rounded : isPlan ? Icons.tune_rounded : isStats ? Icons.edit_note_rounded : Icons.arrow_forward_rounded),
-                label: Text(isSettings ? t('language') : isPlan ? t('edit') : isStats ? t('estimate') : isEncouragement ? t('home') : t('edit')),
+                label: Text(isSettings ? t('edit') : isPlan ? t('edit') : isStats ? t('estimate') : isEncouragement ? t('home') : t('edit')),
                 style: FilledButton.styleFrom(
                   backgroundColor: forest, foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(17)),
