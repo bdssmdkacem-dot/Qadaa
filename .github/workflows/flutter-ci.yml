@@ -35,6 +35,12 @@ jobs:
       - name: Flutter version
         run: flutter --version
 
+      - name: Generate modern Android platform scaffold
+        run: flutter create --platforms=android --project-name qadaa --org com.qadaa .
+
+      - name: Apply Qadaa launcher icon
+        run: sed -i 's#android:icon="@mipmap/ic_launcher"#android:icon="@drawable/qadaa_icon"#' android/app/src/main/AndroidManifest.xml
+
       - name: Resolve dependencies
         run: flutter pub get
 
