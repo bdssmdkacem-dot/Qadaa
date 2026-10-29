@@ -148,6 +148,11 @@ void main() {
     await tester.pumpWidget(const QadaaApp());
     await tester.pumpAndSettle();
 
+    await tester.scrollUntilVisible(
+      find.text('Recent prayer records'),
+      300,
+      scrollable: find.byType(Scrollable).first,
+    );
     expect(find.text('Recent prayer records'), findsOneWidget);
     expect(find.text('Dhuhr'), findsOneWidget);
     expect(find.text('Completed'), findsOneWidget);
