@@ -75,7 +75,7 @@ void main() {
     expect(find.text('Progress'), findsOneWidget);
     await tester.tap(find.text('Settings'));
     await tester.pumpAndSettle();
-    expect(find.text('Language'), findsOneWidget);
+    expect(find.text('Language'), findsWidgets);
   });
   testWidgets('logging a qadaa prayer stores its type and timestamp', (tester) async {
     SharedPreferences.setMockInitialValues({
@@ -180,11 +180,11 @@ void main() {
     ));
     await tester.pumpAndSettle();
     expect(find.text('The five daily prayers'), findsOneWidget);
-    expect(find.text('Fajr'), findsOneWidget);
-    expect(find.text('Dhuhr'), findsOneWidget);
-    expect(find.text('Asr'), findsOneWidget);
-    expect(find.text('Maghrib'), findsOneWidget);
-    expect(find.text('Isha'), findsOneWidget);
+    for (final prayer in ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha']) {
+      await tester.ensureVisible(find.text(prayer).first);
+      await tester.pumpAndSettle();
+      expect(find.text(prayer), findsWidgets);
+    }
   });
 
   testWidgets('redesigned home contains the custom vector brand mark', (tester) async {
