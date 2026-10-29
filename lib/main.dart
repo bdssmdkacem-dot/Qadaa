@@ -380,7 +380,8 @@ class QadaaSceneryPainter extends CustomPainter {
       for (final point in points) {
         path.lineTo(point.dx * size.width, point.dy * size.height);
       }
-      path.lineTo(size.width, size.height)..close();
+      path.lineTo(size.width, size.height);
+      path.close();
       canvas.drawPath(path, Paint()..color = color);
     }
     mountain([const Offset(0,.60), const Offset(.12,.48), const Offset(.23,.56), const Offset(.39,.37), const Offset(.53,.55), const Offset(.67,.42), const Offset(.83,.59), const Offset(1,.46)], const Color(0xFFD8D7B9));
