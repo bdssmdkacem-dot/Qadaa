@@ -132,7 +132,10 @@ class _LanguagePageState extends State<LanguagePage> {
                         borderRadius: BorderRadius.circular(30),
                         border: Border.all(color: gold, width: 2),
                       ),
-                      child: const Icon(Icons.mosque_rounded, color: Color(0xFFFFE8A8), size: 60),
+                      child: const Padding(
+                        padding: EdgeInsets.all(18),
+                        child: CustomPaint(painter: QadaaMarkPainter()),
+                      ),
                     ),
                     const SizedBox(height: 22),
                     Text(t('welcome'), textAlign: TextAlign.center,
@@ -408,110 +411,281 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _home() => CustomScrollView(slivers: [
-    SliverToBoxAdapter(
-      child: SizedBox(
-        height: 230,
-        child: ClipRRect(
-          borderRadius: const BorderRadius.vertical(bottom: Radius.circular(28)),
-          child: Stack(fit: StackFit.expand, children: [
-            const CustomPaint(painter: SceneryPainter()),
-            Positioned(top: 8, left: 12, right: 12, child: Row(children: [
-              IconButton(onPressed: () => setState(() => tab = 4), icon: const Icon(Icons.settings_outlined, color: forest)),
-              const Spacer(),
-              IconButton(onPressed: () => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(t('notifications')))),
-                  icon: const Icon(Icons.notifications_none_rounded, color: forest)),
-            ])),
-            Positioned(left: 18, right: 18, bottom: 22, child: Row(children: [
-              Container(width: 66, height: 66, decoration: BoxDecoration(color: forest, borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: gold, width: 2)),
-                  child: const Icon(Icons.mosque_rounded, color: Color(0xFFFFE8A8), size: 42)),
+  Widget _home() => CustomScrollView(
+    physics: const BouncingScrollPhysics(),
+    slivers: [
+      SliverToBoxAdapter(
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              colors: [Color(0xFF103F35), Color(0xFF17634E), Color(0xFF28765C)],
+            ),
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(32)),
+          ),
+          child: SafeArea(
+            bottom: false,
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Row(children: [
+                Container(
+                  width: 48, height: 48,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: .10),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: gold.withValues(alpha: .8)),
+                  ),
+                  padding: const EdgeInsets.all(8),
+                  child: const CustomPaint(painter: QadaaMarkPainter()),
+                ),
+                const SizedBox(width: 12),
+                Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text('قضاء | Qadaa', style: const TextStyle(
+                    color: Colors.white, fontSize: 21, fontWeight: FontWeight.w900,
+                  )),
+                  const SizedBox(height: 3),
+                  Text(t('welcomeBack'), style: const TextStyle(
+                    color: Color(0xFFD8E9DE), fontSize: 13,
+                  )),
+                ])),
+                IconButton(
+                  tooltip: t('settings'),
+                  onPressed: () => setState(() => tab = 4),
+                  icon: const Icon(Icons.settings_outlined, color: Colors.white),
+                ),
+              ]),
+              const SizedBox(height: 24),
+              Text(t('missed'), style: const TextStyle(
+                color: Color(0xFFE7F0E8), fontSize: 14, fontWeight: FontWeight.w700,
+              )),
+              const SizedBox(height: 8),
+              Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text(_format(remaining), style: const TextStyle(
+                    color: Colors.white, fontSize: 36, height: 1.1, fontWeight: FontWeight.w900,
+                  )),
+                  const SizedBox(height: 6),
+                  Text(t('remaining'), style: const TextStyle(
+                    color: Color(0xFFD8E9DE), fontSize: 13,
+                  )),
+                  const SizedBox(height: 14),
+                  Wrap(spacing: 8, runSpacing: 8, children: [
+                    _heroPill(Icons.check_circle_outline, '${_format(completed)} ${t('completed')}'),
+                    _heroPill(Icons.flag_outlined, '${dailyTarget} ${t('daily')}'),
+                  ]),
+                ])),
+                const SizedBox(width: 14),
+                SizedBox(
+                  width: 112, height: 112,
+                  child: Stack(alignment: Alignment.center, children: [
+                    SizedBox.expand(child: CircularProgressIndicator(
+                      value: progress / 100, strokeWidth: 9,
+                      strokeCap: StrokeCap.round,
+                      backgroundColor: Colors.white.withValues(alpha: .18),
+                      valueColor: const AlwaysStoppedAnimation(Color(0xFFF0CE7C)),
+                    )),
+                    Column(mainAxisSize: MainAxisSize.min, children: [
+                      Text('$progress%', style: const TextStyle(
+                        color: Colors.white, fontSize: 25, fontWeight: FontWeight.w900,
+                      )),
+                      Text(t('progress'), style: const TextStyle(
+                        color: Color(0xFFD8E9DE), fontSize: 10,
+                      )),
+                    ]),
+                  ]),
+                ),
+              ]),
+            ]),
+          ),
+        ),
+      ),
+      SliverPadding(
+        padding: const EdgeInsets.fromLTRB(18, 20, 18, 30),
+        sliver: SliverList(delegate: SliverChildListDelegate([
+          Row(children: [
+            Expanded(child: _homeMetric(
+              t('total'), _format(total), Icons.layers_outlined, const Color(0xFFECE7D9),
+            )),
+            const SizedBox(width: 10),
+            Expanded(child: _homeMetric(
+              t('completed'), _format(completed), Icons.task_alt_rounded, const Color(0xFFE0EEE4),
+            )),
+            const SizedBox(width: 10),
+            Expanded(child: _homeMetric(
+              t('remaining'), _format(remaining), Icons.hourglass_bottom_rounded, const Color(0xFFFFEED8),
+            )),
+          ]),
+          const SizedBox(height: 22),
+          Row(children: [
+            Expanded(child: Text(t('fiveDaily'), style: const TextStyle(
+              color: forest, fontSize: 18, fontWeight: FontWeight.w900,
+            ))),
+            TextButton.icon(
+              onPressed: _logPrayer,
+              icon: const Icon(Icons.add_rounded, size: 18),
+              label: Text(t('log')),
+              style: TextButton.styleFrom(foregroundColor: green),
+            ),
+          ]),
+          const SizedBox(height: 8),
+          _prayerRow('fajr', Icons.wb_twilight_rounded, const Color(0xFFE8EDF8)),
+          _prayerRow('dhuhr', Icons.wb_sunny_outlined, const Color(0xFFFFF0D5)),
+          _prayerRow('asr', Icons.sunny_snowing, const Color(0xFFFFE8D9)),
+          _prayerRow('maghrib', Icons.wb_twilight, const Color(0xFFF1E8F6)),
+          _prayerRow('isha', Icons.nights_stay_outlined, const Color(0xFFE5EAF5)),
+          const SizedBox(height: 16),
+          Container(
+            padding: const EdgeInsets.all(18),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF5F0E3),
+              borderRadius: BorderRadius.circular(22),
+              border: Border.all(color: const Color(0xFFE8DFC9)),
+            ),
+            child: Row(children: [
+              Container(
+                width: 46, height: 46,
+                decoration: BoxDecoration(color: const Color(0xFFE8D8B2), borderRadius: BorderRadius.circular(15)),
+                child: const Icon(Icons.flag_rounded, color: forest, size: 24),
+              ),
               const SizedBox(width: 12),
               Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                const Text('قضاء | Qadaa', style: TextStyle(fontSize: 27, fontWeight: FontWeight.w900, color: forest)),
-                Text(t('subtitle'), style: const TextStyle(color: ink, fontSize: 12)),
+                Text(t('daily'), style: const TextStyle(
+                  color: forest, fontWeight: FontWeight.w900, fontSize: 15,
+                )),
+                const SizedBox(height: 4),
+                Text('$dailyTarget ${t('prayers')} · ${(remaining / dailyTarget / 365).toStringAsFixed(1)} ${t('years')}',
+                  style: const TextStyle(color: ink, fontSize: 12)),
               ])),
-            ])),
+              IconButton(
+                tooltip: t('edit'),
+                onPressed: _editPlan,
+                icon: const Icon(Icons.tune_rounded, color: forest),
+              ),
+            ]),
+          ),
+          if (years == 0) ...[
+            const SizedBox(height: 12),
+            Material(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(18),
+              child: InkWell(
+                onTap: _editEstimate,
+                borderRadius: BorderRadius.circular(18),
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Row(children: [
+                    const Icon(Icons.calculate_outlined, color: gold, size: 26),
+                    const SizedBox(width: 12),
+                    Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                      Text(t('estimate'), style: const TextStyle(color: forest, fontWeight: FontWeight.w900)),
+                      const SizedBox(height: 3),
+                      Text(t('noData'), style: const TextStyle(color: ink, fontSize: 11)),
+                    ])),
+                    const Icon(Icons.chevron_right_rounded, color: green),
+                  ]),
+                ),
+              ),
+            ),
+          ],
+          if (records.isNotEmpty) ...[
+            const SizedBox(height: 22),
+            Text(t('recentRecords'), style: const TextStyle(
+              color: forest, fontSize: 17, fontWeight: FontWeight.w900,
+            )),
+            const SizedBox(height: 8),
+            for (final record in records.take(3))
+              Container(
+                margin: const EdgeInsets.only(bottom: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
+                decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: const Color(0xFFECE9DF)),
+                ),
+                child: Row(children: [
+                  const Icon(Icons.check_circle_rounded, color: green, size: 21),
+                  const SizedBox(width: 10),
+                  Expanded(child: Text(t(record.prayer), style: const TextStyle(
+                    color: forest, fontWeight: FontWeight.w800,
+                  ))),
+                  Text(record.completedAt.toLocal().toString().substring(0, 16),
+                    style: const TextStyle(color: Colors.black54, fontSize: 10)),
+                ]),
+              ),
+          ],
+          const SizedBox(height: 10),
+          Text(t('note'), textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 11, color: Colors.black54)),
+        ])),
+      ),
+    ],
+  );
+
+  Widget _heroPill(IconData icon, String label) => Container(
+    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+    decoration: BoxDecoration(
+      color: Colors.white.withValues(alpha: .12),
+      borderRadius: BorderRadius.circular(30),
+      border: Border.all(color: Colors.white.withValues(alpha: .18)),
+    ),
+    child: Row(mainAxisSize: MainAxisSize.min, children: [
+      Icon(icon, size: 14, color: const Color(0xFFF0CE7C)),
+      const SizedBox(width: 5),
+      Text(label, style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w700)),
+    ]),
+  );
+
+  Widget _homeMetric(String label, String value, IconData icon, Color tint) => Container(
+    constraints: const BoxConstraints(minHeight: 112),
+    padding: const EdgeInsets.all(11),
+    decoration: BoxDecoration(
+      color: Colors.white, borderRadius: BorderRadius.circular(19),
+      border: Border.all(color: const Color(0xFFECE9DF)),
+      boxShadow: const [BoxShadow(color: Color(0x08000000), blurRadius: 12, offset: Offset(0, 4))],
+    ),
+    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Container(width: 32, height: 32,
+        decoration: BoxDecoration(color: tint, borderRadius: BorderRadius.circular(10)),
+        child: Icon(icon, size: 18, color: forest)),
+      const SizedBox(height: 9),
+      Text(value, maxLines: 1, overflow: TextOverflow.ellipsis,
+        style: const TextStyle(color: forest, fontSize: 17, fontWeight: FontWeight.w900)),
+      const SizedBox(height: 3),
+      Text(label, maxLines: 1, overflow: TextOverflow.ellipsis,
+        style: const TextStyle(color: Color(0xFF68756C), fontSize: 10)),
+    ]),
+  );
+
+  Widget _prayerRow(String prayer, IconData icon, Color tint) => Padding(
+    padding: const EdgeInsets.only(bottom: 8),
+    child: Material(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(17),
+      child: InkWell(
+        onTap: _logPrayer,
+        borderRadius: BorderRadius.circular(17),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 12),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(17),
+            border: Border.all(color: const Color(0xFFECE9DF)),
+          ),
+          child: Row(children: [
+            Container(width: 40, height: 40,
+              decoration: BoxDecoration(color: tint, borderRadius: BorderRadius.circular(13)),
+              child: Icon(icon, color: forest, size: 21)),
+            const SizedBox(width: 12),
+            Expanded(child: Text(t(prayer), style: const TextStyle(
+              color: forest, fontWeight: FontWeight.w800, fontSize: 14,
+            ))),
+            Text(t('log'), style: const TextStyle(color: green, fontSize: 11, fontWeight: FontWeight.w800)),
+            const SizedBox(width: 5),
+            const Icon(Icons.add_circle_outline_rounded, color: green, size: 20),
           ]),
         ),
       ),
     ),
-    SliverPadding(
-      padding: const EdgeInsets.all(16),
-      sliver: SliverList(delegate: SliverChildListDelegate([
-        Container(padding: const EdgeInsets.all(16), decoration: BoxDecoration(color: const Color(0xFFEAF0E0), borderRadius: BorderRadius.circular(20)),
-          child: Row(children: [
-            const Icon(Icons.auto_awesome_rounded, color: green, size: 28),
-            const SizedBox(width: 10),
-            Expanded(child: Text(t('verse'), style: const TextStyle(fontWeight: FontWeight.w800, color: forest))),
-            Text(t('verseRef'), style: const TextStyle(fontSize: 11, color: ink)),
-          ])),
-        const SizedBox(height: 14),
-        Container(padding: const EdgeInsets.all(16), decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(22),
-            border: Border.all(color: const Color(0xFFE9E5D9))),
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(t('missed'), style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: forest)),
-            const SizedBox(height: 14),
-            Row(children: [
-              SizedBox(width: 84, height: 84, child: Stack(alignment: Alignment.center, children: [
-                SizedBox.expand(child: CircularProgressIndicator(value: progress / 100, strokeWidth: 8, color: green,
-                    backgroundColor: const Color(0xFFE9E9DF))),
-                Text('$progress%', style: const TextStyle(fontWeight: FontWeight.w900, color: forest, fontSize: 20)),
-              ])),
-              const SizedBox(width: 12),
-              Expanded(child: Column(children: [
-                _metric(t('total'), _format(total)),
-                _metric(t('completed'), _format(completed)),
-                _metric(t('remaining'), _format(remaining)),
-              ])),
-            ]),
-            if (years == 0) Padding(padding: const EdgeInsets.only(top: 8), child: Text(t('noData'), style: const TextStyle(color: ink, fontSize: 12))),
-            const SizedBox(height: 8),
-            Text('${t('years')}: $years', style: const TextStyle(color: ink, fontSize: 12)),
-          ])),
-        const SizedBox(height: 12),
-        Row(children: [
-          Expanded(child: _action(t('estimate'), Icons.calculate_rounded, const Color(0xFFFAF0DC), gold, _editEstimate)),
-          const SizedBox(width: 10),
-          Expanded(child: _action(t('plan'), Icons.event_available_rounded, const Color(0xFFDDF1E7), green, _editPlan)),
-        ]),
-        const SizedBox(height: 12),
-        Row(children: [
-          Expanded(child: _action(t('stats'), Icons.insights_rounded, const Color(0xFFECE7FA), const Color(0xFF7057C9), () => setState(() => tab = 2))),
-          const SizedBox(width: 10),
-          Expanded(child: _action(t('encouragement'), Icons.volunteer_activism_rounded, const Color(0xFFE1F1F8), const Color(0xFF258DB1), () => setState(() => tab = 3))),
-        ]),
-        const SizedBox(height: 14),
-        Container(padding: const EdgeInsets.all(18), decoration: BoxDecoration(
-            gradient: const LinearGradient(colors: [forest, Color(0xFF247D63)]), borderRadius: BorderRadius.circular(22)),
-          child: Row(children: [
-            const Icon(Icons.spa_rounded, color: Color(0xFFE5C77B), size: 34),
-            const SizedBox(width: 12),
-            Expanded(child: Text(t('motivation'), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800))),
-          ])),
-        const SizedBox(height: 12),
-        OutlinedButton.icon(onPressed: _logPrayer, icon: const Icon(Icons.check_circle_outline), label: Text(t('log')),
-            style: OutlinedButton.styleFrom(foregroundColor: forest, padding: const EdgeInsets.all(14))),
-        if (records.isNotEmpty) ...[
-          const SizedBox(height: 14),
-          Text(t('recentRecords'), style: const TextStyle(
-            fontSize: 16, fontWeight: FontWeight.w900, color: forest,
-          )),
-          const SizedBox(height: 6),
-          for (final record in records.take(3))
-            ListTile(
-              contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-              leading: const Icon(Icons.check_circle, color: green),
-              title: Text(t(record.prayer)),
-              subtitle: Text(record.completedAt.toLocal().toString().substring(0, 16)),
-              dense: true,
-            ),
-        ],
-        const SizedBox(height: 8),
-        Text(t('note'), textAlign: TextAlign.center, style: const TextStyle(fontSize: 11, color: Colors.black54)),
-      ])),
-    ),
-  ]);
+  );
 
   String _format(int number) => number.toString().replaceAllMapped(RegExp(r'\B(?=(\d{3})+(?!\d))'), (_) => ',');
 
@@ -537,21 +711,238 @@ class _HomePageState extends State<HomePage> {
     )),
   );
 
-  Widget _simple(String title, IconData icon, String heading, String value, String body, VoidCallback action) => Center(
-    child: SingleChildScrollView(padding: const EdgeInsets.all(24), child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      CircleAvatar(radius: 44, backgroundColor: const Color(0xFFE4EFE5), child: Icon(icon, color: forest, size: 44)),
-      const SizedBox(height: 20),
-      Text(title, textAlign: TextAlign.center, style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w900, color: forest)),
-      const SizedBox(height: 16),
-      Text(heading, textAlign: TextAlign.center, style: const TextStyle(color: ink)),
-      const SizedBox(height: 8),
-      Text(value, textAlign: TextAlign.center, style: const TextStyle(fontSize: 21, fontWeight: FontWeight.w900, color: green)),
-      const SizedBox(height: 10),
-      Text(body, textAlign: TextAlign.center, style: const TextStyle(height: 1.6, color: ink)),
-      const SizedBox(height: 22),
-      FilledButton(onPressed: action, style: FilledButton.styleFrom(backgroundColor: forest), child: Text(t('edit'))),
-    ])),
+  Widget _simple(String title, IconData icon, String heading, String value, String body, VoidCallback action) {
+    final isStats = title == t('stats');
+    final isPlan = title == t('plan');
+    final isEncouragement = title == t('encouragement');
+    final isSettings = title == t('settings');
+    final accent = isStats
+        ? const Color(0xFF6D5CC6)
+        : isEncouragement
+            ? const Color(0xFFB77A28)
+            : forest;
+
+    Widget infoTile(IconData leading, String label, String detail) => Container(
+      padding: const EdgeInsets.all(15),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: const Color(0xFFE9E5D9)),
+      ),
+      child: Row(children: [
+        Container(
+          width: 42, height: 42,
+          decoration: BoxDecoration(color: const Color(0xFFEAF2E9), borderRadius: BorderRadius.circular(13)),
+          child: Icon(leading, color: forest, size: 22),
+        ),
+        const SizedBox(width: 12),
+        Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(label, style: const TextStyle(fontSize: 13, color: Color(0xFF68756C))),
+          const SizedBox(height: 4),
+          Text(detail, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: forest)),
+        ])),
+        const Icon(Icons.chevron_right_rounded, color: Color(0xFF9AA69B)),
+      ]),
+    );
+
+    return Scaffold(
+      backgroundColor: cream,
+      body: CustomScrollView(slivers: [
+        SliverToBoxAdapter(child: Container(
+          padding: const EdgeInsets.fromLTRB(22, 20, 22, 26),
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topRight, end: Alignment.bottomLeft,
+              colors: [Color(0xFFE9F0E2), Color(0xFFFFF9E9), Color(0xFFF4E5C8)],
+            ),
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(30)),
+          ),
+          child: SafeArea(bottom: false, child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(children: [
+                Container(
+                  width: 52, height: 52,
+                  decoration: BoxDecoration(
+                    color: forest, borderRadius: BorderRadius.circular(17),
+                    border: Border.all(color: gold, width: 1.5),
+                    boxShadow: const [BoxShadow(color: Color(0x1F173E34), blurRadius: 12, offset: Offset(0, 5))],
+                  ),
+                  child: Icon(icon, color: const Color(0xFFFFE8A8), size: 27),
+                ),
+                const SizedBox(width: 13),
+                Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text(title, style: const TextStyle(fontSize: 24, height: 1.2, fontWeight: FontWeight.w900, color: forest)),
+                  const SizedBox(height: 4),
+                  Text(t('subtitle'), style: const TextStyle(fontSize: 12, color: ink)),
+                ])),
+              ]),
+              const SizedBox(height: 24),
+              Text(heading, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: ink)),
+              const SizedBox(height: 7),
+              Text(value, style: TextStyle(fontSize: isStats ? 32 : 25, height: 1.25, fontWeight: FontWeight.w900, color: accent)),
+              const SizedBox(height: 9),
+              Text(body, style: const TextStyle(fontSize: 13, height: 1.6, color: ink)),
+              if (isStats) ...[
+                const SizedBox(height: 18),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: LinearProgressIndicator(
+                    value: progress / 100, minHeight: 9,
+                    backgroundColor: const Color(0xFFD9E2D5), color: green,
+                  ),
+                ),
+                const SizedBox(height: 7),
+                Align(alignment: AlignmentDirectional.centerEnd,
+                  child: Text('${t('progress')}: $progress%',
+                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: forest))),
+              ],
+            ],
+          )),
+        )),
+        SliverPadding(
+          padding: const EdgeInsets.fromLTRB(18, 20, 18, 28),
+          sliver: SliverList(delegate: SliverChildListDelegate([
+            if (isPlan) ...[
+              Container(
+                padding: const EdgeInsets.all(18),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(colors: [forest, Color(0xFF26745D)]),
+                  borderRadius: BorderRadius.circular(22),
+                ),
+                child: Row(children: [
+                  const Icon(Icons.flag_rounded, color: Color(0xFFFFE2A0), size: 30),
+                  const SizedBox(width: 13),
+                  Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    Text(t('daily'), style: const TextStyle(color: Colors.white70, fontSize: 13)),
+                    const SizedBox(height: 5),
+                    Text(value, style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w900)),
+                  ])),
+                  const Icon(Icons.edit_calendar_rounded, color: Color(0xFFFFE2A0), size: 26),
+                ]),
+              ),
+              const SizedBox(height: 18),
+              Text(t('fiveDaily'), style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w900, color: forest)),
+              const SizedBox(height: 10),
+              infoTile(Icons.wb_twilight_rounded, t('fajr'), '${t('daily')}: $dailyTarget'),
+              const SizedBox(height: 9),
+              infoTile(Icons.wb_sunny_outlined, t('dhuhr'), '${t('daily')}: $dailyTarget'),
+              const SizedBox(height: 9),
+              infoTile(Icons.wb_sunny_rounded, t('asr'), '${t('daily')}: $dailyTarget'),
+              const SizedBox(height: 9),
+              infoTile(Icons.nights_stay_outlined, t('maghrib'), '${t('daily')}: $dailyTarget'),
+              const SizedBox(height: 9),
+              infoTile(Icons.dark_mode_outlined, t('isha'), '${t('daily')}: $dailyTarget'),
+              const SizedBox(height: 16),
+            ] else if (isStats) ...[
+              Row(children: [
+                Expanded(child: _summaryMetric(t('completed'), _format(completed), Icons.check_circle_outline, const Color(0xFFE0F1E5))),
+                const SizedBox(width: 10),
+                Expanded(child: _summaryMetric(t('remaining'), _format(remaining), Icons.hourglass_bottom_rounded, const Color(0xFFFFEED4))),
+              ]),
+              const SizedBox(height: 12),
+              _summaryMetric(t('total'), _format(total), Icons.format_list_numbered_rounded, const Color(0xFFE8E5F7)),
+              const SizedBox(height: 16),
+              infoTile(Icons.calendar_month_rounded, t('years'), years.toString()),
+              const SizedBox(height: 9),
+              infoTile(Icons.flag_outlined, t('daily'), '$dailyTarget ${t('prayers')}'),
+              const SizedBox(height: 16),
+            ] else if (isEncouragement) ...[
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(22),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFEAF1E4),
+                  borderRadius: BorderRadius.circular(22),
+                  border: Border.all(color: const Color(0xFFD7E4D2)),
+                ),
+                child: Column(children: [
+                  const Icon(Icons.auto_awesome_rounded, color: gold, size: 34),
+                  const SizedBox(height: 14),
+                  Text(t('verse'), textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 20, height: 1.8, fontWeight: FontWeight.w900, color: forest)),
+                  const SizedBox(height: 8),
+                  Text(t('verseRef'), style: const TextStyle(color: ink, fontWeight: FontWeight.w700)),
+                ]),
+              ),
+              const SizedBox(height: 14),
+              infoTile(Icons.spa_rounded, t('motivation'), t('subtitle')),
+              const SizedBox(height: 16),
+            ] else if (isSettings) ...[
+              infoTile(Icons.translate_rounded, t('language'), value),
+              const SizedBox(height: 9),
+              infoTile(Icons.shield_outlined, t('note'), t('intro')),
+              const SizedBox(height: 16),
+            ] else ...[
+              infoTile(icon, heading, value),
+              const SizedBox(height: 16),
+            ],
+            SizedBox(
+              width: double.infinity, height: 54,
+              child: FilledButton.icon(
+                onPressed: action,
+                icon: Icon(isSettings ? Icons.translate_rounded : isPlan ? Icons.tune_rounded : isStats ? Icons.edit_note_rounded : Icons.arrow_forward_rounded),
+                label: Text(isSettings ? t('edit') : isPlan ? t('edit') : isStats ? t('estimate') : isEncouragement ? t('home') : t('edit')),
+                style: FilledButton.styleFrom(
+                  backgroundColor: forest, foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(17)),
+                  textStyle: const TextStyle(fontWeight: FontWeight.w800, fontSize: 15),
+                ),
+              ),
+            ),
+          ])),
+        ),
+      ]),
+    );
+  }
+
+  Widget _summaryMetric(String label, String value, IconData icon, Color tint) => Container(
+    padding: const EdgeInsets.all(15),
+    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20),
+      border: Border.all(color: const Color(0xFFE9E5D9))),
+    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Container(width: 38, height: 38, decoration: BoxDecoration(color: tint, borderRadius: BorderRadius.circular(12)),
+        child: Icon(icon, color: forest, size: 21)),
+      const SizedBox(height: 12),
+      Text(label, style: const TextStyle(fontSize: 12, color: Color(0xFF68756C))),
+      const SizedBox(height: 5),
+      Text(value, maxLines: 1, overflow: TextOverflow.ellipsis,
+        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: forest)),
+    ]),
   );
+}
+
+class QadaaMarkPainter extends CustomPainter {
+  const QadaaMarkPainter();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final goldPaint = Paint()..color = const Color(0xFFFFE8A8)..style = PaintingStyle.stroke..strokeWidth = 2.2..strokeCap = StrokeCap.round..strokeJoin = StrokeJoin.round;
+    final fillPaint = Paint()..color = const Color(0xFFFFE8A8);
+    final arch = Path()
+      ..moveTo(size.width * .16, size.height * .86)
+      ..lineTo(size.width * .16, size.height * .39)
+      ..quadraticBezierTo(size.width * .5, -size.height * .08, size.width * .84, size.height * .39)
+      ..lineTo(size.width * .84, size.height * .86);
+    canvas.drawPath(arch, goldPaint);
+    canvas.drawLine(Offset(size.width * .08, size.height * .87), Offset(size.width * .92, size.height * .87), goldPaint);
+    final dome = Path()
+      ..moveTo(size.width * .29, size.height * .57)
+      ..quadraticBezierTo(size.width * .5, size.height * .28, size.width * .71, size.height * .57)
+      ..lineTo(size.width * .71, size.height * .78)
+      ..lineTo(size.width * .29, size.height * .78)
+      ..close();
+    canvas.drawPath(dome, fillPaint);
+    canvas.drawRect(Rect.fromLTWH(size.width * .46, size.height * .62, size.width * .08, size.height * .16),
+        Paint()..color = forest);
+    canvas.drawLine(Offset(size.width * .5, size.height * .29), Offset(size.width * .5, size.height * .17), goldPaint);
+    canvas.drawCircle(Offset(size.width * .5, size.height * .14), size.width * .045, fillPaint);
+    canvas.drawArc(Rect.fromCircle(center: Offset(size.width * .55, size.height * .13), radius: size.width * .065),
+        .7, 4.9, false, Paint()..color = forest..style = PaintingStyle.stroke..strokeWidth = 2.5);
+  }
+
+  @override
+  bool shouldRepaint(covariant QadaaMarkPainter oldDelegate) => false;
 }
 
 class SceneryPainter extends CustomPainter {
@@ -561,13 +952,22 @@ class SceneryPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final rect = Offset.zero & size;
     canvas.drawRect(rect, Paint()..shader = const LinearGradient(
-      begin: Alignment.topCenter, end: Alignment.bottomCenter,
-      colors: [Color(0xFFF5D9A8), Color(0xFFFFF5DC), Color(0xFFD9E5D1)],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [Color(0xFFF7D9A5), Color(0xFFFFF6DF), Color(0xFFDDE8D6), Color(0xFFB8D0B8)],
+      stops: [0, .38, .72, 1],
     ).createShader(rect));
-    canvas.drawCircle(Offset(size.width * .52, size.height * .34), size.height * .11,
-        Paint()..color = const Color(0xFFFFF2BE));
 
-    void hill(List<Offset> points, Color color) {
+    final sunCenter = Offset(size.width * .72, size.height * .30);
+    canvas.drawCircle(sunCenter, size.height * .19, Paint()
+      ..shader = RadialGradient(colors: [
+        const Color(0xFFFFF5C9).withValues(alpha: .88),
+        const Color(0xFFFFF5C9).withValues(alpha: .28),
+        const Color(0xFFFFF5C9).withValues(alpha: 0),
+      ]).createShader(Rect.fromCircle(center: sunCenter, radius: size.height * .19)));
+    canvas.drawCircle(sunCenter, size.height * .065, Paint()..color = const Color(0xFFFFF4C7));
+
+    void ridge(List<Offset> points, Color color) {
       final path = Path()..moveTo(0, size.height);
       for (final point in points) {
         path.lineTo(point.dx * size.width, point.dy * size.height);
@@ -577,24 +977,106 @@ class SceneryPainter extends CustomPainter {
       canvas.drawPath(path, Paint()..color = color);
     }
 
-    hill([const Offset(0,.60), const Offset(.12,.48), const Offset(.23,.56), const Offset(.39,.37),
-      const Offset(.53,.55), const Offset(.67,.42), const Offset(.83,.59), const Offset(1,.46)], const Color(0xFFD8D7B9));
-    hill([const Offset(0,.72), const Offset(.16,.57), const Offset(.29,.67), const Offset(.47,.50),
-      const Offset(.63,.67), const Offset(.79,.54), const Offset(1,.68)], const Color(0xFF9CB7A0));
-    hill([const Offset(0,.84), const Offset(.15,.68), const Offset(.31,.78), const Offset(.49,.65),
-      const Offset(.68,.79), const Offset(.85,.65), const Offset(1,.76)], const Color(0xFF5B8B73));
+    ridge([const Offset(0,.54), const Offset(.10,.42), const Offset(.19,.48),
+      const Offset(.34,.27), const Offset(.45,.43), const Offset(.58,.34),
+      const Offset(.72,.47), const Offset(.86,.32), const Offset(1,.43)], const Color(0xFFD9D8C2));
+    ridge([const Offset(0,.67), const Offset(.14,.53), const Offset(.25,.62),
+      const Offset(.40,.43), const Offset(.54,.59), const Offset(.70,.45),
+      const Offset(.83,.62), const Offset(1,.49)], const Color(0xFFB4C8AC));
+    ridge([const Offset(0,.79), const Offset(.13,.65), const Offset(.28,.73),
+      const Offset(.42,.61), const Offset(.58,.76), const Offset(.75,.61),
+      const Offset(.89,.74), const Offset(1,.65)], const Color(0xFF789F83));
 
-    final mosque = Paint()..color = const Color(0xFF245C4A);
-    final x = size.width * .18;
-    final y = size.height * .64;
-    canvas.drawRect(Rect.fromLTWH(x, y + 20, 76, 48), mosque);
-    canvas.drawArc(Rect.fromCenter(center: Offset(x + 38, y + 20), width: 45, height: 49),
-        3.14159, 3.14159, true, mosque);
-    canvas.drawRect(Rect.fromLTWH(x - 15, y - 20, 11, 88), mosque);
-    canvas.drawRect(Rect.fromLTWH(x - 18, y - 24, 17, 6), mosque);
-    canvas.drawCircle(Offset(x - 9.5, y - 28), 3, Paint()..color = gold);
-    canvas.drawRect(Rect.fromLTWH(x + 14, y + 43, 13, 25), Paint()..color = const Color(0xFFF5E8C9));
-    canvas.drawRect(Rect.fromLTWH(x + 47, y + 43, 13, 25), Paint()..color = const Color(0xFFF5E8C9));
+    // Distant tree line gives the landscape depth without external image assets.
+    final treePaint = Paint()..color = const Color(0xFF4C8065);
+    for (int i = 0; i < 34; i++) {
+      final x = size.width * (i / 34);
+      final base = size.height * (.83 + ((i % 4) * .012));
+      final h = size.height * (.045 + ((i * 7) % 5) * .009);
+      canvas.drawCircle(Offset(x, base - h * .56), h * .55, treePaint);
+      canvas.drawRect(Rect.fromLTWH(x - 1.4, base - h * .35, 2.8, h * .42),
+          Paint()..color = const Color(0xFF386B54));
+    }
+
+    // Main mosque: layered prayer hall, dome, crescent, arches and minaret.
+    final building = Paint()..color = const Color(0xFF205C49);
+    final dark = Paint()..color = const Color(0xFF164938);
+    final stone = Paint()..color = const Color(0xFFF6E8C8);
+    final x = size.width * .19;
+    final ground = size.height * .86;
+    final hallW = size.width * .24;
+    final hallH = size.height * .18;
+    canvas.drawRect(Rect.fromLTWH(x, ground - hallH, hallW, hallH), building);
+    canvas.drawRect(Rect.fromLTWH(x - 5, ground - hallH - 4, hallW + 10, 5), dark);
+
+    final domeRect = Rect.fromCenter(
+      center: Offset(x + hallW * .52, ground - hallH - size.height * .035),
+      width: hallW * .58, height: size.height * .15,
+    );
+    canvas.drawArc(domeRect, 3.14159265, 3.14159265, true, dark);
+    canvas.drawRect(Rect.fromLTWH(domeRect.left, domeRect.center.dy, domeRect.width, size.height * .035), dark);
+    canvas.drawCircle(Offset(domeRect.center.dx, domeRect.top - 2), 2.5, Paint()..color = gold);
+
+    // Minaret with balconies and pointed cap.
+    final minX = x - size.width * .045;
+    final minW = size.width * .034;
+    final minTop = size.height * .38;
+    canvas.drawRect(Rect.fromLTWH(minX, minTop, minW, ground - minTop), dark);
+    canvas.drawRect(Rect.fromLTWH(minX - 4, minTop + size.height * .08, minW + 8, 3), Paint()..color = gold);
+    canvas.drawRect(Rect.fromLTWH(minX - 4, minTop + size.height * .16, minW + 8, 3), Paint()..color = gold);
+    final spire = Path()
+      ..moveTo(minX - 3, minTop)
+      ..lineTo(minX + minW / 2, minTop - size.height * .045)
+      ..lineTo(minX + minW + 3, minTop)
+      ..close();
+    canvas.drawPath(spire, dark);
+    canvas.drawLine(Offset(minX + minW / 2, minTop - size.height * .045),
+        Offset(minX + minW / 2, minTop - size.height * .065), Paint()..color = gold..strokeWidth = 1.5);
+
+    // Arched doors and windows.
+    for (int i = 0; i < 3; i++) {
+      final wx = x + hallW * (.17 + i * .31);
+      final wy = ground - hallH * .70;
+      final w = hallW * .16;
+      canvas.drawRRect(RRect.fromRectAndRadius(Rect.fromLTWH(wx, wy, w, hallH * .70),
+          Radius.circular(w / 2)), stone);
+      canvas.drawRect(Rect.fromLTWH(wx, wy + w / 2, w, hallH * .70 - w / 2), stone);
+    }
+
+    // Small foreground trees.
+    for (int i = 0; i < 8; i++) {
+      final tx = size.width * (.04 + i * .045);
+      final ty = size.height * (.91 - (i % 3) * .018);
+      canvas.drawCircle(Offset(tx, ty), size.height * (.025 + (i % 2) * .008),
+          Paint()..color = i.isEven ? const Color(0xFF2D6B52) : const Color(0xFF39795A));
+    }
+
+    // Birds as restrained silhouettes in the open sky.
+    final birdPaint = Paint()..color = const Color(0xFF55745F)..style = PaintingStyle.stroke..strokeWidth = 1.35..strokeCap = StrokeCap.round;
+    for (final p in const [
+      Offset(.49,.22), Offset(.55,.18), Offset(.59,.24), Offset(.64,.16), Offset(.68,.22),
+    ]) {
+      final bx = p.dx * size.width;
+      final by = p.dy * size.height;
+      final path = Path()
+        ..moveTo(bx - 5, by + 1)
+        ..quadraticBezierTo(bx - 2, by - 3, bx, by)
+        ..quadraticBezierTo(bx + 3, by - 3, bx + 6, by + 1);
+      canvas.drawPath(path, birdPaint);
+    }
+
+    // Fine geometric corner ornament; subtle enough to keep text legible.
+    final ornament = Paint()..color = const Color(0xFFB68C43).withValues(alpha: .25)..style = PaintingStyle.stroke..strokeWidth = 1;
+    for (int i = 0; i < 6; i++) {
+      final d = 13.0 + i * 12;
+      final path = Path()
+        ..moveTo(0, d)
+        ..lineTo(d, 0)
+        ..lineTo(d * 1.5, d * .5)
+        ..lineTo(d * .5, d * 1.5)
+        ..close();
+      canvas.drawPath(path, ornament);
+    }
   }
 
   @override

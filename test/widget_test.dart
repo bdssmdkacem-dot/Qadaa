@@ -75,7 +75,7 @@ void main() {
     expect(find.text('Progress'), findsOneWidget);
     await tester.tap(find.text('Settings'));
     await tester.pumpAndSettle();
-    expect(find.text('Language'), findsOneWidget);
+    expect(find.text('Language'), findsWidgets);
   });
   testWidgets('logging a qadaa prayer stores its type and timestamp', (tester) async {
     SharedPreferences.setMockInitialValues({
@@ -167,6 +167,56 @@ void main() {
     ));
     await tester.pumpAndSettle();
     expect(find.textContaining('Completed: 1'), findsOneWidget);
+  });
+
+
+  testWidgets('redesigned plan screen shows all five daily prayers', (tester) async {
+    SharedPreferences.setMockInitialValues({'qadaa.language': 'en'});
+    await tester.pumpWidget(const QadaaApp());
+    await tester.pumpAndSettle();
+    await tester.tap(find.descendant(
+      of: find.byType(NavigationBar),
+      matching: find.text('Daily plan'),
+    ));
+    await tester.pumpAndSettle();
+    expect(find.text('The five daily prayers'), findsOneWidget);
+    for (final prayer in ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha']) {
+      await tester.ensureVisible(find.text(prayer).first);
+      await tester.pumpAndSettle();
+      expect(find.text(prayer), findsWidgets);
+    }
+  });
+
+
+  testWidgets('home dashboard exposes five prayer shortcuts and records from a shortcut', (tester) async {
+    SharedPreferences.setMockInitialValues({
+      'qadaa.language': 'en',
+      'qadaa.years': 1,
+    });
+    await tester.pumpWidget(const QadaaApp());
+    await tester.pumpAndSettle();
+
+    for (final prayer in ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha']) {
+      expect(find.text(prayer), findsWidgets);
+    }
+
+    await tester.tap(find.text('Fajr').first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Fajr').last);
+    await tester.pumpAndSettle();
+
+    final prefs = await SharedPreferences.getInstance();
+    expect(prefs.getString('qadaa.prayerRecords'), contains('"prayer":"fajr"'));
+    expect(prefs.getInt('qadaa.completed'), 1);
+  });
+
+
+  testWidgets('redesigned home contains the custom vector brand mark', (tester) async {
+    SharedPreferences.setMockInitialValues({'qadaa.language': 'ar'});
+    await tester.pumpWidget(const QadaaApp());
+    await tester.pumpAndSettle();
+    expect(find.byType(CustomPaint), findsWidgets);
+    expect(find.text('الصلوات الفائتة'), findsOneWidget);
   });
 
 }
