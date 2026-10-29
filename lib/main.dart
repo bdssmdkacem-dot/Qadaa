@@ -220,29 +220,44 @@ class _HomeShellState extends State<HomeShell> {
     ]);
   }
 
-  Widget _hero() => Container(
-    padding: const EdgeInsets.fromLTRB(20, 16, 20, 22),
-    decoration: const BoxDecoration(
-      gradient: LinearGradient(begin: Alignment.topRight, end: Alignment.bottomLeft, colors: [Color(0xFFF7E8C9), Color(0xFFFDF9EF), Color(0xFFD8E7D7)]),
-      borderRadius: BorderRadius.vertical(bottom: Radius.circular(30)),
+  Widget _hero() => SizedBox(
+    height: 222,
+    child: ClipRRect(
+      borderRadius: const BorderRadius.vertical(bottom: Radius.circular(30)),
+      child: Stack(fit: StackFit.expand, children: [
+        const CustomPaint(painter: QadaaSceneryPainter()),
+        Positioned(
+          top: 2, right: 12, left: 12,
+          child: Row(children: [
+            _roundHeaderButton(Icons.settings_outlined, () => setState(() => tab = 4)),
+            const Spacer(),
+            _roundHeaderButton(Icons.notifications_none_rounded, () => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('التنبيهات ستضاف في مرحلة لاحقة.')))),
+          ]),
+        ),
+        Positioned(
+          right: 20, left: 20, bottom: 24,
+          child: Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
+            Container(
+              width: 74, height: 74,
+              decoration: BoxDecoration(color: forest, borderRadius: BorderRadius.circular(23), border: Border.all(color: gold, width: 2), boxShadow: const [BoxShadow(color: Color(0x33000000), blurRadius: 12, offset: Offset(0, 4))]),
+              child: const Icon(Icons.mosque_rounded, color: Color(0xFFFFE8A8), size: 46),
+            ),
+            const SizedBox(width: 14),
+            const Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
+              Text('قضاء', style: TextStyle(fontSize: 42, height: 1.05, fontWeight: FontWeight.w900, color: forest, shadows: [Shadow(color: Color(0xAAFFF9EA), blurRadius: 10)])),
+              SizedBox(height: 6),
+              Text('خطوتك نحو إكمال ما فاتك من صلوات', style: TextStyle(fontSize: 12, color: ink, fontWeight: FontWeight.w700, height: 1.4)),
+            ])),
+          ]),
+        ),
+      ]),
     ),
-    child: Column(children: [
-      Row(children: [
-        IconButton(onPressed: () => setState(() => tab = 4), icon: const Icon(Icons.settings_outlined, color: forest)),
-        const Spacer(),
-        IconButton(onPressed: () => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('التنبيهات ستضاف في مرحلة لاحقة.'))), icon: const Icon(Icons.notifications_none_rounded, color: forest)),
-      ]),
-      Row(children: [
-        Container(width: 82, height: 82, decoration: BoxDecoration(color: forest, borderRadius: BorderRadius.circular(26), border: Border.all(color: gold, width: 2)), child: const Icon(Icons.mosque_rounded, color: Color(0xFFFFE8A8), size: 50)),
-        const SizedBox(width: 16),
-        const Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text('قضاء', style: TextStyle(fontSize: 42, height: 1.05, fontWeight: FontWeight.w900, color: forest)),
-          SizedBox(height: 6),
-          Text('خطوتك نحو إكمال ما فاتك من صلوات', style: TextStyle(fontSize: 13, color: ink, height: 1.4)),
-        ])),
-      ]),
-      const SizedBox(height: 8),
-    ]),
+  );
+
+  Widget _roundHeaderButton(IconData icon, VoidCallback action) => Container(
+    margin: const EdgeInsets.only(top: 8),
+    decoration: BoxDecoration(color: const Color(0xF7FFFCF4), shape: BoxShape.circle, border: Border.all(color: const Color(0x66D3A64B))),
+    child: IconButton(onPressed: action, icon: Icon(icon, color: forest), tooltip: icon == Icons.settings_outlined ? 'الإعدادات' : 'التنبيهات'),
   );
 
   Widget _verseCard() => Container(
@@ -342,4 +357,58 @@ class _HomeShellState extends State<HomeShell> {
   );
 
   String _fmt(int n) => n.toString().replaceAllMapped(RegExp(r'\B(?=(\d{3})+(?!\d))'), (_) => ',');
+}
+
+
+class QadaaSceneryPainter extends CustomPainter {
+  const QadaaSceneryPainter();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final rect = Offset.zero & size;
+    final bg = Paint()..shader = const LinearGradient(
+      begin: Alignment.topCenter, end: Alignment.bottomCenter,
+      colors: [Color(0xFFF5D9A8), Color(0xFFFFF5DC), Color(0xFFD9E5D1)],
+    ).createShader(rect);
+    canvas.drawRect(rect, bg);
+
+    final sunPaint = Paint()..color = const Color(0xFFFFF2BE);
+    canvas.drawCircle(Offset(size.width * .47, size.height * .42), size.height * .105, sunPaint);
+
+    void mountain(List<Offset> points, Color color) {
+      final path = Path()..moveTo(0, size.height);
+      for (final point in points) {
+        path.lineTo(point.dx * size.width, point.dy * size.height);
+      }
+      path.lineTo(size.width, size.height)..close();
+      canvas.drawPath(path, Paint()..color = color);
+    }
+    mountain([const Offset(0,.60), const Offset(.12,.48), const Offset(.23,.56), const Offset(.39,.37), const Offset(.53,.55), const Offset(.67,.42), const Offset(.83,.59), const Offset(1,.46)], const Color(0xFFD8D7B9));
+    mountain([const Offset(0,.72), const Offset(.16,.57), const Offset(.29,.67), const Offset(.47,.50), const Offset(.63,.67), const Offset(.79,.54), const Offset(1,.68)], const Color(0xFF9CB7A0));
+    mountain([const Offset(0,.84), const Offset(.15,.68), const Offset(.31,.78), const Offset(.49,.65), const Offset(.68,.79), const Offset(.85,.65), const Offset(1,.76)], const Color(0xFF5B8B73));
+
+    final mosque = Paint()..color = const Color(0xFF245C4A);
+    final x = size.width * .18;
+    final y = size.height * .64;
+    canvas.drawRect(Rect.fromLTWH(x, y + 20, 76, 48), mosque);
+    canvas.drawArc(Rect.fromCenter(center: Offset(x + 38, y + 20), width: 45, height: 49), 3.14159, 3.14159, true, mosque);
+    canvas.drawRect(Rect.fromLTWH(x - 15, y - 20, 11, 88), mosque);
+    canvas.drawRect(Rect.fromLTWH(x - 18, y - 24, 17, 6), mosque);
+    canvas.drawCircle(Offset(x - 9.5, y - 28), 3, Paint()..color = const Color(0xFFD3A64B));
+    canvas.drawRect(Rect.fromLTWH(x + 14, y + 43, 13, 25), Paint()..color = const Color(0xFFF5E8C9));
+    canvas.drawRect(Rect.fromLTWH(x + 47, y + 43, 13, 25), Paint()..color = const Color(0xFFF5E8C9));
+
+    final birds = Paint()..color = const Color(0xFF476D59)..style = PaintingStyle.stroke..strokeWidth = 1.4..strokeCap = StrokeCap.round;
+    for (var i = 0; i < 3; i++) {
+      final bx = size.width * (.63 + i * .07);
+      final by = size.height * (.30 + (i % 2) * .035);
+      final p = Path()..moveTo(bx - 6, by)..quadraticBezierTo(bx - 2, by - 5, bx, by)..quadraticBezierTo(bx + 3, by - 5, bx + 7, by);
+      canvas.drawPath(p, birds);
+    }
+    final shade = Paint()..shader = LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Colors.transparent, const Color(0x22FFFFFF)]).createShader(rect);
+    canvas.drawRect(rect, shade);
+  }
+
+  @override
+  bool shouldRepaint(covariant QadaaSceneryPainter oldDelegate) => false;
 }
