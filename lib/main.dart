@@ -64,7 +64,7 @@ class _HomeShellState extends State<HomeShell> {
 
   int get total => years * 365 * 5;
   int get remaining => (total - completed).clamp(0, total);
-  int get progress => total == 0 ? 0 : (completed * 100 / total).round().clamp(0, 100);
+  int get progress => total == 0 ? 0 : (completed * 100 / total).round().clamp(0, 100).toInt();
 
   Future<void> _save() async {
     final prefs = await SharedPreferences.getInstance();
@@ -102,7 +102,7 @@ class _HomeShellState extends State<HomeShell> {
           FilledButton(
             style: FilledButton.styleFrom(backgroundColor: forest, padding: const EdgeInsets.all(16)),
             onPressed: () async {
-              setState(() { years = draftYears; completed = completed.clamp(0, draftYears * 365 * 5); });
+              setState(() { years = draftYears; completed = completed.clamp(0, draftYears * 365 * 5).toInt(); });
               await _save();
               if (context.mounted) Navigator.pop(context);
             },
