@@ -745,13 +745,22 @@ class SceneryPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final rect = Offset.zero & size;
     canvas.drawRect(rect, Paint()..shader = const LinearGradient(
-      begin: Alignment.topCenter, end: Alignment.bottomCenter,
-      colors: [Color(0xFFF5D9A8), Color(0xFFFFF5DC), Color(0xFFD9E5D1)],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [Color(0xFFF7D9A5), Color(0xFFFFF6DF), Color(0xFFDDE8D6), Color(0xFFB8D0B8)],
+      stops: [0, .38, .72, 1],
     ).createShader(rect));
-    canvas.drawCircle(Offset(size.width * .52, size.height * .34), size.height * .11,
-        Paint()..color = const Color(0xFFFFF2BE));
 
-    void hill(List<Offset> points, Color color) {
+    final sunCenter = Offset(size.width * .72, size.height * .30);
+    canvas.drawCircle(sunCenter, size.height * .19, Paint()
+      ..shader = RadialGradient(colors: [
+        const Color(0xFFFFF5C9).withOpacity(.88),
+        const Color(0xFFFFF5C9).withOpacity(.28),
+        const Color(0xFFFFF5C9).withOpacity(0),
+      ]).createShader(Rect.fromCircle(center: sunCenter, radius: size.height * .19)));
+    canvas.drawCircle(sunCenter, size.height * .065, Paint()..color = const Color(0xFFFFF4C7));
+
+    void ridge(List<Offset> points, Color color) {
       final path = Path()..moveTo(0, size.height);
       for (final point in points) {
         path.lineTo(point.dx * size.width, point.dy * size.height);
@@ -761,24 +770,106 @@ class SceneryPainter extends CustomPainter {
       canvas.drawPath(path, Paint()..color = color);
     }
 
-    hill([const Offset(0,.60), const Offset(.12,.48), const Offset(.23,.56), const Offset(.39,.37),
-      const Offset(.53,.55), const Offset(.67,.42), const Offset(.83,.59), const Offset(1,.46)], const Color(0xFFD8D7B9));
-    hill([const Offset(0,.72), const Offset(.16,.57), const Offset(.29,.67), const Offset(.47,.50),
-      const Offset(.63,.67), const Offset(.79,.54), const Offset(1,.68)], const Color(0xFF9CB7A0));
-    hill([const Offset(0,.84), const Offset(.15,.68), const Offset(.31,.78), const Offset(.49,.65),
-      const Offset(.68,.79), const Offset(.85,.65), const Offset(1,.76)], const Color(0xFF5B8B73));
+    ridge([const Offset(0,.54), const Offset(.10,.42), const Offset(.19,.48),
+      const Offset(.34,.27), const Offset(.45,.43), const Offset(.58,.34),
+      const Offset(.72,.47), const Offset(.86,.32), const Offset(1,.43)], const Color(0xFFD9D8C2));
+    ridge([const Offset(0,.67), const Offset(.14,.53), const Offset(.25,.62),
+      const Offset(.40,.43), const Offset(.54,.59), const Offset(.70,.45),
+      const Offset(.83,.62), const Offset(1,.49)], const Color(0xFFB4C8AC));
+    ridge([const Offset(0,.79), const Offset(.13,.65), const Offset(.28,.73),
+      const Offset(.42,.61), const Offset(.58,.76), const Offset(.75,.61),
+      const Offset(.89,.74), const Offset(1,.65)], const Color(0xFF789F83));
 
-    final mosque = Paint()..color = const Color(0xFF245C4A);
-    final x = size.width * .18;
-    final y = size.height * .64;
-    canvas.drawRect(Rect.fromLTWH(x, y + 20, 76, 48), mosque);
-    canvas.drawArc(Rect.fromCenter(center: Offset(x + 38, y + 20), width: 45, height: 49),
-        3.14159, 3.14159, true, mosque);
-    canvas.drawRect(Rect.fromLTWH(x - 15, y - 20, 11, 88), mosque);
-    canvas.drawRect(Rect.fromLTWH(x - 18, y - 24, 17, 6), mosque);
-    canvas.drawCircle(Offset(x - 9.5, y - 28), 3, Paint()..color = gold);
-    canvas.drawRect(Rect.fromLTWH(x + 14, y + 43, 13, 25), Paint()..color = const Color(0xFFF5E8C9));
-    canvas.drawRect(Rect.fromLTWH(x + 47, y + 43, 13, 25), Paint()..color = const Color(0xFFF5E8C9));
+    // Distant tree line gives the landscape depth without external image assets.
+    final treePaint = Paint()..color = const Color(0xFF4C8065);
+    for (int i = 0; i < 34; i++) {
+      final x = size.width * (i / 34);
+      final base = size.height * (.83 + ((i % 4) * .012));
+      final h = size.height * (.045 + ((i * 7) % 5) * .009);
+      canvas.drawCircle(Offset(x, base - h * .56), h * .55, treePaint);
+      canvas.drawRect(Rect.fromLTWH(x - 1.4, base - h * .35, 2.8, h * .42),
+          Paint()..color = const Color(0xFF386B54));
+    }
+
+    // Main mosque: layered prayer hall, dome, crescent, arches and minaret.
+    final building = Paint()..color = const Color(0xFF205C49);
+    final dark = Paint()..color = const Color(0xFF164938);
+    final stone = Paint()..color = const Color(0xFFF6E8C8);
+    final x = size.width * .19;
+    final ground = size.height * .86;
+    final hallW = size.width * .24;
+    final hallH = size.height * .18;
+    canvas.drawRect(Rect.fromLTWH(x, ground - hallH, hallW, hallH), building);
+    canvas.drawRect(Rect.fromLTWH(x - 5, ground - hallH - 4, hallW + 10, 5), dark);
+
+    final domeRect = Rect.fromCenter(
+      center: Offset(x + hallW * .52, ground - hallH - size.height * .035),
+      width: hallW * .58, height: size.height * .15,
+    );
+    canvas.drawArc(domeRect, 3.14159265, 3.14159265, true, dark);
+    canvas.drawRect(Rect.fromLTWH(domeRect.left, domeRect.center.dy, domeRect.width, size.height * .035), dark);
+    canvas.drawCircle(Offset(domeRect.center.dx, domeRect.top - 2), 2.5, Paint()..color = gold);
+
+    // Minaret with balconies and pointed cap.
+    final minX = x - size.width * .045;
+    final minW = size.width * .034;
+    final minTop = size.height * .38;
+    canvas.drawRect(Rect.fromLTWH(minX, minTop, minW, ground - minTop), dark);
+    canvas.drawRect(Rect.fromLTWH(minX - 4, minTop + size.height * .08, minW + 8, 3), Paint()..color = gold);
+    canvas.drawRect(Rect.fromLTWH(minX - 4, minTop + size.height * .16, minW + 8, 3), Paint()..color = gold);
+    final spire = Path()
+      ..moveTo(minX - 3, minTop)
+      ..lineTo(minX + minW / 2, minTop - size.height * .045)
+      ..lineTo(minX + minW + 3, minTop)
+      ..close();
+    canvas.drawPath(spire, dark);
+    canvas.drawLine(Offset(minX + minW / 2, minTop - size.height * .045),
+        Offset(minX + minW / 2, minTop - size.height * .065), Paint()..color = gold..strokeWidth = 1.5);
+
+    // Arched doors and windows.
+    for (int i = 0; i < 3; i++) {
+      final wx = x + hallW * (.17 + i * .31);
+      final wy = ground - hallH * .70;
+      final w = hallW * .16;
+      canvas.drawRRect(RRect.fromRectAndRadius(Rect.fromLTWH(wx, wy, w, hallH * .70),
+          Radius.circular(w / 2)), stone);
+      canvas.drawRect(Rect.fromLTWH(wx, wy + w / 2, w, hallH * .70 - w / 2), stone);
+    }
+
+    // Small foreground trees.
+    for (int i = 0; i < 8; i++) {
+      final tx = size.width * (.04 + i * .045);
+      final ty = size.height * (.91 - (i % 3) * .018);
+      canvas.drawCircle(Offset(tx, ty), size.height * (.025 + (i % 2) * .008),
+          Paint()..color = i.isEven ? const Color(0xFF2D6B52) : const Color(0xFF39795A));
+    }
+
+    // Birds as restrained silhouettes in the open sky.
+    final birdPaint = Paint()..color = const Color(0xFF55745F)..style = PaintingStyle.stroke..strokeWidth = 1.35..strokeCap = StrokeCap.round;
+    for (final p in const [
+      Offset(.49,.22), Offset(.55,.18), Offset(.59,.24), Offset(.64,.16), Offset(.68,.22),
+    ]) {
+      final bx = p.dx * size.width;
+      final by = p.dy * size.height;
+      final path = Path()
+        ..moveTo(bx - 5, by + 1)
+        ..quadraticBezierTo(bx - 2, by - 3, bx, by)
+        ..quadraticBezierTo(bx + 3, by - 3, bx + 6, by + 1);
+      canvas.drawPath(path, birdPaint);
+    }
+
+    // Fine geometric corner ornament; subtle enough to keep text legible.
+    final ornament = Paint()..color = const Color(0xFFB68C43).withOpacity(.25)..style = PaintingStyle.stroke..strokeWidth = 1;
+    for (int i = 0; i < 6; i++) {
+      final d = 13.0 + i * 12;
+      final path = Path()
+        ..moveTo(0, d)
+        ..lineTo(d, 0)
+        ..lineTo(d * 1.5, d * .5)
+        ..lineTo(d * .5, d * 1.5)
+        ..close();
+      canvas.drawPath(path, ornament);
+    }
   }
 
   @override
