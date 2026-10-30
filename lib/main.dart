@@ -240,10 +240,10 @@ class _HomePageState extends State<HomePage> {
     final snapshot = await QadaaPrayerStore.load();
     if (!mounted) return;
     setState(() {
-      years = prefs.getInt('qadaa.years') ?? 0;
-      legacyCompleted = snapshot.legacyCompleted;
+      years = (prefs.getInt('qadaa.years') ?? 0).clamp(0, 80).toInt();
+      legacyCompleted = snapshot.legacyCompleted.clamp(0, 1000000000).toInt();
       records = snapshot.records;
-      dailyTarget = prefs.getInt('qadaa.dailyTarget') ?? 5;
+      dailyTarget = (prefs.getInt('qadaa.dailyTarget') ?? 5).clamp(1, 20).toInt();
       loading = false;
     });
   }
@@ -444,7 +444,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _planPage() {
     final daysNeeded = remaining == 0 ? 0 : (remaining / dailyTarget).ceil();
-        final todayProgress = (dailyTarget == 0 ? 0.0 : _todayCount / dailyTarget).clamp(0.0, 1.0);
+    final todayProgress = (dailyTarget == 0 ? 0.0 : _todayCount / dailyTarget).clamp(0.0, 1.0);
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
