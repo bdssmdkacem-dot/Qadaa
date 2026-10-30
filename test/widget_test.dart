@@ -202,4 +202,32 @@ void main() {
   });
 
 
+
+  testWidgets('all localized screens fit a narrow Android viewport', (tester) async {
+    tester.view.physicalSize = const Size(320, 640);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    for (final item in [
+      ('ar', 'الخطة اليومية', 'الإحصائيات', 'الإعدادات'),
+      ('es', 'Plan diario', 'Estadísticas', 'Ajustes'),
+      ('en', 'Daily plan', 'Statistics', 'Settings'),
+      ('fr', 'Plan quotidien', 'Statistiques', 'Paramètres'),
+      ('de', 'Tagesplan', 'Statistik', 'Einstellungen'),
+    ]) {
+      SharedPreferences.setMockInitialValues({'qadaa.language': item.$1});
+      await tester.pumpWidget(const QadaaApp());
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull, reason: 'home overflow for ${item.$1}');
+
+      for (final label in [item.$2, item.$3, item.$4]) {
+        await tester.tap(find.text(label).last);
+        await tester.pumpAndSettle();
+        expect(tester.takeException(), isNull,
+            reason: 'layout overflow for ${item.$1} on $label');
+      }
+    }
+  });
+
 }
