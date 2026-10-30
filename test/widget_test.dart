@@ -268,4 +268,27 @@ void main() {
     }
   });
 
+
+  testWidgets('settings exposes localized backup and local privacy controls', (tester) async {
+    SharedPreferences.setMockInitialValues({'qadaa.language': 'en'});
+    await tester.pumpWidget(const QadaaApp());
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Settings'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Backup'), findsOneWidget);
+    expect(find.text('Copy my data'), findsOneWidget);
+    expect(find.text('Restore backup'), findsOneWidget);
+    expect(find.text('Your data is stored locally on this device.'), findsOneWidget);
+
+    await tester.tap(find.text('Restore backup'));
+    await tester.pumpAndSettle();
+    expect(find.text('Paste your Qadaa backup here'), findsOneWidget);
+    await tester.enterText(find.byType(TextField), 'not a backup');
+    await tester.tap(find.widgetWithText(FilledButton, 'Restore'));
+    await tester.pumpAndSettle();
+    expect(find.text('This backup is invalid or unsupported'), findsOneWidget);
+  });
+
 }
