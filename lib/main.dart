@@ -83,6 +83,39 @@ class _QadaaAppState extends State<QadaaApp> {
         useMaterial3: true,
         scaffoldBackgroundColor: cream,
         colorScheme: ColorScheme.fromSeed(seedColor: forest, surface: cream),
+        visualDensity: VisualDensity.standard,
+        textTheme: const TextTheme(
+          titleLarge: TextStyle(fontSize: 25, fontWeight: FontWeight.w900, color: forest, height: 1.2),
+          titleMedium: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: forest, height: 1.25),
+          bodyLarge: TextStyle(fontSize: 15, color: ink, height: 1.45),
+          bodyMedium: TextStyle(fontSize: 14, color: ink, height: 1.4),
+          labelLarge: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+        ),
+        navigationBarTheme: NavigationBarThemeData(
+          height: 76,
+          backgroundColor: const Color(0xFFFFFEFA),
+          indicatorColor: const Color(0xFFDCEDE4),
+          labelTextStyle: WidgetStateProperty.resolveWith((states) => TextStyle(
+            fontSize: 10.5,
+            fontWeight: states.contains(WidgetState.selected) ? FontWeight.w800 : FontWeight.w600,
+            color: states.contains(WidgetState.selected) ? forest : ink,
+          )),
+        ),
+        filledButtonTheme: FilledButtonThemeData(
+          style: FilledButton.styleFrom(
+            minimumSize: const Size(48, 48),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+            backgroundColor: forest,
+          ),
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          fillColor: const Color(0xFFFFFEFA),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: const BorderSide(color: Color(0xFFE4E0D5))),
+          enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: const BorderSide(color: Color(0xFFE4E0D5))),
+          focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: const BorderSide(color: green, width: 1.6)),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+        ),
       ),
       home: loading
           ? const Scaffold(
@@ -391,9 +424,7 @@ class _HomePageState extends State<HomePage> {
       body: SafeArea(child: loading ? const Center(child: CircularProgressIndicator(color: green))
           : IndexedStack(index: tab, children: pages)),
       bottomNavigationBar: NavigationBar(
-        height: 74,
-        backgroundColor: const Color(0xFFFFFEFA),
-        indicatorColor: const Color(0xFFDCEDE4),
+        height: 76,
         selectedIndex: tab,
         onDestinationSelected: (index) => setState(() => tab = index),
         destinations: [
@@ -436,10 +467,23 @@ class _HomePageState extends State<HomePage> {
     decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(18),
       border: Border.all(color: const Color(0xFFE9E5D9))),
     child: Row(children: [
-      CircleAvatar(backgroundColor: const Color(0xFFE4EFE5), child: Icon(icon, color: forest)),
+      CircleAvatar(
+        radius: 21,
+        backgroundColor: const Color(0xFFE4EFE5),
+        child: Icon(icon, color: forest, size: 21),
+      ),
       const SizedBox(width: 12),
-      Expanded(child: Text(label, style: const TextStyle(color: ink))),
-      Text(value, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: forest)),
+      Expanded(
+        child: Text(label, style: const TextStyle(color: ink, fontSize: 14, height: 1.3),
+          maxLines: 2, overflow: TextOverflow.ellipsis),
+      ),
+      const SizedBox(width: 8),
+      Flexible(
+        child: Text(value, textAlign: TextAlign.end, maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w900, color: forest,
+            fontFeatures: [FontFeature.tabularFigures()])),
+      ),
     ]),
   );
 
@@ -519,16 +563,28 @@ class _HomePageState extends State<HomePage> {
               IconButton(onPressed: () => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(t('notifications')))),
                   icon: const Icon(Icons.notifications_none_rounded, color: forest)),
             ])),
-            Positioned(left: 18, right: 18, bottom: 22, child: Row(children: [
-              Container(width: 66, height: 66, decoration: BoxDecoration(color: forest, borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: gold, width: 2)),
-                  child: const Icon(Icons.mosque_rounded, color: Color(0xFFFFE8A8), size: 42)),
-              const SizedBox(width: 12),
-              Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                const Text('قضاء | Qadaa', style: TextStyle(fontSize: 27, fontWeight: FontWeight.w900, color: forest)),
-                Text(t('subtitle'), style: const TextStyle(color: ink, fontSize: 12)),
-              ])),
-            ])),
+            PositionedDirectional(start: 16, end: 16, bottom: 18, child: Container(
+              padding: const EdgeInsetsDirectional.fromSTEB(12, 10, 16, 10),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFFCF4).withValues(alpha: .94),
+                borderRadius: BorderRadius.circular(22),
+                border: Border.all(color: Colors.white.withValues(alpha: .8)),
+                boxShadow: const [BoxShadow(color: Color(0x220D3328), blurRadius: 18, offset: Offset(0, 6))],
+              ),
+              child: Row(children: [
+                Container(width: 58, height: 58, decoration: BoxDecoration(color: forest,
+                    borderRadius: BorderRadius.circular(17), border: Border.all(color: gold, width: 1.5)),
+                    child: const Icon(Icons.mosque_rounded, color: Color(0xFFFFE8A8), size: 36)),
+                const SizedBox(width: 12),
+                Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
+                  const Text('قضاء | Qadaa', maxLines: 1, overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 24, height: 1.15, fontWeight: FontWeight.w900, color: forest)),
+                  const SizedBox(height: 4),
+                  Text(t('subtitle'), maxLines: 2, overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(color: ink, fontSize: 12, height: 1.25)),
+                ])),
+              ]),
+            )),
           ]),
         ),
       ),
