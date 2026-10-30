@@ -32,3 +32,27 @@ New qadaa entries are stored locally with a prayer type and UTC timestamp. Exist
 ## Monetization
 
 Planned formats are an adaptive banner first, then an optional clearly labelled native placement and/or a non-essential rewarded placement only after core functionality and privacy checks pass. A paid ad-free option can be evaluated later. Ads must never block prayer logging or be shown on the first-run language selection screen. See the roadmap for the supplied AdMob IDs and acceptance gates.
+
+## Visual assets specification
+
+The UI is being prepared against the approved Arabic home-screen reference. Do not add placeholder artwork or stretch one image into multiple roles. Add the final assets only after they are supplied at the following dimensions.
+
+| Asset path | Required dimensions | Format | Intended use |
+|---|---:|---|---|
+| `assets/images/brand/qadaa_app_icon.png` | 1024 × 1024 px | PNG, opaque square master | Source for Android launcher icon generation; keep the emblem centered with safe margins |
+| `assets/images/home/qadaa_home_hero.webp` | 1600 × 900 px | WebP, high quality | Wide home header scene; keep mosque, sun and focal details inside the central 80% safe area |
+| `assets/images/home/qadaa_header_logo.png` | 900 × 900 px | PNG, transparent background | Standalone Qadaa wordmark/emblem overlay if the hero does not contain the final logo |
+| `assets/images/ornaments/islamic_pattern.png` | 1024 × 1024 px | PNG, transparent background | Subtle decorative pattern in header/card edges; must remain low contrast |
+| `assets/images/illustrations/empty_prayer_history.webp` | 1200 × 900 px | WebP, transparent/clean background | Empty-state illustration for a new user with no recorded prayers |
+| `assets/images/illustrations/encouragement.webp` | 1200 × 900 px | WebP, transparent/clean background | Encouragement screen illustration |
+
+### Image integration rules
+
+- Keep the original source files at the paths above; do not commit screenshots of the full app as production UI assets.
+- Preserve aspect ratio with `BoxFit.cover` for the hero and `BoxFit.contain` for standalone illustrations and logos.
+- Provide meaningful semantic descriptions for informative images; decorative patterns must be excluded from accessibility semantics.
+- Supply a 2×/3× raster variant only when needed for a specific density; do not upscale a small source.
+- The home hero must remain readable with RTL and LTR layouts, and must not place important details underneath the status bar, action buttons, or text.
+- Until the final assets are supplied, retain the vector-painted fallback and do not add generated or stock images.
+- After integration, validate image cropping on 320 px, 360 px, and 412 px logical widths, plus large text scaling.
+
