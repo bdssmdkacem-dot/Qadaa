@@ -52,4 +52,27 @@ void main() {
       record.toJson(),
     );
   });
+
+  test('damaged or unknown prayer records do not crash startup', () async {
+    SharedPreferences.setMockInitialValues({
+      'qadaa.legacyCompleted': 3,
+      'qadaa.prayerRecords':
+          '[{"prayer":"not-a-prayer","completedAt":"2026-01-01T00:00:00.000Z"}]',
+    });
+    final snapshot = await QadaaPrayerStore.load();
+    expect(snapshot.legacyCompleted, 3);
+    expect(snapshot.records, isEmpty);
+    expect(snapshot.completedCount, 3);
+  });
+
+  test('empty history does not discard migrated legacy progress', () async {
+    SharedPreferences.setMockInitialValues({
+      'qadaa.completed': 8,
+      'qadaa.prayerRecords': '[]',
+    });
+    final snapshot = await QadaaPrayerStore.load();
+    expect(snapshot.legacyCompleted, 8);
+    expect(snapshot.records, isEmpty);
+  });
+
 }
