@@ -98,3 +98,62 @@ class QadaaPrayerStoreSnapshot {
         records: [record, ...records],
       );
 }
+
+
+/// Versioned, portable backup format. Import rejects unknown versions and
+/// malformed records before any persisted value is changed.
+class QadaaBackup {
+  const QadaaBackup({
+    required this.years,
+    required this.dailyTarget,
+    required this.snapshot,
+  });
+
+  final int years;
+  final int dailyTarget;
+  final QadaaPrayerStoreSnapshot snapshot;
+
+  String encode() => jsonEncode({
+        'format': 'qadaa-backup',
+        'version': 1,
+        'exportedAt': DateTime.now().toUtc().toIso8601String(),
+        'years': years,
+        'dailyTarget': dailyTarget,
+        'legacyCompleted': snapshot.legacyCompleted,
+        'records': snapshot.records.map((record) => record.toJson()).toList(),
+      });
+
+  factory QadaaBackup.decode(String source) {
+    final decoded = jsonDecode(source);
+    if (decoded is! Map<String, dynamic> ||
+        decoded['format'] != 'qadaa-backup' ||
+        decoded['version'] != 1) {
+      throw const FormatException('Unsupported Qadaa backup');
+    }
+    final years = decoded['years'];
+    final dailyTarget = decoded['dailyTarget'];
+    final legacy = decoded['legacyCompleted'];
+    final rawRecords = decoded['records'];
+    if (years is! int || years < 0 || years > 80 ||
+        dailyTarget is! int || dailyTarget < 1 || dailyTarget > 20 ||
+        legacy is! int || legacy < 0 || legacy > 1000000000 ||
+        rawRecords is! List) {
+      throw const FormatException('Invalid Qadaa backup values');
+    }
+    final records = rawRecords.map((item) {
+      if (item is! Map<String, dynamic>) {
+        throw const FormatException('Invalid Qadaa backup record');
+      }
+      return PrayerRecord.fromJson(item);
+    }).toList()
+      ..sort((a, b) => b.completedAt.compareTo(a.completedAt));
+    return QadaaBackup(
+      years: years,
+      dailyTarget: dailyTarget,
+      snapshot: QadaaPrayerStoreSnapshot(
+        legacyCompleted: legacy,
+        records: records,
+      ),
+    );
+  }
+}
