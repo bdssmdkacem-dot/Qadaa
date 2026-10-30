@@ -10,19 +10,19 @@ const ink = Color(0xFF173E34);
 
 const translations = <String, Map<String, String>>{
   'ar': {
-    'welcome':'مرحبًا بك في قضاء','intro':'رفيقك لتنظيم قضاء الصلوات الفائتة','choose':'اختر لغة التطبيق','continue':'المتابعة','home':'الرئيسية','plan':'الخطة اليومية','stats':'الإحصائيات','encouragement':'التشجيع','settings':'الإعدادات','missed':'الصلوات الفائتة','estimate':'تقدير الفوائت','completed':'تم قضاؤها','remaining':'المتبقي','total':'الإجمالي التقديري','progress':'نسبة الإنجاز','years':'سنوات الفوائت','save':'حفظ التقدير','daily':'الهدف اليومي','prayers':'صلوات','savePlan':'حفظ الخطة','log':'تسجيل صلاة تم قضاؤها','motivation':'خطوة ثابتة كل يوم خير من الانقطاع.','verse':'﴿ وَأَقِمِ الصَّلَاةَ لِذِكْرِي ﴾','verseRef':'طه: 14','subtitle':'ابدأ بخطوة صغيرة، واستمر بثبات','language':'اللغة','note':'هذا تقدير للتنظيم الشخصي، وليس فتوى شرعية.','edit':'تعديل','notifications':'التنبيهات','welcomeBack':'السلام عليكم','fajr':'الفجر','dhuhr':'الظهر','asr':'العصر','maghrib':'المغرب','isha':'العشاء','recentRecords':'آخر الصلوات المسجلة','fiveDaily':'الصلوات الخمس اليومية','target':'الهدف','days':'أيام','noData':'ابدأ بإدخال تقديرك للسنوات التي فاتتك فيها الصلاة.'
+    'welcome':'مرحبًا بك في قضاء','intro':'رفيقك لتنظيم قضاء الصلوات الفائتة','choose':'اختر لغة التطبيق','continue':'المتابعة','home':'الرئيسية','plan':'الخطة اليومية','stats':'الإحصائيات','encouragement':'التشجيع','settings':'الإعدادات','missed':'الصلوات الفائتة','estimate':'تقدير الفوائت','completed':'تم قضاؤها','remaining':'المتبقي','total':'الإجمالي التقديري','progress':'نسبة الإنجاز','years':'سنوات الفوائت','save':'حفظ التقدير','daily':'الهدف اليومي','prayers':'صلوات','savePlan':'حفظ الخطة','log':'تسجيل صلاة تم قضاؤها','motivation':'خطوة ثابتة كل يوم خير من الانقطاع.','verse':'﴿ وَأَقِمِ الصَّلَاةَ لِذِكْرِي ﴾','verseRef':'طه: 14','subtitle':'ابدأ بخطوة صغيرة، واستمر بثبات','language':'اللغة','note':'هذا تقدير للتنظيم الشخصي، وليس فتوى شرعية.','edit':'تعديل','notifications':'التنبيهات','welcomeBack':'السلام عليكم','fajr':'الفجر','dhuhr':'الظهر','asr':'العصر','maghrib':'المغرب','isha':'العشاء','recentRecords':'آخر الصلوات المسجلة','fiveDaily':'الصلوات الخمس اليومية','target':'الهدف','days':'أيام','today':'اليوم','thisWeek':'هذا الأسبوع','byPrayer':'حسب الصلاة','dailyProgress':'إنجاز اليوم','planRemaining':'المدة التقريبية المتبقية','atTarget':'وفق هدفك اليومي','noData':'ابدأ بإدخال تقديرك للسنوات التي فاتتك فيها الصلاة.'
   },
   'es': {
-    'welcome':'Te damos la bienvenida a Qadaa','intro':'Tu compañero para organizar las oraciones pendientes','choose':'Elige el idioma','continue':'Continuar','home':'Inicio','plan':'Plan diario','stats':'Estadísticas','encouragement':'Motivación','settings':'Ajustes','missed':'Oraciones pendientes','estimate':'Calcular pendientes','completed':'Realizadas','remaining':'Pendientes','total':'Total estimado','progress':'Progreso','years':'Años estimados','save':'Guardar estimación','daily':'Objetivo diario','prayers':'oraciones','savePlan':'Guardar plan','log':'Registrar una oración realizada','motivation':'Un paso constante cada día es mejor que rendirse.','verse':'«Establece la oración para recordarme»','verseRef':'Ta-Ha 20:14','subtitle':'Empieza poco a poco y continúa con constancia','language':'Idioma','note':'Es una estimación organizativa, no una opinión religiosa.','edit':'Editar','notifications':'Notificaciones','welcomeBack':'Bienvenido','fajr':'Fajr','dhuhr':'Dhuhr','asr':'Asr','maghrib':'Maghrib','isha':'Isha','recentRecords':'Registros recientes','fiveDaily':'Las cinco oraciones diarias','target':'Objetivo','days':'días','noData':'Introduce una estimación de los años de oraciones pendientes.'
+    'welcome':'Te damos la bienvenida a Qadaa','intro':'Tu compañero para organizar las oraciones pendientes','choose':'Elige el idioma','continue':'Continuar','home':'Inicio','plan':'Plan diario','stats':'Estadísticas','encouragement':'Motivación','settings':'Ajustes','missed':'Oraciones pendientes','estimate':'Calcular pendientes','completed':'Realizadas','remaining':'Pendientes','total':'Total estimado','progress':'Progreso','years':'Años estimados','save':'Guardar estimación','daily':'Objetivo diario','prayers':'oraciones','savePlan':'Guardar plan','log':'Registrar una oración realizada','motivation':'Un paso constante cada día es mejor que rendirse.','verse':'«Establece la oración para recordarme»','verseRef':'Ta-Ha 20:14','subtitle':'Empieza poco a poco y continúa con constancia','language':'Idioma','note':'Es una estimación organizativa, no una opinión religiosa.','edit':'Editar','notifications':'Notificaciones','welcomeBack':'Bienvenido','fajr':'Fajr','dhuhr':'Dhuhr','asr':'Asr','maghrib':'Maghrib','isha':'Isha','recentRecords':'Registros recientes','fiveDaily':'Las cinco oraciones diarias','target':'Objetivo','days':'días','today':'Hoy','thisWeek':'Esta semana','byPrayer':'Por oración','dailyProgress':'Progreso de hoy','planRemaining':'Tiempo restante estimado','atTarget':'Según tu objetivo diario','noData':'Introduce una estimación de los años de oraciones pendientes.'
   },
   'en': {
-    'welcome':'Welcome to Qadaa','intro':'Your companion for organizing missed prayers','choose':'Choose your language','continue':'Continue','home':'Home','plan':'Daily plan','stats':'Statistics','encouragement':'Encouragement','settings':'Settings','missed':'Missed prayers','estimate':'Estimate missed prayers','completed':'Completed','remaining':'Remaining','total':'Estimated total','progress':'Progress','years':'Estimated years','save':'Save estimate','daily':'Daily target','prayers':'prayers','savePlan':'Save plan','log':'Log a completed prayer','motivation':'A steady step each day is better than stopping.','verse':'“Establish prayer for My remembrance”','verseRef':'Ta-Ha 20:14','subtitle':'Start small and keep moving forward','language':'Language','note':'An organizational estimate, not a religious ruling.','edit':'Edit','notifications':'Notifications','welcomeBack':'Welcome','fajr':'Fajr','dhuhr':'Dhuhr','asr':'Asr','maghrib':'Maghrib','isha':'Isha','recentRecords':'Recent prayer records','fiveDaily':'The five daily prayers','target':'Target','days':'days','noData':'Enter an estimate of the years of missed prayers.'
+    'welcome':'Welcome to Qadaa','intro':'Your companion for organizing missed prayers','choose':'Choose your language','continue':'Continue','home':'Home','plan':'Daily plan','stats':'Statistics','encouragement':'Encouragement','settings':'Settings','missed':'Missed prayers','estimate':'Estimate missed prayers','completed':'Completed','remaining':'Remaining','total':'Estimated total','progress':'Progress','years':'Estimated years','save':'Save estimate','daily':'Daily target','prayers':'prayers','savePlan':'Save plan','log':'Log a completed prayer','motivation':'A steady step each day is better than stopping.','verse':'“Establish prayer for My remembrance”','verseRef':'Ta-Ha 20:14','subtitle':'Start small and keep moving forward','language':'Language','note':'An organizational estimate, not a religious ruling.','edit':'Edit','notifications':'Notifications','welcomeBack':'Welcome','fajr':'Fajr','dhuhr':'Dhuhr','asr':'Asr','maghrib':'Maghrib','isha':'Isha','recentRecords':'Recent prayer records','fiveDaily':'The five daily prayers','target':'Target','days':'days','today':'Today','thisWeek':'This week','byPrayer':'By prayer','dailyProgress':'Today’s progress','planRemaining':'Estimated time remaining','atTarget':'At your daily target','noData':'Enter an estimate of the years of missed prayers.'
   },
   'fr': {
-    'welcome':'Bienvenue sur Qadaa','intro':'Votre compagnon pour organiser les prières à rattraper','choose':'Choisissez la langue','continue':'Continuer','home':'Accueil','plan':'Plan quotidien','stats':'Statistiques','encouragement':'Encouragement','settings':'Paramètres','missed':'Prières à rattraper','estimate':'Estimer les prières','completed':'Effectuées','remaining':'Restantes','total':'Total estimé','progress':'Progression','years':'Années estimées','save':'Enregistrer','daily':'Objectif quotidien','prayers':'prières','savePlan':'Valider le plan','log':'Enregistrer une prière effectuée','motivation':'Un petit pas chaque jour vaut mieux que l’abandon.','verse':'« Accomplis la prière pour te souvenir de Moi »','verseRef':'Taha : 14','subtitle':'Commencez doucement, avancez avec constance','language':'Langue','note':'Estimation d’organisation, pas un avis religieux.','edit':'Modifier','notifications':'Notifications','welcomeBack':'Bienvenue','fajr':'Fajr','dhuhr':'Dhouhr','asr':'Asr','maghrib':'Maghrib','isha':'Icha','recentRecords':'Prières récemment enregistrées','fiveDaily':'Les cinq prières quotidiennes','target':'Objectif','days':'jours','noData':'Saisissez une estimation des années de prières à rattraper.'
+    'welcome':'Bienvenue sur Qadaa','intro':'Votre compagnon pour organiser les prières à rattraper','choose':'Choisissez la langue','continue':'Continuer','home':'Accueil','plan':'Plan quotidien','stats':'Statistiques','encouragement':'Encouragement','settings':'Paramètres','missed':'Prières à rattraper','estimate':'Estimer les prières','completed':'Effectuées','remaining':'Restantes','total':'Total estimé','progress':'Progression','years':'Années estimées','save':'Enregistrer','daily':'Objectif quotidien','prayers':'prières','savePlan':'Valider le plan','log':'Enregistrer une prière effectuée','motivation':'Un petit pas chaque jour vaut mieux que l’abandon.','verse':'« Accomplis la prière pour te souvenir de Moi »','verseRef':'Taha : 14','subtitle':'Commencez doucement, avancez avec constance','language':'Langue','note':'Estimation d’organisation, pas un avis religieux.','edit':'Modifier','notifications':'Notifications','welcomeBack':'Bienvenue','fajr':'Fajr','dhuhr':'Dhouhr','asr':'Asr','maghrib':'Maghrib','isha':'Icha','recentRecords':'Prières récemment enregistrées','fiveDaily':'Les cinq prières quotidiennes','target':'Objectif','days':'jours','today':'Aujourd’hui','thisWeek':'Cette semaine','byPrayer':'Par prière','dailyProgress':'Progrès du jour','planRemaining':'Durée restante estimée','atTarget':'Avec votre objectif quotidien','noData':'Saisissez une estimation des années de prières à rattraper.'
   },
   'de': {
-    'welcome':'Willkommen bei Qadaa','intro':'Dein Begleiter zum Nachholen versäumter Gebete','choose':'Sprache auswählen','continue':'Weiter','home':'Startseite','plan':'Tagesplan','stats':'Statistik','encouragement':'Motivation','settings':'Einstellungen','missed':'Versäumte Gebete','estimate':'Gebete schätzen','completed':'Nachgeholt','remaining':'Offen','total':'Geschätzte Gesamtzahl','progress':'Fortschritt','years':'Geschätzte Jahre','save':'Schätzung speichern','daily':'Tagesziel','prayers':'Gebete','savePlan':'Plan speichern','log':'Nachgeholtes Gebet erfassen','motivation':'Ein beständiger Schritt jeden Tag ist besser als aufzugeben.','verse':'„Verrichte das Gebet zu Meinem Gedenken“','verseRef':'Ta-Ha 20:14','subtitle':'Fange klein an und bleibe beständig','language':'Sprache','note':'Eine organisatorische Schätzung, keine religiöse Rechtsauskunft.','edit':'Bearbeiten','notifications':'Benachrichtigungen','welcomeBack':'Willkommen','fajr':'Fadschr','dhuhr':'Dhuhr','asr':'Asr','maghrib':'Maghrib','isha':'Ischa','recentRecords':'Zuletzt erfasste Gebete','fiveDaily':'Die fünf täglichen Gebete','target':'Ziel','days':'Tage','noData':'Gib eine Schätzung der Jahre mit versäumten Gebeten ein.'
+    'welcome':'Willkommen bei Qadaa','intro':'Dein Begleiter zum Nachholen versäumter Gebete','choose':'Sprache auswählen','continue':'Weiter','home':'Startseite','plan':'Tagesplan','stats':'Statistik','encouragement':'Motivation','settings':'Einstellungen','missed':'Versäumte Gebete','estimate':'Gebete schätzen','completed':'Nachgeholt','remaining':'Offen','total':'Geschätzte Gesamtzahl','progress':'Fortschritt','years':'Geschätzte Jahre','save':'Schätzung speichern','daily':'Tagesziel','prayers':'Gebete','savePlan':'Plan speichern','log':'Nachgeholtes Gebet erfassen','motivation':'Ein beständiger Schritt jeden Tag ist besser als aufzugeben.','verse':'„Verrichte das Gebet zu Meinem Gedenken“','verseRef':'Ta-Ha 20:14','subtitle':'Fange klein an und bleibe beständig','language':'Sprache','note':'Eine organisatorische Schätzung, keine religiöse Rechtsauskunft.','edit':'Bearbeiten','notifications':'Benachrichtigungen','welcomeBack':'Willkommen','fajr':'Fadschr','dhuhr':'Dhuhr','asr':'Asr','maghrib':'Maghrib','isha':'Ischa','recentRecords':'Zuletzt erfasste Gebete','fiveDaily':'Die fünf täglichen Gebete','target':'Ziel','days':'Tage','today':'Heute','thisWeek':'Diese Woche','byPrayer':'Nach Gebet','dailyProgress':'Heutiger Fortschritt','planRemaining':'Geschätzte Restdauer','atTarget':'Bei deinem Tagesziel','noData':'Gib eine Schätzung der Jahre mit versäumten Gebeten ein.'
   }
 };
 
@@ -381,9 +381,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final pages = <Widget>[
       _home(),
-      _simple(t('plan'), Icons.calendar_month_rounded, t('daily'), '$dailyTarget ${t('prayers')}', t('subtitle'), _editPlan),
-      _simple(t('stats'), Icons.bar_chart_rounded, t('progress'), '$progress%',
-          '${t('completed')}: $completed\n${t('remaining')}: $remaining', _editEstimate),
+      _planPage(),
+      _statsPage(),
       _simple(t('encouragement'), Icons.volunteer_activism_rounded, t('motivation'), t('verse'), t('verseRef'), () => setState(() => tab = 0)),
       _simple(t('settings'), Icons.settings_rounded, t('language'), languages.firstWhere((e) => e.$1 == lang).$2, t('intro'), _changeLanguage),
     ];
@@ -407,6 +406,99 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+
+  DateTime _localDay(DateTime value) {
+    final local = value.toLocal();
+    return DateTime(local.year, local.month, local.day);
+  }
+
+  int _recordsOn(DateTime day) =>
+      records.where((record) => _localDay(record.completedAt) == day).length;
+
+  int get _todayCount => _recordsOn(_localDay(DateTime.now()));
+
+  int get _weekCount {
+    final today = _localDay(DateTime.now());
+    final monday = today.subtract(Duration(days: today.weekday - 1));
+    return records.where((record) {
+      final day = _localDay(record.completedAt);
+      return !day.isBefore(monday) && !day.isAfter(today);
+    }).length;
+  }
+
+  int _prayerCount(String prayer) =>
+      records.where((record) => record.prayer == prayer).length;
+
+  Widget _summaryTile(String label, String value, IconData icon) => Container(
+    padding: const EdgeInsets.all(16),
+    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(18),
+      border: Border.all(color: const Color(0xFFE9E5D9))),
+    child: Row(children: [
+      CircleAvatar(backgroundColor: const Color(0xFFE4EFE5), child: Icon(icon, color: forest)),
+      const SizedBox(width: 12),
+      Expanded(child: Text(label, style: const TextStyle(color: ink))),
+      Text(value, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: forest)),
+    ]),
+  );
+
+  Widget _planPage() {
+    final daysNeeded = remaining == 0 ? 0 : (remaining / dailyTarget).ceil();
+    final weeksNeeded = (daysNeeded / 7).ceil();
+    final todayProgress = (dailyTarget == 0 ? 0.0 : _todayCount / dailyTarget).clamp(0.0, 1.0);
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        Text(t('plan'), style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w900, color: forest)),
+        const SizedBox(height: 8),
+        Text(t('atTarget'), style: const TextStyle(color: ink)),
+        const SizedBox(height: 18),
+        _summaryTile(t('daily'), '$dailyTarget ${t('prayers')}', Icons.flag_rounded),
+        const SizedBox(height: 10),
+        _summaryTile(t('remaining'), _format(remaining), Icons.hourglass_bottom_rounded),
+        const SizedBox(height: 10),
+        _summaryTile(t('planRemaining'),
+          remaining == 0 ? '0 ${t('days')}' : '$daysNeeded ${t('days')} · $weeksNeeded',
+          Icons.event_available_rounded),
+        const SizedBox(height: 18),
+        ClipRRect(borderRadius: BorderRadius.circular(12), child: LinearProgressIndicator(
+          minHeight: 10, value: todayProgress, color: green, backgroundColor: const Color(0xFFE6E8DE))),
+        const SizedBox(height: 8),
+        Text('${t('dailyProgress')}: $_todayCount / $dailyTarget',
+          style: const TextStyle(fontWeight: FontWeight.w700, color: forest)),
+        const SizedBox(height: 18),
+        FilledButton.icon(onPressed: _editPlan, icon: const Icon(Icons.tune_rounded),
+          style: FilledButton.styleFrom(backgroundColor: forest, padding: const EdgeInsets.all(15)),
+          label: Text(t('edit'))),
+        const SizedBox(height: 10),
+        Text(t('note'), textAlign: TextAlign.center, style: const TextStyle(fontSize: 12, color: Colors.black54)),
+      ]),
+    );
+  }
+
+  Widget _statsPage() => SingleChildScrollView(
+    padding: const EdgeInsets.all(20),
+    child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+      Text(t('stats'), style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w900, color: forest)),
+      const SizedBox(height: 18),
+      _summaryTile(t('completed'), _format(completed), Icons.check_circle_rounded),
+      const SizedBox(height: 10),
+      _summaryTile(t('remaining'), _format(remaining), Icons.pending_actions_rounded),
+      const SizedBox(height: 10),
+      _summaryTile(t('today'), '$_todayCount', Icons.today_rounded),
+      const SizedBox(height: 10),
+      _summaryTile(t('thisWeek'), '$_weekCount', Icons.date_range_rounded),
+      const SizedBox(height: 22),
+      Text(t('byPrayer'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: forest)),
+      const SizedBox(height: 8),
+      for (final prayer in const ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'])
+        Padding(padding: const EdgeInsets.only(bottom: 8),
+          child: _summaryTile(t(prayer), _format(_prayerCount(prayer)), Icons.mosque_outlined)),
+      const SizedBox(height: 12),
+      OutlinedButton.icon(onPressed: _editEstimate, icon: const Icon(Icons.edit_outlined), label: Text(t('estimate'))),
+      Text(t('note'), textAlign: TextAlign.center, style: const TextStyle(fontSize: 12, color: Colors.black54)),
+    ]),
+  );
 
   Widget _home() => CustomScrollView(slivers: [
     SliverToBoxAdapter(
