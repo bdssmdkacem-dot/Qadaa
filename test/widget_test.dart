@@ -236,4 +236,36 @@ void main() {
     }
   });
 
+
+  testWidgets('all tabs remain usable at common widths with enlarged text', (tester) async {
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(tester.view.resetTextScaler);
+    tester.view.devicePixelRatio = 1;
+    tester.view.textScaler = TextScaler.linear(1.3);
+
+    for (final width in [320.0, 360.0, 412.0]) {
+      tester.view.physicalSize = Size(width, 800);
+      SharedPreferences.setMockInitialValues({'qadaa.language': 'ar'});
+      await tester.pumpWidget(const QadaaApp());
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull, reason: 'home overflow at width $width');
+
+      final nav = find.byType(NavigationBar);
+      expect(nav, findsOneWidget);
+      final rect = tester.getRect(nav);
+      for (var index = 0; index < 5; index++) {
+        await tester.tapAt(Offset(
+          rect.left + rect.width * (index + 0.5) / 5,
+          rect.center.dy,
+        ));
+        await tester.pumpAndSettle();
+        expect(tester.takeException(), isNull,
+            reason: 'tab $index overflow at width $width with text scale 1.3');
+      }
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pumpAndSettle();
+    }
+  });
+
 }
