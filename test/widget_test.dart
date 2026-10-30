@@ -72,7 +72,8 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('Statistics'));
     await tester.pumpAndSettle();
-    expect(find.text('Progress'), findsOneWidget);
+    expect(find.text('Today'), findsOneWidget);
+    expect(find.text('This week'), findsOneWidget);
     await tester.tap(find.text('Settings'));
     await tester.pumpAndSettle();
     expect(find.text('Language'), findsOneWidget);
@@ -168,5 +169,32 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.textContaining('Completed: 1'), findsOneWidget);
   });
+
+
+  testWidgets('plan and statistics use real prayer record data', (tester) async {
+    final now = DateTime.now().toUtc();
+    SharedPreferences.setMockInitialValues({
+      'qadaa.language': 'en',
+      'qadaa.years': 1,
+      'qadaa.dailyTarget': 3,
+      'qadaa.prayerRecords': '[{"prayer":"fajr","completedAt":"${now.toIso8601String()}"},{"prayer":"isha","completedAt":"${now.toIso8601String()}"}]',
+    });
+    await tester.pumpWidget(const QadaaApp());
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Plan'));
+    await tester.pumpAndSettle();
+    expect(find.text('Today’s progress: 2 / 3'), findsOneWidget);
+    expect(find.text('3 prayers'), findsOneWidget);
+
+    await tester.tap(find.text('Statistics'));
+    await tester.pumpAndSettle();
+    expect(find.text('Today'), findsOneWidget);
+    expect(find.text('This week'), findsOneWidget);
+    expect(find.text('Fajr'), findsOneWidget);
+    expect(find.text('Isha'), findsOneWidget);
+    expect(find.text('2'), findsWidgets);
+  });
+
 
 }
