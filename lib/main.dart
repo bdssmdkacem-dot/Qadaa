@@ -430,7 +430,8 @@ class _HomePageState extends State<HomePage> {
   int _prayerCount(String prayer) =>
       records.where((record) => record.prayer == prayer).length;
 
-  Widget _summaryTile(String label, String value, IconData icon) => Container(
+  Widget _summaryTile(String label, String value, IconData icon, {Key? key}) => Container(
+    key: key,
     padding: const EdgeInsets.all(16),
     decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(18),
       border: Border.all(color: const Color(0xFFE9E5D9))),
@@ -480,7 +481,12 @@ class _HomePageState extends State<HomePage> {
     child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
       Text(t('stats'), style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w900, color: forest)),
       const SizedBox(height: 18),
-      _summaryTile(t('completed'), _format(completed), Icons.check_circle_rounded),
+      _summaryTile(
+        t('completed'),
+        _format(completed),
+        Icons.check_circle_rounded,
+        key: const ValueKey('completed-summary'),
+      ),
       const SizedBox(height: 10),
       _summaryTile(t('remaining'), _format(remaining), Icons.pending_actions_rounded),
       const SizedBox(height: 10),
