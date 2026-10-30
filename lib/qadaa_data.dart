@@ -17,7 +17,9 @@ class PrayerRecord {
   factory PrayerRecord.fromJson(Map<String, Object?> json) {
     final prayer = json['prayer'];
     final completedAt = json['completedAt'];
-    if (prayer is! String || completedAt is! String) {
+    if (prayer is! String ||
+        !const {'fajr', 'dhuhr', 'asr', 'maghrib', 'isha'}.contains(prayer) ||
+        completedAt is! String) {
       throw const FormatException('Invalid Qadaa prayer record');
     }
     return PrayerRecord(
