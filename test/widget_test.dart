@@ -221,11 +221,17 @@ void main() {
       await tester.pumpAndSettle();
       expect(tester.takeException(), isNull, reason: 'home overflow for ${item.$1}');
 
-      for (final label in [item.$2, item.$3, item.$4]) {
-        await tester.tap(find.text(label).last);
+      final navigationBar = find.byType(NavigationBar);
+      expect(navigationBar, findsOneWidget);
+      final navRect = tester.getRect(navigationBar);
+      for (final index in [1, 2, 4]) {
+        await tester.tapAt(Offset(
+          navRect.left + navRect.width * (index + 0.5) / 5,
+          navRect.center.dy,
+        ));
         await tester.pumpAndSettle();
         expect(tester.takeException(), isNull,
-            reason: 'layout overflow for ${item.$1} on $label');
+            reason: 'layout overflow for ${item.$1} on navigation item $index');
       }
     }
   });
