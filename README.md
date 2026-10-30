@@ -27,7 +27,7 @@ The committed implementation plan and release gates live in [docs/COMMERCIAL_ROA
 
 ## Prayer records
 
-New qadaa entries are stored locally with a prayer type and UTC timestamp. Existing installations that only stored a completed count are migrated into a legacy progress baseline so that their count is not discarded. The estimate still uses a configurable `years × 365 × 5` approximation and must not be presented as a religious ruling.
+New qadaa entries are stored locally with a prayer type and UTC timestamp. Existing installations that only stored a completed count are migrated into a legacy progress baseline so that their count is not discarded. Settings provide a versioned JSON backup that includes the estimate, daily target, legacy baseline, and prayer history; restore validates the entire payload and requires confirmation before replacing local data. The estimate still uses a configurable `years × 365 × 5` approximation and must not be presented as a religious ruling.
 
 ## Monetization
 
