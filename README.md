@@ -56,3 +56,16 @@ The UI is being prepared against the approved Arabic home-screen reference. Do n
 - Until the final assets are supplied, retain the vector-painted fallback and do not add generated or stock images.
 - After integration, validate image cropping on 320 px, 360 px, and 412 px logical widths, plus large text scaling.
 
+## Visual and physical-device acceptance
+
+Automated widget coverage includes narrow layouts and enlarged text, but it is not a substitute for a real Android device review. Before merging the release candidate, capture and inspect these screens on the target phone:
+
+- First launch and language selection.
+- Home at the top and after scrolling, including zero-data and populated states.
+- Daily plan, statistics, encouragement, and settings.
+- Prayer logging sheet with all five prayer choices and the keyboard visible where applicable.
+- Smallest supported display setting and Android's largest practical font setting.
+- RTL Arabic and at least one LTR language.
+
+Check that all five navigation destinations remain visible and tappable, no text or numbers clip, buttons have comfortable touch areas, content respects status/navigation bars, and bottom sheets remain scrollable above the keyboard. Compare the home composition, hierarchy, spacing, and contrast against the approved reference image; record any deviations before release. Do not mark commercial readiness or merge solely because CI is green.
+
