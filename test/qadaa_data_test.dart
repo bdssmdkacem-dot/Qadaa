@@ -75,4 +75,35 @@ void main() {
     expect(snapshot.records, isEmpty);
   });
 
+  test('malformed JSON history is ignored without losing legacy progress', () async {
+    SharedPreferences.setMockInitialValues({
+      'qadaa.legacyCompleted': 11,
+      'qadaa.prayerRecords': '[{"prayer":',
+    });
+
+    final snapshot = await QadaaPrayerStore.load();
+
+    expect(snapshot.legacyCompleted, 11);
+    expect(snapshot.records, isEmpty);
+    expect(snapshot.completedCount, 11);
+  });
+
+  test('invalid timestamps and non-list history do not crash startup', () async {
+    SharedPreferences.setMockInitialValues({
+      'qadaa.legacyCompleted': 5,
+      'qadaa.prayerRecords':
+          '[{"prayer":"fajr","completedAt":"not-a-date"}]',
+    });
+
+    final invalidTimestamp = await QadaaPrayerStore.load();
+    expect(invalidTimestamp.completedCount, 5);
+    expect(invalidTimestamp.records, isEmpty);
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('qadaa.prayerRecords', '{"prayer":"fajr"}');
+
+    final nonList = await QadaaPrayerStore.load();
+    expect(nonList.completedCount, 5);
+    expect(nonList.records, isEmpty);
+  });
 }
