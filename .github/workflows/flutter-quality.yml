@@ -38,8 +38,12 @@ jobs:
       - name: Generate Android platform files when absent
         shell: bash
         run: |
-          if [ ! -d android ]; then
-            flutter create --platforms=android --project-name qadaa .
+          # The repository may contain only custom Android resources (such as
+          # the launcher icon) without the actual Flutter Android host project.
+          # Check for the manifest, not merely the directory, before deciding
+          # whether platform scaffolding is present.
+          if [ ! -f android/app/src/main/AndroidManifest.xml ]; then
+            flutter create --platforms=android --project-name qadaa --org com.qadaa .
           fi
 
       - name: Install dependencies
