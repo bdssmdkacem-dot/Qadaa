@@ -444,8 +444,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _planPage() {
     final daysNeeded = remaining == 0 ? 0 : (remaining / dailyTarget).ceil();
-    final weeksNeeded = (daysNeeded / 7).ceil();
-    final todayProgress = (dailyTarget == 0 ? 0.0 : _todayCount / dailyTarget).clamp(0.0, 1.0);
+        final todayProgress = (dailyTarget == 0 ? 0.0 : _todayCount / dailyTarget).clamp(0.0, 1.0);
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
@@ -458,7 +457,7 @@ class _HomePageState extends State<HomePage> {
         _summaryTile(t('remaining'), _format(remaining), Icons.hourglass_bottom_rounded),
         const SizedBox(height: 10),
         _summaryTile(t('planRemaining'),
-          remaining == 0 ? '0 ${t('days')}' : '$daysNeeded ${t('days')} · $weeksNeeded',
+          '$daysNeeded ${t('days')}',
           Icons.event_available_rounded),
         const SizedBox(height: 18),
         ClipRRect(borderRadius: BorderRadius.circular(12), child: LinearProgressIndicator(
