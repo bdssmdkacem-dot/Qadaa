@@ -106,4 +106,59 @@ void main() {
     expect(nonList.completedCount, 5);
     expect(nonList.records, isEmpty);
   });
+
+  test('versioned backup round-trips estimate, target and prayer history', () {
+    final source = QadaaBackup(
+      years: 4,
+      dailyTarget: 7,
+      snapshot: QadaaPrayerStoreSnapshot(
+        legacyCompleted: 12,
+        records: [
+          PrayerRecord(
+            prayer: 'maghrib',
+            completedAt: DateTime.utc(2026, 10, 29, 18),
+          ),
+          PrayerRecord(
+            prayer: 'fajr',
+            completedAt: DateTime.utc(2026, 10, 28, 5),
+          ),
+        ],
+      ),
+    );
+
+    final restored = QadaaBackup.decode(source.encode());
+
+    expect(restored.years, 4);
+    expect(restored.dailyTarget, 7);
+    expect(restored.snapshot.legacyCompleted, 12);
+    expect(restored.snapshot.completedCount, 14);
+    expect(restored.snapshot.records.map((item) => item.prayer),
+        ['maghrib', 'fajr']);
+  });
+
+  test('backup rejects unsupported versions and invalid record types', () {
+    expect(
+      () => QadaaBackup.decode('{"format":"qadaa-backup","version":99}'),
+      throwsFormatException,
+    );
+    expect(
+      () => QadaaBackup.decode(
+        '{"format":"qadaa-backup","version":1,"years":1,"dailyTarget":5,'
+        '"legacyCompleted":0,"records":[{"prayer":"invalid",'
+        '"completedAt":"2026-01-01T00:00:00Z"}]}',
+      ),
+      throwsFormatException,
+    );
+  });
+
+  test('backup rejects out-of-range planning values', () {
+    expect(
+      () => QadaaBackup.decode(
+        '{"format":"qadaa-backup","version":1,"years":81,"dailyTarget":5,'
+        '"legacyCompleted":0,"records":[]}',
+      ),
+      throwsFormatException,
+    );
+  });
+
 }
