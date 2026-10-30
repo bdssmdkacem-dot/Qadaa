@@ -17,7 +17,9 @@ Acceptance gate: analyze and tests pass; release APK builds; manual install/reop
 - Add daily and weekly summaries based on actual records.
 - Add an editable per-day target and a practical backlog plan.
 - Add optional reminders with clear permission handling and no duplicate notifications.
-- Add export/restore or a documented backup strategy before users accumulate substantial history.
+- Add versioned JSON export/restore for the estimate, daily target, legacy baseline, and timestamped prayer records; validate the complete backup before replacing local data.
+- Provide clear local-storage disclosure and explicit confirmation before a restore overwrites existing progress.
+- Add optional reminders only after selecting and testing a maintained notification implementation, timezone behavior, Android 13+ notification permission flow, and duplicate-schedule prevention.
 
 ## Phase 3 — Google Mobile Ads and revenue
 Use the supplied AdMob IDs only after confirming they belong to the Qadaa app and banner unit:
@@ -54,6 +56,9 @@ Acceptance gate: test ad IDs in development; verify loading, no-fill, offline, d
 5. Avoid launching banner + native + interstitial + rewarded ads together. Start with one format, measure retention/crashes and policy compliance, then decide using evidence.
 
 ## Current status
-- CI run 40872384351 completed successfully for analyze, tests, release APK build, and artifact upload.
-- This proves automated build/test success only. It does not prove physical-device acceptance, live AdMob serving, or commercial readiness.
-- Current app code still uses a simplified estimate based on years × 365 × 5; this is a planning approximation, not a personalized religious calculation.
+- The core record store supports typed UTC records, legacy-count migration, malformed-history tolerance, and real daily/weekly statistics.
+- A versioned JSON backup format now validates version, planning bounds, record types, and timestamps before restore. Settings expose copy/export and confirmed restore flows in all five languages.
+- CI on `f15f7696` passed static analysis, widget/unit tests, Android release build, and artifact upload. The backup implementation and its new tests are awaiting CI on the latest commit; do not treat earlier CI as validation of these changes.
+- The UI still uses a vector fallback until the user supplies the final visual assets. Physical-device review, touch/scroll validation, real notification behavior, and final reference comparison remain pending.
+- The estimate remains a simplified `years × 365 × 5` planning approximation, not a personalized religious calculation or fatwa.
+- Do not claim commercial readiness until device acceptance, backup restore on-device, accessibility review, privacy/store disclosures, and release signing are verified.
