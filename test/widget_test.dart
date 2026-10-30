@@ -182,7 +182,7 @@ void main() {
     await tester.pumpWidget(const QadaaApp());
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Plan'));
+    await tester.tap(find.text('Daily plan'));
     await tester.pumpAndSettle();
     expect(find.text('Today’s progress: 2 / 3'), findsOneWidget);
     expect(find.text('3 prayers'), findsOneWidget);
