@@ -167,7 +167,12 @@ void main() {
       matching: find.text('Statistics'),
     ));
     await tester.pumpAndSettle();
-    expect(find.textContaining('Completed: 1'), findsOneWidget);
+    final completedTile = find.byKey(const ValueKey('completed-summary'));
+    expect(completedTile, findsOneWidget);
+    expect(
+      find.descendant(of: completedTile, matching: find.text('1')),
+      findsOneWidget,
+    );
   });
 
 
