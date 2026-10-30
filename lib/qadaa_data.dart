@@ -38,8 +38,10 @@ class QadaaPrayerStore {
 
   static Future<QadaaPrayerStoreSnapshot> load() async {
     final prefs = await SharedPreferences.getInstance();
+    // The presence of an empty records list does not mean the old aggregate
+    // count was migrated. Read it until the dedicated baseline key exists.
     final legacy = prefs.getInt(legacyCompletedKey) ??
-        (prefs.containsKey(recordsKey) ? 0 : (prefs.getInt('qadaa.completed') ?? 0));
+        (prefs.getInt('qadaa.completed') ?? 0);
     if (!prefs.containsKey(legacyCompletedKey)) {
       await prefs.setInt(legacyCompletedKey, legacy);
     }
