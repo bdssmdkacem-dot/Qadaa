@@ -240,9 +240,9 @@ void main() {
   testWidgets('all tabs remain usable at common widths with enlarged text', (tester) async {
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
-    addTearDown(tester.view.resetTextScaler);
+    addTearDown(tester.binding.platformDispatcher.clearTextScaleFactorTestValue);
     tester.view.devicePixelRatio = 1;
-    tester.view.textScaler = TextScaler.linear(1.3);
+    tester.binding.platformDispatcher.textScaleFactorTestValue = 1.3;
 
     for (final width in [320.0, 360.0, 412.0]) {
       tester.view.physicalSize = Size(width, 800);
