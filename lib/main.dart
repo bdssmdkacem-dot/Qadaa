@@ -421,20 +421,29 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _importBackup() async {
-    final controller = TextEditingController();
+    var sourceText = '';
     final source = await showDialog<String>(
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(t('importBackup')),
-        content: TextField(controller: controller, minLines: 4, maxLines: 8,
-          decoration: InputDecoration(hintText: t('pasteBackup'), border: const OutlineInputBorder())),
+        content: TextField(
+          minLines: 4,
+          maxLines: 8,
+          onChanged: (value) => sourceText = value,
+          decoration: InputDecoration(
+            hintText: t('pasteBackup'),
+            border: const OutlineInputBorder(),
+          ),
+        ),
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx), child: Text(t('cancel'))),
-          FilledButton(onPressed: () => Navigator.pop(ctx, controller.text.trim()), child: Text(t('restore'))),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, sourceText.trim()),
+            child: Text(t('restore')),
+          ),
         ],
       ),
     );
-    controller.dispose();
     if (source == null || source.isEmpty) return;
     late final QadaaBackup backup;
     try {
