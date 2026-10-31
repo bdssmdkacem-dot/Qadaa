@@ -58,7 +58,7 @@ Acceptance gate: test ad IDs in development; verify loading, no-fill, offline, d
 ## Current status
 - The core record store supports typed UTC records, legacy-count migration, malformed-history tolerance, and real daily/weekly statistics.
 - A versioned JSON backup format now validates version, planning bounds, record types, and timestamps before restore. Settings expose copy/export and confirmed restore flows in all five languages.
-- CI on `f15f7696` passed static analysis, widget/unit tests, Android release build, and artifact upload. The backup implementation and its new tests are awaiting CI on the latest commit; do not treat earlier CI as validation of these changes.
-- The UI still uses a vector fallback until the user supplies the final visual assets. Physical-device review, touch/scroll validation, real notification behavior, and final reference comparison remain pending.
+- CI run `41147885888` on commit `6d43b00755a2ff556c4e04a744973159a23bdd70` passed all workflow steps: dependency installation, static analysis, unit/widget tests, Android release APK build, and artifact upload. This validates the current feature-branch source in CI, not physical-device behavior.
+- The UI still uses a vector fallback until the user supplies the final visual assets. Physical-device review is deliberately deferred until the pre-device phase is complete. Real notification behavior is not implemented; reminder permission, timezone scheduling, rescheduling, and duplicate prevention remain open. Final reference comparison also remains pending.
 - The estimate remains a simplified `years × 365 × 5` planning approximation, not a personalized religious calculation or fatwa.
 - Do not claim commercial readiness until device acceptance, backup restore on-device, accessibility review, privacy/store disclosures, and release signing are verified.
