@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'qadaa_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -10,19 +11,19 @@ const ink = Color(0xFF173E34);
 
 const translations = <String, Map<String, String>>{
   'ar': {
-    'welcome':'مرحبًا بك في قضاء','intro':'رفيقك لتنظيم قضاء الصلوات الفائتة','choose':'اختر لغة التطبيق','continue':'المتابعة','home':'الرئيسية','plan':'الخطة اليومية','stats':'الإحصائيات','encouragement':'التشجيع','settings':'الإعدادات','missed':'الصلوات الفائتة','estimate':'تقدير الفوائت','completed':'تم قضاؤها','remaining':'المتبقي','total':'الإجمالي التقديري','progress':'نسبة الإنجاز','years':'سنوات الفوائت','save':'حفظ التقدير','daily':'الهدف اليومي','prayers':'صلوات','savePlan':'حفظ الخطة','log':'تسجيل صلاة تم قضاؤها','motivation':'خطوة ثابتة كل يوم خير من الانقطاع.','verse':'﴿ وَأَقِمِ الصَّلَاةَ لِذِكْرِي ﴾','verseRef':'طه: 14','subtitle':'ابدأ بخطوة صغيرة، واستمر بثبات','language':'اللغة','note':'هذا تقدير للتنظيم الشخصي، وليس فتوى شرعية.','edit':'تعديل','notifications':'التنبيهات','welcomeBack':'السلام عليكم','fajr':'الفجر','dhuhr':'الظهر','asr':'العصر','maghrib':'المغرب','isha':'العشاء','recentRecords':'آخر الصلوات المسجلة','fiveDaily':'الصلوات الخمس اليومية','target':'الهدف','days':'أيام','noData':'ابدأ بإدخال تقديرك للسنوات التي فاتتك فيها الصلاة.'
+    'welcome':'مرحبًا بك في قضاء','intro':'رفيقك لتنظيم قضاء الصلوات الفائتة','choose':'اختر لغة التطبيق','continue':'المتابعة','home':'الرئيسية','plan':'الخطة اليومية','stats':'الإحصائيات','encouragement':'التشجيع','settings':'الإعدادات','missed':'الصلوات الفائتة','estimate':'تقدير الفوائت','completed':'تم قضاؤها','remaining':'المتبقي','total':'الإجمالي التقديري','progress':'نسبة الإنجاز','years':'سنوات الفوائت','save':'حفظ التقدير','daily':'الهدف اليومي','prayers':'صلوات','savePlan':'حفظ الخطة','log':'تسجيل صلاة تم قضاؤها','motivation':'خطوة ثابتة كل يوم خير من الانقطاع.','verse':'﴿ وَأَقِمِ الصَّلَاةَ لِذِكْرِي ﴾','verseRef':'طه: 14','subtitle':'ابدأ بخطوة صغيرة، واستمر بثبات','language':'اللغة','note':'هذا تقدير للتنظيم الشخصي، وليس فتوى شرعية.','edit':'تعديل','notifications':'التنبيهات','welcomeBack':'السلام عليكم','fajr':'الفجر','dhuhr':'الظهر','asr':'العصر','maghrib':'المغرب','isha':'العشاء','recentRecords':'آخر الصلوات المسجلة','fiveDaily':'الصلوات الخمس اليومية','target':'الهدف','days':'أيام','today':'اليوم','thisWeek':'هذا الأسبوع','byPrayer':'حسب الصلاة','dailyProgress':'إنجاز اليوم','planRemaining':'المدة التقريبية المتبقية','atTarget':'وفق هدفك اليومي','noData':'ابدأ بإدخال تقديرك للسنوات التي فاتتك فيها الصلاة.', 'backup':'النسخ الاحتياطي', 'exportBackup':'نسخ بياناتي', 'importBackup':'استعادة نسخة', 'backupHint':'احتفظ بنسخة من سجل صلواتك وخطتك. تُحفظ البيانات على جهازك.', 'pasteBackup':'الصق محتوى نسخة قضاء هنا', 'backupCopied':'تم نسخ النسخة الاحتياطية', 'backupRestored':'تمت استعادة البيانات', 'backupInvalid':'النسخة غير صالحة أو غير مدعومة', 'restoreConfirm':'ستستبدل الاستعادة البيانات الحالية. هل تريد المتابعة؟', 'cancel':'إلغاء', 'restore':'استعادة', 'privacyLocal':'بياناتك محفوظة محليًا على هذا الجهاز.'
   },
   'es': {
-    'welcome':'Te damos la bienvenida a Qadaa','intro':'Tu compañero para organizar las oraciones pendientes','choose':'Elige el idioma','continue':'Continuar','home':'Inicio','plan':'Plan diario','stats':'Estadísticas','encouragement':'Motivación','settings':'Ajustes','missed':'Oraciones pendientes','estimate':'Calcular pendientes','completed':'Realizadas','remaining':'Pendientes','total':'Total estimado','progress':'Progreso','years':'Años estimados','save':'Guardar estimación','daily':'Objetivo diario','prayers':'oraciones','savePlan':'Guardar plan','log':'Registrar una oración realizada','motivation':'Un paso constante cada día es mejor que rendirse.','verse':'«Establece la oración para recordarme»','verseRef':'Ta-Ha 20:14','subtitle':'Empieza poco a poco y continúa con constancia','language':'Idioma','note':'Es una estimación organizativa, no una opinión religiosa.','edit':'Editar','notifications':'Notificaciones','welcomeBack':'Bienvenido','fajr':'Fajr','dhuhr':'Dhuhr','asr':'Asr','maghrib':'Maghrib','isha':'Isha','recentRecords':'Registros recientes','fiveDaily':'Las cinco oraciones diarias','target':'Objetivo','days':'días','noData':'Introduce una estimación de los años de oraciones pendientes.'
+    'welcome':'Te damos la bienvenida a Qadaa','intro':'Tu compañero para organizar las oraciones pendientes','choose':'Elige el idioma','continue':'Continuar','home':'Inicio','plan':'Plan diario','stats':'Estadísticas','encouragement':'Motivación','settings':'Ajustes','missed':'Oraciones pendientes','estimate':'Calcular pendientes','completed':'Realizadas','remaining':'Pendientes','total':'Total estimado','progress':'Progreso','years':'Años estimados','save':'Guardar estimación','daily':'Objetivo diario','prayers':'oraciones','savePlan':'Guardar plan','log':'Registrar una oración realizada','motivation':'Un paso constante cada día es mejor que rendirse.','verse':'«Establece la oración para recordarme»','verseRef':'Ta-Ha 20:14','subtitle':'Empieza poco a poco y continúa con constancia','language':'Idioma','note':'Es una estimación organizativa, no una opinión religiosa.','edit':'Editar','notifications':'Notificaciones','welcomeBack':'Bienvenido','fajr':'Fajr','dhuhr':'Dhuhr','asr':'Asr','maghrib':'Maghrib','isha':'Isha','recentRecords':'Registros recientes','fiveDaily':'Las cinco oraciones diarias','target':'Objetivo','days':'días','today':'Hoy','thisWeek':'Esta semana','byPrayer':'Por oración','dailyProgress':'Progreso de hoy','planRemaining':'Tiempo restante estimado','atTarget':'Según tu objetivo diario','noData':'Introduce una estimación de los años de oraciones pendientes.', 'backup':'Copia de seguridad', 'exportBackup':'Copiar mis datos', 'importBackup':'Restaurar copia', 'backupHint':'Guarda una copia de tu historial de oraciones y tu plan. Los datos permanecen en tu dispositivo.', 'pasteBackup':'Pega aquí la copia de Qadaa', 'backupCopied':'Copia de seguridad copiada', 'backupRestored':'Datos restaurados', 'backupInvalid':'La copia no es válida o no es compatible', 'restoreConfirm':'La restauración sustituirá los datos actuales. ¿Continuar?', 'cancel':'Cancelar', 'restore':'Restaurar', 'privacyLocal':'Tus datos se guardan localmente en este dispositivo.'
   },
   'en': {
-    'welcome':'Welcome to Qadaa','intro':'Your companion for organizing missed prayers','choose':'Choose your language','continue':'Continue','home':'Home','plan':'Daily plan','stats':'Statistics','encouragement':'Encouragement','settings':'Settings','missed':'Missed prayers','estimate':'Estimate missed prayers','completed':'Completed','remaining':'Remaining','total':'Estimated total','progress':'Progress','years':'Estimated years','save':'Save estimate','daily':'Daily target','prayers':'prayers','savePlan':'Save plan','log':'Log a completed prayer','motivation':'A steady step each day is better than stopping.','verse':'“Establish prayer for My remembrance”','verseRef':'Ta-Ha 20:14','subtitle':'Start small and keep moving forward','language':'Language','note':'An organizational estimate, not a religious ruling.','edit':'Edit','notifications':'Notifications','welcomeBack':'Welcome','fajr':'Fajr','dhuhr':'Dhuhr','asr':'Asr','maghrib':'Maghrib','isha':'Isha','recentRecords':'Recent prayer records','fiveDaily':'The five daily prayers','target':'Target','days':'days','noData':'Enter an estimate of the years of missed prayers.'
+    'welcome':'Welcome to Qadaa','intro':'Your companion for organizing missed prayers','choose':'Choose your language','continue':'Continue','home':'Home','plan':'Daily plan','stats':'Statistics','encouragement':'Encouragement','settings':'Settings','missed':'Missed prayers','estimate':'Estimate missed prayers','completed':'Completed','remaining':'Remaining','total':'Estimated total','progress':'Progress','years':'Estimated years','save':'Save estimate','daily':'Daily target','prayers':'prayers','savePlan':'Save plan','log':'Log a completed prayer','motivation':'A steady step each day is better than stopping.','verse':'“Establish prayer for My remembrance”','verseRef':'Ta-Ha 20:14','subtitle':'Start small and keep moving forward','language':'Language','note':'An organizational estimate, not a religious ruling.','edit':'Edit','notifications':'Notifications','welcomeBack':'Welcome','fajr':'Fajr','dhuhr':'Dhuhr','asr':'Asr','maghrib':'Maghrib','isha':'Isha','recentRecords':'Recent prayer records','fiveDaily':'The five daily prayers','target':'Target','days':'days','today':'Today','thisWeek':'This week','byPrayer':'By prayer','dailyProgress':'Today’s progress','planRemaining':'Estimated time remaining','atTarget':'At your daily target','noData':'Enter an estimate of the years of missed prayers.', 'backup':'Backup', 'exportBackup':'Copy my data', 'importBackup':'Restore backup', 'backupHint':'Keep a copy of your prayer history and plan. Your data stays on this device.', 'pasteBackup':'Paste your Qadaa backup here', 'backupCopied':'Backup copied', 'backupRestored':'Data restored', 'backupInvalid':'This backup is invalid or unsupported', 'restoreConfirm':'Restoring will replace current data. Continue?', 'cancel':'Cancel', 'restore':'Restore', 'privacyLocal':'Your data is stored locally on this device.'
   },
   'fr': {
-    'welcome':'Bienvenue sur Qadaa','intro':'Votre compagnon pour organiser les prières à rattraper','choose':'Choisissez la langue','continue':'Continuer','home':'Accueil','plan':'Plan quotidien','stats':'Statistiques','encouragement':'Encouragement','settings':'Paramètres','missed':'Prières à rattraper','estimate':'Estimer les prières','completed':'Effectuées','remaining':'Restantes','total':'Total estimé','progress':'Progression','years':'Années estimées','save':'Enregistrer','daily':'Objectif quotidien','prayers':'prières','savePlan':'Valider le plan','log':'Enregistrer une prière effectuée','motivation':'Un petit pas chaque jour vaut mieux que l’abandon.','verse':'« Accomplis la prière pour te souvenir de Moi »','verseRef':'Taha : 14','subtitle':'Commencez doucement, avancez avec constance','language':'Langue','note':'Estimation d’organisation, pas un avis religieux.','edit':'Modifier','notifications':'Notifications','welcomeBack':'Bienvenue','fajr':'Fajr','dhuhr':'Dhouhr','asr':'Asr','maghrib':'Maghrib','isha':'Icha','recentRecords':'Prières récemment enregistrées','fiveDaily':'Les cinq prières quotidiennes','target':'Objectif','days':'jours','noData':'Saisissez une estimation des années de prières à rattraper.'
+    'welcome':'Bienvenue sur Qadaa','intro':'Votre compagnon pour organiser les prières à rattraper','choose':'Choisissez la langue','continue':'Continuer','home':'Accueil','plan':'Plan quotidien','stats':'Statistiques','encouragement':'Encouragement','settings':'Paramètres','missed':'Prières à rattraper','estimate':'Estimer les prières','completed':'Effectuées','remaining':'Restantes','total':'Total estimé','progress':'Progression','years':'Années estimées','save':'Enregistrer','daily':'Objectif quotidien','prayers':'prières','savePlan':'Valider le plan','log':'Enregistrer une prière effectuée','motivation':'Un petit pas chaque jour vaut mieux que l’abandon.','verse':'« Accomplis la prière pour te souvenir de Moi »','verseRef':'Taha : 14','subtitle':'Commencez doucement, avancez avec constance','language':'Langue','note':'Estimation d’organisation, pas un avis religieux.','edit':'Modifier','notifications':'Notifications','welcomeBack':'Bienvenue','fajr':'Fajr','dhuhr':'Dhouhr','asr':'Asr','maghrib':'Maghrib','isha':'Icha','recentRecords':'Prières récemment enregistrées','fiveDaily':'Les cinq prières quotidiennes','target':'Objectif','days':'jours','today':'Aujourd’hui','thisWeek':'Cette semaine','byPrayer':'Par prière','dailyProgress':'Progrès du jour','planRemaining':'Durée restante estimée','atTarget':'Avec votre objectif quotidien','noData':'Saisissez une estimation des années de prières à rattraper.', 'backup':'Sauvegarde', 'exportBackup':'Copier mes données', 'importBackup':'Restaurer une sauvegarde', 'backupHint':'Conservez une copie de votre historique de prières et de votre plan. Vos données restent sur cet appareil.', 'pasteBackup':'Collez votre sauvegarde Qadaa ici', 'backupCopied':'Sauvegarde copiée', 'backupRestored':'Données restaurées', 'backupInvalid':'Cette sauvegarde est invalide ou non prise en charge', 'restoreConfirm':'La restauration remplacera les données actuelles. Continuer ?', 'cancel':'Annuler', 'restore':'Restaurer', 'privacyLocal':'Vos données sont stockées localement sur cet appareil.'
   },
   'de': {
-    'welcome':'Willkommen bei Qadaa','intro':'Dein Begleiter zum Nachholen versäumter Gebete','choose':'Sprache auswählen','continue':'Weiter','home':'Startseite','plan':'Tagesplan','stats':'Statistik','encouragement':'Motivation','settings':'Einstellungen','missed':'Versäumte Gebete','estimate':'Gebete schätzen','completed':'Nachgeholt','remaining':'Offen','total':'Geschätzte Gesamtzahl','progress':'Fortschritt','years':'Geschätzte Jahre','save':'Schätzung speichern','daily':'Tagesziel','prayers':'Gebete','savePlan':'Plan speichern','log':'Nachgeholtes Gebet erfassen','motivation':'Ein beständiger Schritt jeden Tag ist besser als aufzugeben.','verse':'„Verrichte das Gebet zu Meinem Gedenken“','verseRef':'Ta-Ha 20:14','subtitle':'Fange klein an und bleibe beständig','language':'Sprache','note':'Eine organisatorische Schätzung, keine religiöse Rechtsauskunft.','edit':'Bearbeiten','notifications':'Benachrichtigungen','welcomeBack':'Willkommen','fajr':'Fadschr','dhuhr':'Dhuhr','asr':'Asr','maghrib':'Maghrib','isha':'Ischa','recentRecords':'Zuletzt erfasste Gebete','fiveDaily':'Die fünf täglichen Gebete','target':'Ziel','days':'Tage','noData':'Gib eine Schätzung der Jahre mit versäumten Gebeten ein.'
+    'welcome':'Willkommen bei Qadaa','intro':'Dein Begleiter zum Nachholen versäumter Gebete','choose':'Sprache auswählen','continue':'Weiter','home':'Startseite','plan':'Tagesplan','stats':'Statistik','encouragement':'Motivation','settings':'Einstellungen','missed':'Versäumte Gebete','estimate':'Gebete schätzen','completed':'Nachgeholt','remaining':'Offen','total':'Geschätzte Gesamtzahl','progress':'Fortschritt','years':'Geschätzte Jahre','save':'Schätzung speichern','daily':'Tagesziel','prayers':'Gebete','savePlan':'Plan speichern','log':'Nachgeholtes Gebet erfassen','motivation':'Ein beständiger Schritt jeden Tag ist besser als aufzugeben.','verse':'„Verrichte das Gebet zu Meinem Gedenken“','verseRef':'Ta-Ha 20:14','subtitle':'Fange klein an und bleibe beständig','language':'Sprache','note':'Eine organisatorische Schätzung, keine religiöse Rechtsauskunft.','edit':'Bearbeiten','notifications':'Benachrichtigungen','welcomeBack':'Willkommen','fajr':'Fadschr','dhuhr':'Dhuhr','asr':'Asr','maghrib':'Maghrib','isha':'Ischa','recentRecords':'Zuletzt erfasste Gebete','fiveDaily':'Die fünf täglichen Gebete','target':'Ziel','days':'Tage','today':'Heute','thisWeek':'Diese Woche','byPrayer':'Nach Gebet','dailyProgress':'Heutiger Fortschritt','planRemaining':'Geschätzte Restdauer','atTarget':'Bei deinem Tagesziel','noData':'Gib eine Schätzung der Jahre mit versäumten Gebeten ein.', 'backup':'Datensicherung', 'exportBackup':'Meine Daten kopieren', 'importBackup':'Sicherung wiederherstellen', 'backupHint':'Bewahre eine Kopie deines Gebetsverlaufs und Plans auf. Deine Daten bleiben auf diesem Gerät.', 'pasteBackup':'Füge hier deine Qadaa-Sicherung ein', 'backupCopied':'Sicherung kopiert', 'backupRestored':'Daten wiederhergestellt', 'backupInvalid':'Diese Sicherung ist ungültig oder wird nicht unterstützt', 'restoreConfirm':'Beim Wiederherstellen werden aktuelle Daten ersetzt. Fortfahren?', 'cancel':'Abbrechen', 'restore':'Wiederherstellen', 'privacyLocal':'Deine Daten werden lokal auf diesem Gerät gespeichert.'
   }
 };
 
@@ -83,6 +84,39 @@ class _QadaaAppState extends State<QadaaApp> {
         useMaterial3: true,
         scaffoldBackgroundColor: cream,
         colorScheme: ColorScheme.fromSeed(seedColor: forest, surface: cream),
+        visualDensity: VisualDensity.standard,
+        textTheme: const TextTheme(
+          titleLarge: TextStyle(fontSize: 25, fontWeight: FontWeight.w900, color: forest, height: 1.2),
+          titleMedium: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: forest, height: 1.25),
+          bodyLarge: TextStyle(fontSize: 15, color: ink, height: 1.45),
+          bodyMedium: TextStyle(fontSize: 14, color: ink, height: 1.4),
+          labelLarge: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+        ),
+        navigationBarTheme: NavigationBarThemeData(
+          height: 76,
+          backgroundColor: const Color(0xFFFFFEFA),
+          indicatorColor: const Color(0xFFDCEDE4),
+          labelTextStyle: WidgetStateProperty.resolveWith((states) => TextStyle(
+            fontSize: 10.5,
+            fontWeight: states.contains(WidgetState.selected) ? FontWeight.w800 : FontWeight.w600,
+            color: states.contains(WidgetState.selected) ? forest : ink,
+          )),
+        ),
+        filledButtonTheme: FilledButtonThemeData(
+          style: FilledButton.styleFrom(
+            minimumSize: const Size(48, 48),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+            backgroundColor: forest,
+          ),
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          fillColor: const Color(0xFFFFFEFA),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: const BorderSide(color: Color(0xFFE4E0D5))),
+          enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: const BorderSide(color: Color(0xFFE4E0D5))),
+          focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: const BorderSide(color: green, width: 1.6)),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+        ),
       ),
       home: loading
           ? const Scaffold(
@@ -240,10 +274,10 @@ class _HomePageState extends State<HomePage> {
     final snapshot = await QadaaPrayerStore.load();
     if (!mounted) return;
     setState(() {
-      years = prefs.getInt('qadaa.years') ?? 0;
-      legacyCompleted = snapshot.legacyCompleted;
+      years = (prefs.getInt('qadaa.years') ?? 0).clamp(0, 80).toInt();
+      legacyCompleted = snapshot.legacyCompleted.clamp(0, 1000000000).toInt();
       records = snapshot.records;
-      dailyTarget = prefs.getInt('qadaa.dailyTarget') ?? 5;
+      dailyTarget = (prefs.getInt('qadaa.dailyTarget') ?? 5).clamp(1, 20).toInt();
       loading = false;
     });
   }
@@ -377,24 +411,119 @@ class _HomePageState extends State<HomePage> {
     await _saveData();
   }
 
+
+  Future<void> _exportBackup() async {
+    final backup = QadaaBackup(years: years, dailyTarget: dailyTarget,
+      snapshot: QadaaPrayerStoreSnapshot(legacyCompleted: legacyCompleted, records: records));
+    await Clipboard.setData(ClipboardData(text: backup.encode()));
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(t('backupCopied'))));
+  }
+
+  Future<void> _importBackup() async {
+    var sourceText = '';
+    final source = await showDialog<String>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(t('importBackup')),
+        content: TextField(
+          minLines: 4,
+          maxLines: 8,
+          onChanged: (value) => sourceText = value,
+          decoration: InputDecoration(
+            hintText: t('pasteBackup'),
+            border: const OutlineInputBorder(),
+          ),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx), child: Text(t('cancel'))),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, sourceText.trim()),
+            child: Text(t('restore')),
+          ),
+        ],
+      ),
+    );
+    if (source == null || source.isEmpty) return;
+    late final QadaaBackup backup;
+    try {
+      backup = QadaaBackup.decode(source);
+    } on FormatException {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(t('backupInvalid'))));
+      return;
+    }
+    if (!mounted) return;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        content: Text(t('restoreConfirm')),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(t('cancel'))),
+          FilledButton(onPressed: () => Navigator.pop(ctx, true), child: Text(t('restore'))),
+        ],
+      ),
+    );
+    if (confirmed != true) return;
+    setState(() {
+      years = backup.years;
+      dailyTarget = backup.dailyTarget;
+      legacyCompleted = backup.snapshot.legacyCompleted;
+      records = backup.snapshot.records;
+    });
+    await _saveData();
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(t('backupRestored'))));
+  }
+
+  Widget _settingsPage() => ListView(
+    padding: const EdgeInsets.all(20),
+    children: [
+      Text(t('settings'), style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w900, color: forest)),
+      const SizedBox(height: 18),
+      Card(color: Colors.white, child: ListTile(
+        leading: const Icon(Icons.language_rounded, color: forest),
+        title: Text(t('language')),
+        subtitle: Text(languages.firstWhere((item) => item.$1 == lang).$2),
+        trailing: const Icon(Icons.chevron_right_rounded),
+        onTap: _changeLanguage,
+      )),
+      const SizedBox(height: 18),
+      Text(t('backup'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: forest)),
+      const SizedBox(height: 6),
+      Text(t('backupHint'), style: const TextStyle(color: ink, height: 1.5)),
+      const SizedBox(height: 12),
+      FilledButton.icon(onPressed: _exportBackup, icon: const Icon(Icons.copy_all_rounded), label: Text(t('exportBackup'))),
+      const SizedBox(height: 8),
+      OutlinedButton.icon(onPressed: _importBackup, icon: const Icon(Icons.restore_rounded), label: Text(t('importBackup'))),
+      const SizedBox(height: 20),
+      const Divider(),
+      const SizedBox(height: 10),
+      Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        const Icon(Icons.lock_outline_rounded, color: green),
+        const SizedBox(width: 10),
+        Expanded(child: Text(t('privacyLocal'), style: const TextStyle(color: ink, height: 1.5))),
+      ]),
+      const SizedBox(height: 12),
+      Text(t('note'), textAlign: TextAlign.center, style: const TextStyle(fontSize: 12, color: Colors.black54)),
+    ],
+  );
+
   @override
   Widget build(BuildContext context) {
     final pages = <Widget>[
       _home(),
-      _simple(t('plan'), Icons.calendar_month_rounded, t('daily'), '$dailyTarget ${t('prayers')}', t('subtitle'), _editPlan),
-      _simple(t('stats'), Icons.bar_chart_rounded, t('progress'), '$progress%',
-          '${t('completed')}: $completed\n${t('remaining')}: $remaining', _editEstimate),
+      _planPage(),
+      _statsPage(),
       _simple(t('encouragement'), Icons.volunteer_activism_rounded, t('motivation'), t('verse'), t('verseRef'), () => setState(() => tab = 0)),
-      _simple(t('settings'), Icons.settings_rounded, t('language'), languages.firstWhere((e) => e.$1 == lang).$2, t('intro'), _changeLanguage),
+      _settingsPage(),
     ];
 
     return Scaffold(
       body: SafeArea(child: loading ? const Center(child: CircularProgressIndicator(color: green))
           : IndexedStack(index: tab, children: pages)),
       bottomNavigationBar: NavigationBar(
-        height: 74,
-        backgroundColor: const Color(0xFFFFFEFA),
-        indicatorColor: const Color(0xFFDCEDE4),
+        height: 76,
         selectedIndex: tab,
         onDestinationSelected: (index) => setState(() => tab = index),
         destinations: [
@@ -407,6 +536,117 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+
+  DateTime _localDay(DateTime value) {
+    final local = value.toLocal();
+    return DateTime(local.year, local.month, local.day);
+  }
+
+  int _recordsOn(DateTime day) =>
+      records.where((record) => _localDay(record.completedAt) == day).length;
+
+  int get _todayCount => _recordsOn(_localDay(DateTime.now()));
+
+  int get _weekCount {
+    final today = _localDay(DateTime.now());
+    final monday = today.subtract(Duration(days: today.weekday - 1));
+    return records.where((record) {
+      final day = _localDay(record.completedAt);
+      return !day.isBefore(monday) && !day.isAfter(today);
+    }).length;
+  }
+
+  int _prayerCount(String prayer) =>
+      records.where((record) => record.prayer == prayer).length;
+
+  Widget _summaryTile(String label, String value, IconData icon, {Key? key}) => Container(
+    key: key,
+    padding: const EdgeInsets.all(16),
+    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(18),
+      border: Border.all(color: const Color(0xFFE9E5D9))),
+    child: Row(children: [
+      CircleAvatar(
+        radius: 21,
+        backgroundColor: const Color(0xFFE4EFE5),
+        child: Icon(icon, color: forest, size: 21),
+      ),
+      const SizedBox(width: 12),
+      Expanded(
+        child: Text(label, style: const TextStyle(color: ink, fontSize: 14, height: 1.3),
+          maxLines: 2, overflow: TextOverflow.ellipsis),
+      ),
+      const SizedBox(width: 8),
+      Flexible(
+        child: Text(value, textAlign: TextAlign.end, maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w900, color: forest,
+            fontFeatures: [FontFeature.tabularFigures()])),
+      ),
+    ]),
+  );
+
+  Widget _planPage() {
+    final daysNeeded = remaining == 0 ? 0 : (remaining / dailyTarget).ceil();
+    final todayProgress = (dailyTarget == 0 ? 0.0 : _todayCount / dailyTarget).clamp(0.0, 1.0);
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        Text(t('plan'), style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w900, color: forest)),
+        const SizedBox(height: 8),
+        Text(t('atTarget'), style: const TextStyle(color: ink)),
+        const SizedBox(height: 18),
+        _summaryTile(t('daily'), '$dailyTarget ${t('prayers')}', Icons.flag_rounded),
+        const SizedBox(height: 10),
+        _summaryTile(t('remaining'), _format(remaining), Icons.hourglass_bottom_rounded),
+        const SizedBox(height: 10),
+        _summaryTile(t('planRemaining'),
+          '$daysNeeded ${t('days')}',
+          Icons.event_available_rounded),
+        const SizedBox(height: 18),
+        ClipRRect(borderRadius: BorderRadius.circular(12), child: LinearProgressIndicator(
+          minHeight: 10, value: todayProgress, color: green, backgroundColor: const Color(0xFFE6E8DE))),
+        const SizedBox(height: 8),
+        Text('${t('dailyProgress')}: $_todayCount / $dailyTarget',
+          style: const TextStyle(fontWeight: FontWeight.w700, color: forest)),
+        const SizedBox(height: 18),
+        FilledButton.icon(onPressed: _editPlan, icon: const Icon(Icons.tune_rounded),
+          style: FilledButton.styleFrom(backgroundColor: forest, padding: const EdgeInsets.all(15)),
+          label: Text(t('edit'))),
+        const SizedBox(height: 10),
+        Text(t('note'), textAlign: TextAlign.center, style: const TextStyle(fontSize: 12, color: Colors.black54)),
+      ]),
+    );
+  }
+
+  Widget _statsPage() => SingleChildScrollView(
+    padding: const EdgeInsets.all(20),
+    child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+      Text(t('stats'), style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w900, color: forest)),
+      const SizedBox(height: 18),
+      _summaryTile(
+        t('completed'),
+        _format(completed),
+        Icons.check_circle_rounded,
+        key: const ValueKey('completed-summary'),
+      ),
+      const SizedBox(height: 10),
+      _summaryTile(t('remaining'), _format(remaining), Icons.pending_actions_rounded),
+      const SizedBox(height: 10),
+      _summaryTile(t('today'), '$_todayCount', Icons.today_rounded),
+      const SizedBox(height: 10),
+      _summaryTile(t('thisWeek'), '$_weekCount', Icons.date_range_rounded),
+      const SizedBox(height: 22),
+      Text(t('byPrayer'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: forest)),
+      const SizedBox(height: 8),
+      for (final prayer in const ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'])
+        Padding(padding: const EdgeInsets.only(bottom: 8),
+          child: _summaryTile(t(prayer), _format(_prayerCount(prayer)), Icons.mosque_outlined)),
+      const SizedBox(height: 12),
+      OutlinedButton.icon(onPressed: _editEstimate, icon: const Icon(Icons.edit_outlined), label: Text(t('estimate'))),
+      Text(t('note'), textAlign: TextAlign.center, style: const TextStyle(fontSize: 12, color: Colors.black54)),
+    ]),
+  );
 
   Widget _home() => CustomScrollView(slivers: [
     SliverToBoxAdapter(
@@ -422,16 +662,28 @@ class _HomePageState extends State<HomePage> {
               IconButton(onPressed: () => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(t('notifications')))),
                   icon: const Icon(Icons.notifications_none_rounded, color: forest)),
             ])),
-            Positioned(left: 18, right: 18, bottom: 22, child: Row(children: [
-              Container(width: 66, height: 66, decoration: BoxDecoration(color: forest, borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: gold, width: 2)),
-                  child: const Icon(Icons.mosque_rounded, color: Color(0xFFFFE8A8), size: 42)),
-              const SizedBox(width: 12),
-              Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                const Text('قضاء | Qadaa', style: TextStyle(fontSize: 27, fontWeight: FontWeight.w900, color: forest)),
-                Text(t('subtitle'), style: const TextStyle(color: ink, fontSize: 12)),
-              ])),
-            ])),
+            PositionedDirectional(start: 16, end: 16, bottom: 18, child: Container(
+              padding: const EdgeInsetsDirectional.fromSTEB(12, 10, 16, 10),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFFCF4).withValues(alpha: .94),
+                borderRadius: BorderRadius.circular(22),
+                border: Border.all(color: Colors.white.withValues(alpha: .8)),
+                boxShadow: const [BoxShadow(color: Color(0x220D3328), blurRadius: 18, offset: Offset(0, 6))],
+              ),
+              child: Row(children: [
+                Container(width: 58, height: 58, decoration: BoxDecoration(color: forest,
+                    borderRadius: BorderRadius.circular(17), border: Border.all(color: gold, width: 1.5)),
+                    child: const Icon(Icons.mosque_rounded, color: Color(0xFFFFE8A8), size: 36)),
+                const SizedBox(width: 12),
+                Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
+                  const Text('قضاء | Qadaa', maxLines: 1, overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 24, height: 1.15, fontWeight: FontWeight.w900, color: forest)),
+                  const SizedBox(height: 4),
+                  Text(t('subtitle'), maxLines: 2, overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(color: ink, fontSize: 12, height: 1.25)),
+                ])),
+              ]),
+            )),
           ]),
         ),
       ),

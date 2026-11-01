@@ -72,7 +72,8 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('Statistics'));
     await tester.pumpAndSettle();
-    expect(find.text('Progress'), findsOneWidget);
+    expect(find.text('Today'), findsOneWidget);
+    expect(find.text('This week'), findsOneWidget);
     await tester.tap(find.text('Settings'));
     await tester.pumpAndSettle();
     expect(find.text('Language'), findsOneWidget);
@@ -166,7 +167,128 @@ void main() {
       matching: find.text('Statistics'),
     ));
     await tester.pumpAndSettle();
-    expect(find.textContaining('Completed: 1'), findsOneWidget);
+    final completedTile = find.byKey(const ValueKey('completed-summary'));
+    expect(completedTile, findsOneWidget);
+    expect(
+      find.descendant(of: completedTile, matching: find.text('1')),
+      findsOneWidget,
+    );
+  });
+
+
+  testWidgets('plan and statistics use real prayer record data', (tester) async {
+    final now = DateTime.now().toUtc();
+    SharedPreferences.setMockInitialValues({
+      'qadaa.language': 'en',
+      'qadaa.years': 1,
+      'qadaa.dailyTarget': 3,
+      'qadaa.prayerRecords': '[{"prayer":"fajr","completedAt":"${now.toIso8601String()}"},{"prayer":"isha","completedAt":"${now.toIso8601String()}"}]',
+    });
+    await tester.pumpWidget(const QadaaApp());
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Daily plan'));
+    await tester.pumpAndSettle();
+    expect(find.text('Today’s progress: 2 / 3'), findsOneWidget);
+    expect(find.text('3 prayers'), findsOneWidget);
+
+    await tester.tap(find.text('Statistics'));
+    await tester.pumpAndSettle();
+    expect(find.text('Today'), findsOneWidget);
+    expect(find.text('This week'), findsOneWidget);
+    expect(find.text('Fajr'), findsOneWidget);
+    expect(find.text('Isha'), findsOneWidget);
+    expect(find.text('2'), findsWidgets);
+  });
+
+
+
+  testWidgets('all localized screens fit a narrow Android viewport', (tester) async {
+    tester.view.physicalSize = const Size(320, 640);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    for (final item in [
+      ('ar', 'الخطة اليومية', 'الإحصائيات', 'الإعدادات'),
+      ('es', 'Plan diario', 'Estadísticas', 'Ajustes'),
+      ('en', 'Daily plan', 'Statistics', 'Settings'),
+      ('fr', 'Plan quotidien', 'Statistiques', 'Paramètres'),
+      ('de', 'Tagesplan', 'Statistik', 'Einstellungen'),
+    ]) {
+      SharedPreferences.setMockInitialValues({'qadaa.language': item.$1});
+      await tester.pumpWidget(const QadaaApp());
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull, reason: 'home overflow for ${item.$1}');
+
+      final navigationBar = find.byType(NavigationBar);
+      expect(navigationBar, findsOneWidget);
+      final navRect = tester.getRect(navigationBar);
+      for (final index in [1, 2, 4]) {
+        await tester.tapAt(Offset(
+          navRect.left + navRect.width * (index + 0.5) / 5,
+          navRect.center.dy,
+        ));
+        await tester.pumpAndSettle();
+        expect(tester.takeException(), isNull,
+            reason: 'layout overflow for ${item.$1} on navigation item $index');
+      }
+    }
+  });
+
+
+  testWidgets('all tabs remain usable at common widths with enlarged text', (tester) async {
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(tester.binding.platformDispatcher.clearTextScaleFactorTestValue);
+    tester.view.devicePixelRatio = 1;
+    tester.binding.platformDispatcher.textScaleFactorTestValue = 1.3;
+
+    for (final width in [320.0, 360.0, 412.0]) {
+      tester.view.physicalSize = Size(width, 800);
+      SharedPreferences.setMockInitialValues({'qadaa.language': 'ar'});
+      await tester.pumpWidget(const QadaaApp());
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull, reason: 'home overflow at width $width');
+
+      final nav = find.byType(NavigationBar);
+      expect(nav, findsOneWidget);
+      final rect = tester.getRect(nav);
+      for (var index = 0; index < 5; index++) {
+        await tester.tapAt(Offset(
+          rect.left + rect.width * (index + 0.5) / 5,
+          rect.center.dy,
+        ));
+        await tester.pumpAndSettle();
+        expect(tester.takeException(), isNull,
+            reason: 'tab $index overflow at width $width with text scale 1.3');
+      }
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pumpAndSettle();
+    }
+  });
+
+
+  testWidgets('settings exposes localized backup and local privacy controls', (tester) async {
+    SharedPreferences.setMockInitialValues({'qadaa.language': 'en'});
+    await tester.pumpWidget(const QadaaApp());
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Settings'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Backup'), findsOneWidget);
+    expect(find.text('Copy my data'), findsOneWidget);
+    expect(find.text('Restore backup'), findsOneWidget);
+    expect(find.text('Your data is stored locally on this device.'), findsOneWidget);
+
+    await tester.tap(find.text('Restore backup'));
+    await tester.pumpAndSettle();
+    expect(find.text('Paste your Qadaa backup here'), findsOneWidget);
+    await tester.enterText(find.byType(TextField), 'not a backup');
+    await tester.tap(find.widgetWithText(FilledButton, 'Restore'));
+    await tester.pumpAndSettle();
+    expect(find.text('This backup is invalid or unsupported'), findsOneWidget);
   });
 
 }
