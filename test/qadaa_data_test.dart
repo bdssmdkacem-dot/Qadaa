@@ -171,7 +171,7 @@ void main() {
 
   test('backup rejects duplicate prayer records', () {
     const record = '{"prayer":"fajr","completedAt":"2026-01-01T00:00:00Z"}';
-    final source = '{"format":"qadaa-backup","version":1,"years":1,'
+    const source = '{"format":"qadaa-backup","version":1,"years":1,
         '"dailyTarget":5,"legacyCompleted":0,"records":[$record,$record]}';
     expect(() => QadaaBackup.decode(source), throwsFormatException);
   });
