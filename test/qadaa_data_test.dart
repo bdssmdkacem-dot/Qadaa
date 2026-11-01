@@ -164,7 +164,7 @@ void main() {
 
   test('backup rejects oversized input before decoding', () {
     expect(
-      () => QadaaBackup.decode(' ' * (QadaaBackup.maxSourceLength + 1)),
+      () => QadaaBackup.decode(List.filled(QadaaBackup.maxSourceLength + 1, ' ').join()),
       throwsFormatException,
     );
   });
