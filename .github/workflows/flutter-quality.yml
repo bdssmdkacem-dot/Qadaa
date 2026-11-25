@@ -58,7 +58,7 @@ jobs:
           if "android.permission.RECEIVE_BOOT_COMPLETED" not in text:
               text = text.replace(
                   "<application",
-                  '<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />\\n    <application',
+                  '<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />\n    <application',
                   1,
               )
           receivers = """
@@ -77,7 +77,7 @@ jobs:
                   </receiver>
           """
           if "ScheduledNotificationBootReceiver" not in text:
-              text = text.replace("</application>", receivers + "\\n    </application>", 1)
+              text = text.replace("</application>", receivers + "\n    </application>", 1)
           text = text.replace('android:icon="@mipmap/ic_launcher"', 'android:icon="@drawable/qadaa_icon"')
           manifest.write_text(text)
 
@@ -89,18 +89,18 @@ jobs:
           if "isCoreLibraryDesugaringEnabled" not in g:
               g = g.replace(
                   "compileOptions {",
-                  "compileOptions {\\n        isCoreLibraryDesugaringEnabled = true",
+                  "compileOptions {\n        isCoreLibraryDesugaringEnabled = true",
                   1,
               )
           if "coreLibraryDesugaring(" not in g:
               if "dependencies {" in g:
                   g = g.replace(
                       "dependencies {",
-                      'dependencies {\\n    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")',
+                      'dependencies {\n    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")',
                       1,
                   )
               else:
-                  g += '\\ndependencies {\\n    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")\\n}\\n'
+                  g += '\ndependencies {\n    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")\n}\n'
           if "compileSdk = 37" not in g or "isCoreLibraryDesugaringEnabled" not in g or "coreLibraryDesugaring(" not in g:
               raise SystemExit("Notification Gradle configuration could not be applied")
           gradle.write_text(g)
