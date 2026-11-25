@@ -22,10 +22,14 @@ class PrayerRecord {
         completedAt is! String) {
       throw const FormatException('Invalid Qadaa prayer record');
     }
-    return PrayerRecord(
-      prayer: prayer,
-      completedAt: DateTime.parse(completedAt).toUtc(),
-    );
+    try {
+      return PrayerRecord(
+        prayer: prayer,
+        completedAt: DateTime.parse(completedAt).toUtc(),
+      );
+    } on FormatException {
+      throw const FormatException('Invalid Qadaa prayer timestamp');
+    }
   }
 }
 
@@ -35,11 +39,11 @@ class QadaaPrayerStore {
 
   static const recordsKey = 'qadaa.prayerRecords';
   static const legacyCompletedKey = 'qadaa.legacyCompleted';
+  static const maxHistoryBytes = 4 * 1024 * 1024;
+  static const maxRecords = 100000;
 
   static Future<QadaaPrayerStoreSnapshot> load() async {
     final prefs = await SharedPreferences.getInstance();
-    // The presence of an empty records list does not mean the old aggregate
-    // count was migrated. Read it until the dedicated baseline key exists.
     final legacy = prefs.getInt(legacyCompletedKey) ??
         (prefs.getInt('qadaa.completed') ?? 0);
     if (!prefs.containsKey(legacyCompletedKey)) {
@@ -52,19 +56,23 @@ class QadaaPrayerStore {
     }
 
     try {
-      final decoded = jsonDecode(raw);
-      if (decoded is! List) {
-        throw const FormatException('Prayer records must be a list');
+      if (raw.length > maxHistoryBytes) {
+        throw const FormatException('Prayer history exceeds the supported size');
       }
-      final records = decoded
-          .whereType<Map<String, dynamic>>()
-          .map(PrayerRecord.fromJson)
-          .toList()
-        ..sort((a, b) => b.completedAt.compareTo(a.completedAt));
+      final decoded = jsonDecode(raw);
+      if (decoded is! List || decoded.length > maxRecords) {
+        throw const FormatException('Prayer history has an invalid size');
+      }
+      final records = decoded.map((item) {
+        if (item is! Map<String, dynamic>) {
+          throw const FormatException('Invalid Qadaa prayer record');
+        }
+        return PrayerRecord.fromJson(item);
+      }).toList();
+      _rejectDuplicateRecords(records);
+      records.sort((a, b) => b.completedAt.compareTo(a.completedAt));
       return QadaaPrayerStoreSnapshot(legacyCompleted: legacy, records: records);
     } on FormatException {
-      // Preserve the user's app state and surface an empty record list rather
-      // than crashing startup on a damaged optional history value.
       return QadaaPrayerStoreSnapshot(legacyCompleted: legacy, records: const []);
     } on TypeError {
       return QadaaPrayerStoreSnapshot(legacyCompleted: legacy, records: const []);
@@ -72,12 +80,17 @@ class QadaaPrayerStore {
   }
 
   static Future<void> save(QadaaPrayerStoreSnapshot snapshot) async {
+    if (snapshot.records.length > maxRecords) {
+      throw ArgumentError('Prayer history exceeds the supported record limit');
+    }
+    _rejectDuplicateRecords(snapshot.records);
+    final encoded = jsonEncode(snapshot.records.map((record) => record.toJson()).toList());
+    if (encoded.length > maxHistoryBytes) {
+      throw ArgumentError('Prayer history exceeds the supported size');
+    }
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt(legacyCompletedKey, snapshot.legacyCompleted);
-    await prefs.setString(
-      recordsKey,
-      jsonEncode(snapshot.records.map((record) => record.toJson()).toList()),
-    );
+    await prefs.setString(recordsKey, encoded);
     await prefs.setInt('qadaa.completed', snapshot.completedCount);
   }
 }
@@ -99,9 +112,20 @@ class QadaaPrayerStoreSnapshot {
       );
 }
 
+void _rejectDuplicateRecords(List<PrayerRecord> records) {
+  final seen = <String>{};
+  for (final record in records) {
+    final key = '${record.prayer}|'
+        '${record.completedAt.toUtc().microsecondsSinceEpoch}';
+    if (!seen.add(key)) {
+      throw const FormatException('Duplicate Qadaa prayer record');
+    }
+  }
+}
 
-/// Versioned, portable backup format. Import rejects unknown versions and
-/// malformed records before any persisted value is changed.
+/// Versioned, portable backup format. Import rejects invalid payloads before
+/// any persisted value is changed. The limits also protect the import path
+/// from unexpectedly large clipboard contents.
 class QadaaBackup {
   const QadaaBackup({
     required this.years,
@@ -109,21 +133,37 @@ class QadaaBackup {
     required this.snapshot,
   });
 
+  static const maxSourceLength = 1024 * 1024;
+  static const maxRecords = 10000;
+
   final int years;
   final int dailyTarget;
   final QadaaPrayerStoreSnapshot snapshot;
 
-  String encode() => jsonEncode({
-        'format': 'qadaa-backup',
-        'version': 1,
-        'exportedAt': DateTime.now().toUtc().toIso8601String(),
-        'years': years,
-        'dailyTarget': dailyTarget,
-        'legacyCompleted': snapshot.legacyCompleted,
-        'records': snapshot.records.map((record) => record.toJson()).toList(),
-      });
+  String encode() {
+    if (snapshot.records.length > maxRecords) {
+      throw ArgumentError('Backup contains too many prayer records');
+    }
+    _rejectDuplicateRecords(snapshot.records);
+    final result = jsonEncode({
+      'format': 'qadaa-backup',
+      'version': 1,
+      'exportedAt': DateTime.now().toUtc().toIso8601String(),
+      'years': years,
+      'dailyTarget': dailyTarget,
+      'legacyCompleted': snapshot.legacyCompleted,
+      'records': snapshot.records.map((record) => record.toJson()).toList(),
+    });
+    if (result.length > maxSourceLength) {
+      throw ArgumentError('Backup exceeds the supported size');
+    }
+    return result;
+  }
 
   factory QadaaBackup.decode(String source) {
+    if (source.length > maxSourceLength) {
+      throw const FormatException('Qadaa backup exceeds the supported size');
+    }
     final decoded = jsonDecode(source);
     if (decoded is! Map<String, dynamic> ||
         decoded['format'] != 'qadaa-backup' ||
@@ -137,7 +177,7 @@ class QadaaBackup {
     if (years is! int || years < 0 || years > 80 ||
         dailyTarget is! int || dailyTarget < 1 || dailyTarget > 20 ||
         legacy is! int || legacy < 0 || legacy > 1000000000 ||
-        rawRecords is! List) {
+        rawRecords is! List || rawRecords.length > maxRecords) {
       throw const FormatException('Invalid Qadaa backup values');
     }
     final records = rawRecords.map((item) {
@@ -147,6 +187,7 @@ class QadaaBackup {
       return PrayerRecord.fromJson(item);
     }).toList()
       ..sort((a, b) => b.completedAt.compareTo(a.completedAt));
+    _rejectDuplicateRecords(records);
     return QadaaBackup(
       years: years,
       dailyTarget: dailyTarget,

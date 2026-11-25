@@ -161,4 +161,41 @@ void main() {
     );
   });
 
+
+  test('backup rejects oversized input before decoding', () {
+    expect(
+      () => QadaaBackup.decode(List.filled(QadaaBackup.maxSourceLength + 1, ' ').join()),
+      throwsFormatException,
+    );
+  });
+
+  test('backup rejects duplicate prayer records', () {
+    const record = '{"prayer":"fajr","completedAt":"2026-01-01T00:00:00Z"}';
+    const source = '{"format":"qadaa-backup","version":1,"years":1,'
+        '"dailyTarget":5,"legacyCompleted":0,"records":[$record,$record]}';
+    expect(() => QadaaBackup.decode(source), throwsFormatException);
+  });
+
+  test('backup rejects record counts above the supported limit', () {
+    final records = List.filled(
+      QadaaBackup.maxRecords + 1,
+      '{"prayer":"fajr","completedAt":"2026-01-01T00:00:00Z"}',
+    ).join(',');
+    final source = '{"format":"qadaa-backup","version":1,"years":1,'
+        '"dailyTarget":5,"legacyCompleted":0,"records":[$records]}';
+    expect(() => QadaaBackup.decode(source), throwsFormatException);
+  });
+
+  test('local history rejects duplicate records without losing legacy count', () async {
+    const record = '{"prayer":"isha","completedAt":"2026-01-01T00:00:00Z"}';
+    SharedPreferences.setMockInitialValues({
+      'qadaa.legacyCompleted': 6,
+      'qadaa.prayerRecords': '[$record,$record]',
+    });
+    final snapshot = await QadaaPrayerStore.load();
+    expect(snapshot.legacyCompleted, 6);
+    expect(snapshot.records, isEmpty);
+    expect(snapshot.completedCount, 6);
+  });
+
 }
