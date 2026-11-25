@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -289,6 +291,100 @@ void main() {
     await tester.tap(find.widgetWithText(FilledButton, 'Restore'));
     await tester.pumpAndSettle();
     expect(find.text('This backup is invalid or unsupported'), findsOneWidget);
+  });
+
+
+  testWidgets('encouragement shows a useful empty state before the first record', (tester) async {
+    SharedPreferences.setMockInitialValues({'qadaa.language': 'en'});
+    await tester.pumpWidget(const QadaaApp());
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Encouragement'));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const ValueKey('encouragement-page')), findsOneWidget);
+    expect(find.text('You have not recorded a make-up prayer yet. Log your first completed prayer to see your progress here.'), findsOneWidget);
+    expect(find.text('No prayer recorded yet'), findsOneWidget);
+    expect(find.text('0 days'), findsNWidgets(2));
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('encouragement derives streak, active days and goal from records', (tester) async {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final records = [
+      PrayerRecord(prayer: 'fajr', completedAt: today.add(const Duration(hours: 7)).toUtc()),
+      PrayerRecord(prayer: 'dhuhr', completedAt: today.add(const Duration(hours: 12)).toUtc()),
+      PrayerRecord(prayer: 'asr', completedAt: today.subtract(const Duration(days: 1)).add(const Duration(hours: 15)).toUtc()),
+      PrayerRecord(prayer: 'isha', completedAt: today.subtract(const Duration(days: 2)).add(const Duration(hours: 20)).toUtc()),
+    ];
+    SharedPreferences.setMockInitialValues({
+      'qadaa.language': 'en',
+      'qadaa.dailyTarget': 2,
+      'qadaa.years': 1,
+      'qadaa.prayerRecords': jsonEncode(records.map((record) => record.toJson()).toList()),
+    });
+    await tester.pumpWidget(const QadaaApp());
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Encouragement'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('You reached your daily target. Well done—keep a balanced, steady pace.'), findsOneWidget);
+    expect(find.text('3 days'), findsNWidgets(2));
+    expect(find.text('4'), findsWidgets);
+    expect(find.text('2 / 2'), findsOneWidget);
+    expect(find.textContaining('Isha ·'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('encouragement content is translated in all five languages', (tester) async {
+    const emptyMessages = {
+      'ar': 'لم تسجل صلاة قضاء بعد. ابدأ بتسجيل أول صلاة أنجزتها ليظهر تقدمك هنا.',
+      'es': 'Todavía no has registrado ninguna oración recuperada. Registra la primera para ver tu progreso aquí.',
+      'en': 'You have not recorded a make-up prayer yet. Log your first completed prayer to see your progress here.',
+      'fr': 'Vous n’avez pas encore enregistré de prière de rattrapage. Enregistrez-en une pour voir votre progression ici.',
+      'de': 'Du hast noch kein nachgeholtes Gebet erfasst. Erfasse dein erstes Gebet, um deinen Fortschritt hier zu sehen.',
+    };
+    for (final entry in emptyMessages.entries) {
+      SharedPreferences.setMockInitialValues({'qadaa.language': entry.key});
+      await tester.pumpWidget(const QadaaApp());
+      await tester.pumpAndSettle();
+      final nav = tester.getRect(find.byType(NavigationBar));
+      await tester.tapAt(Offset(nav.left + nav.width * 3.5 / 5, nav.center.dy));
+      await tester.pumpAndSettle();
+      expect(find.text(entry.value), findsOneWidget, reason: 'encouragement translation for ${entry.key}');
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pumpAndSettle();
+    }
+  });
+
+  testWidgets('encouragement remains usable with RTL and enlarged text', (tester) async {
+    tester.view.physicalSize = const Size(320, 640);
+    tester.view.devicePixelRatio = 1;
+    tester.binding.platformDispatcher.textScaleFactorTestValue = 1.4;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(tester.binding.platformDispatcher.clearTextScaleFactorTestValue);
+    SharedPreferences.setMockInitialValues({'qadaa.language': 'ar'});
+    await tester.pumpWidget(const QadaaApp());
+    await tester.pumpAndSettle();
+
+    final nav = tester.getRect(find.byType(NavigationBar));
+    await tester.tapAt(Offset(nav.left + nav.width * 3.5 / 5, nav.center.dy));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const ValueKey('encouragement-page')), findsOneWidget);
+    expect(find.text('التشجيع'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+    await tester.scrollUntilVisible(
+      find.text('إنجاز الهدف اليومي'),
+      250,
+      scrollable: find.byType(Scrollable).first,
+    );
+    expect(find.text('إنجاز الهدف اليومي'), findsOneWidget);
+    expect(tester.takeException(), isNull);
   });
 
 }
