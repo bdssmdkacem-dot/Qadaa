@@ -375,7 +375,13 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byKey(const ValueKey('encouragement-page')), findsOneWidget);
-    expect(find.text('التشجيع'), findsOneWidget);
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey('encouragement-page')),
+        matching: find.text('التشجيع'),
+      ),
+      findsOneWidget,
+    );
     expect(tester.takeException(), isNull);
     await tester.scrollUntilVisible(
       find.text('إنجاز الهدف اليومي'),
