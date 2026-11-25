@@ -283,6 +283,11 @@ void main() {
     expect(find.text('Backup'), findsOneWidget);
     expect(find.text('Copy my data'), findsOneWidget);
     expect(find.text('Restore backup'), findsOneWidget);
+    await tester.scrollUntilVisible(
+      find.text('Your data is stored locally on this device.'),
+      220,
+      scrollable: find.byType(Scrollable).first,
+    );
     expect(find.text('Your data is stored locally on this device.'), findsOneWidget);
 
     await tester.tap(find.text('Restore backup'));
