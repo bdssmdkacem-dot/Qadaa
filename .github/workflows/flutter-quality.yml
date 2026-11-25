@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: qadaa-${{ github.workflow }}-${{ github.ref }}
@@ -22,6 +22,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # Use the PR branch commit, not GitHub's synthetic merge commit;
+          # generated Android files can then be committed as a fast-forward.
+          ref: ${{ github.event.pull_request.head.sha || github.ref }}
 
       - name: Set up Java
         uses: actions/setup-java@v4
@@ -105,6 +109,22 @@ jobs:
               raise SystemExit("Notification Gradle configuration could not be applied")
           gradle.write_text(g)
           PY
+
+      - name: Persist generated Android host project
+        if: github.event_name == 'pull_request'
+        shell: bash
+        env:
+          GITHUB_HEAD_REF: ${{ github.head_ref }}
+        run: |
+          git add android/
+          # The Gradle wrapper is intentionally committed even though Flutter's template ignores it.
+          git add -f android/gradlew android/gradlew.bat android/gradle/wrapper/gradle-wrapper.jar
+          if ! git diff --cached --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "chore(android): persist Flutter Android host project"
+            git push origin "HEAD:${GITHUB_HEAD_REF}"
+          fi
 
       - name: Install dependencies
         run: flutter pub get
