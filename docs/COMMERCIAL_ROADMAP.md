@@ -20,10 +20,10 @@ Acceptance gate: analyze and tests pass; release APK builds; manual install/reop
 - Add daily and weekly summaries based on actual records.
 - Provide a data-driven encouragement screen with a meaningful empty state, daily-goal progress, current consecutive-day streak, active days, weekly activity, and latest recorded prayer in all five supported languages.
 - Add an editable per-day target and a practical backlog plan.
-- Add optional reminders with clear permission handling and no duplicate notifications.
+- Implement daily local reminders with permission requested only after opt-in, IANA timezone-aware scheduling, stable IDs, cancellation/rescheduling, and Android reboot receiver.
 - Add versioned JSON export/restore for the estimate, daily target, legacy baseline, and timestamped prayer records; validate the complete backup before replacing local data.
 - Provide clear local-storage disclosure and explicit confirmation before a restore overwrites existing progress.
-- Add optional reminders only after selecting and testing a maintained notification implementation, timezone behavior, Android 13+ notification permission flow, and duplicate-schedule prevention.
+- Validate reminders on physical devices, including Android 13+ permission denial/grant, reboot, timezone changes, daylight-saving transitions, OEM battery restrictions, and schedule replacement.
 
 ## Phase 3 — Google Mobile Ads and revenue
 Use the supplied AdMob IDs only after confirming they belong to the Qadaa app and banner unit:
@@ -62,7 +62,7 @@ Acceptance gate: test ad IDs in development; verify loading, no-fill, offline, d
 ## Current status
 - The core record store supports typed UTC records, legacy-count migration, malformed-history tolerance, and real daily/weekly statistics.
 - A versioned JSON backup format now validates version, planning bounds, record types, timestamps, payload size (1 MiB), record count (10,000), and duplicate prayer/timestamp pairs before restore. Local history reads/writes also enforce size/count limits (4 MiB / 100,000 records). Regression tests cover oversized input, excess records, and duplicate entries. Settings expose copy/export and confirmed restore flows in all five languages.
-- CI run `41147885888` on commit `6d43b00755a2ff556c4e04a744973159a23bdd70` passed all workflow steps: dependency installation, static analysis, unit/widget tests, Android release APK build, and artifact upload. This validates the current feature-branch source in CI, not physical-device behavior.
-- The UI still uses a vector fallback until the user supplies the final visual assets. The encouragement tab now derives progress from saved prayer records and has localized empty / goal-complete states with widget coverage. Physical-device review is deliberately deferred until the pre-device phase is complete. Real notification behavior is not implemented; reminder permission, timezone scheduling, rescheduling, and duplicate prevention remain open. Final reference comparison also remains pending.
+- PR #5 was merged to main at `68977e0380b99d014f9094c9246a4bab05d86c78` after CI run `45579791926` passed dependency installation, static analysis, unit/widget tests, Android release APK build, and artifact upload. This validates the source in CI, not physical-device behavior.
+- The UI still uses a vector fallback until the user supplies the final visual assets. The encouragement tab now derives progress from saved prayer records and has localized empty / goal-complete states with widget coverage. Physical-device review is deliberately deferred until the pre-device phase is complete. A first local-reminder implementation now exists using flutter_local_notifications, flutter_timezone, and timezone. It uses inexact scheduling and opt-in permission; physical-device verification of reboot, time-zone changes, DST, and OEM battery restrictions remains open. The Android host project is still generated in CI rather than fully committed to the repository, and must be made persistent before release. Final reference comparison also remains pending.
 - The estimate remains a simplified `years × 365 × 5` planning approximation, not a personalized religious calculation or fatwa.
 - Do not claim commercial readiness until device acceptance, backup restore on-device, accessibility review, privacy/store disclosures, and release signing are verified.
