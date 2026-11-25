@@ -17,7 +17,7 @@ class ReminderTime {
       '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
 
   static ReminderTime? tryParse(String? value) {
-    if (value == null || !RegExp(r'^([01]\\d|2[0-3]):[0-5]\\d$').hasMatch(value)) {
+    if (value == null || !RegExp(r'^([01]\d|2[0-3]):[0-5]\d$').hasMatch(value)) {
       return null;
     }
     final parts = value.split(':');
