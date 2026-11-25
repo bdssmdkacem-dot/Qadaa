@@ -33,6 +33,10 @@ New qadaa entries are stored locally with a prayer type and UTC timestamp. Exist
 
 The encouragement tab is driven by the saved prayer history. It shows the number of individually recorded prayers, active calendar days, the current consecutive-day streak (counting a streak through yesterday when no prayer has yet been logged today), this week's records, today's progress against the editable target, and the latest recorded prayer with its local date. Empty history and completed daily-target states have separate messages in Arabic, Spanish, English, French, and German.
 
+## Daily reminders
+
+Daily reminders are optional and disabled by default. The app asks Android for notification permission only after the user turns the reminder on. The selected wall-clock time is scheduled in the device's IANA time zone, using an inexact alarm to avoid requesting the restricted exact-alarm permission. The reminder is replaced by a stable notification ID when the time changes, and is cancelled when the user turns the feature off. The app refreshes the schedule on resume; Android boot rescheduling is configured in the build workflow. Android OEM battery policies may still delay or suppress background notifications, so real-device validation remains required.
+
 ## Monetization
 
 Planned formats are an adaptive banner first, then an optional clearly labelled native placement and/or a non-essential rewarded placement only after core functionality and privacy checks pass. A paid ad-free option can be evaluated later. Ads must never block prayer logging or be shown on the first-run language selection screen. See the roadmap for the supplied AdMob IDs and acceptance gates.
