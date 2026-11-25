@@ -35,7 +35,7 @@ void main() {
 
     test('moves to tomorrow when the selected local time has passed', () {
       final riyadh = tz.getLocation('Asia/Riyadh');
-      final time = ReminderTime(hour: 8, minute: 30);
+      const time = ReminderTime(hour: 8, minute: 30);
       final next = time.nextOccurrence(riyadh, DateTime.utc(2026, 11, 25, 6));
       expect(next.year, 2026);
       expect(next.month, 11);
@@ -46,7 +46,7 @@ void main() {
 
     test('treats the exact current minute as already passed', () {
       final utc = tz.getLocation('Etc/UTC');
-      final time = ReminderTime(hour: 8, minute: 30);
+      const time = ReminderTime(hour: 8, minute: 30);
       final next = time.nextOccurrence(utc, DateTime.utc(2026, 11, 25, 8, 30));
       expect(next.day, 26);
       expect(next.hour, 8);
