@@ -295,6 +295,41 @@ void main() {
   });
 
 
+
+  testWidgets('daily reminder controls are localized and disabled by default', (tester) async {
+    const labels = {
+      'ar': ('التنبيهات', 'وقت التذكير'),
+      'es': ('Notificaciones', 'Hora del recordatorio'),
+      'en': ('Notifications', 'Reminder time'),
+      'fr': ('Notifications', 'Heure du rappel'),
+      'de': ('Benachrichtigungen', 'Erinnerungszeit'),
+    };
+    for (final entry in labels.entries) {
+      SharedPreferences.setMockInitialValues({'qadaa.language': entry.key});
+      await tester.pumpWidget(const QadaaApp());
+      await tester.pumpAndSettle();
+      final settingsLabel = switch (entry.key) {
+        'ar' => 'الإعدادات',
+        'es' => 'Ajustes',
+        'en' => 'Settings',
+        'fr' => 'Paramètres',
+        _ => 'Einstellungen',
+      };
+      await tester.tap(find.text(settingsLabel));
+      await tester.pumpAndSettle();
+      expect(find.text(entry.value.$1), findsOneWidget);
+      expect(find.text(entry.value.$2), findsOneWidget);
+      final reminderSwitch = tester.widget<SwitchListTile>(
+        find.byKey(const ValueKey('daily-reminder-switch')),
+      );
+      expect(reminderSwitch.value, isFalse);
+      expect(reminderSwitch.onChanged, isNotNull);
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pumpAndSettle();
+    }
+  });
+
   testWidgets('encouragement shows a useful empty state before the first record', (tester) async {
     SharedPreferences.setMockInitialValues({'qadaa.language': 'en'});
     await tester.pumpWidget(const QadaaApp());
