@@ -351,8 +351,7 @@ void main() {
       SharedPreferences.setMockInitialValues({'qadaa.language': entry.key});
       await tester.pumpWidget(const QadaaApp());
       await tester.pumpAndSettle();
-      final nav = tester.getRect(find.byType(NavigationBar));
-      await tester.tapAt(Offset(nav.left + nav.width * 3.5 / 5, nav.center.dy));
+      await tester.tap(find.byIcon(Icons.volunteer_activism_outlined));
       await tester.pumpAndSettle();
       expect(find.text(entry.value), findsOneWidget, reason: 'encouragement translation for ${entry.key}');
       expect(tester.takeException(), isNull);
@@ -372,8 +371,7 @@ void main() {
     await tester.pumpWidget(const QadaaApp());
     await tester.pumpAndSettle();
 
-    final nav = tester.getRect(find.byType(NavigationBar));
-    await tester.tapAt(Offset(nav.left + nav.width * 3.5 / 5, nav.center.dy));
+    await tester.tap(find.byIcon(Icons.volunteer_activism_outlined));
     await tester.pumpAndSettle();
 
     expect(find.byKey(const ValueKey('encouragement-page')), findsOneWidget);
