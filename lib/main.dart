@@ -306,7 +306,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 
   Future<void> _refreshReminder() async {
-    final prefs = await SharedPreferences.getInstance();
     await QadaaReminderService.instance.refreshDailyReminder(
       enabled: reminderEnabled,
       storedTime: '${reminderHour.toString().padLeft(2, '0')}:${reminderMinute.toString().padLeft(2, '0')}',
@@ -336,6 +335,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     await prefs.setBool('qadaa.reminder.enabled', true);
     await prefs.setInt('qadaa.reminder.hour', reminderHour);
     await prefs.setInt('qadaa.reminder.minute', reminderMinute);
+    if (!mounted) return;
     setState(() => reminderEnabled = true);
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(t('reminderSaved'))));
   }
