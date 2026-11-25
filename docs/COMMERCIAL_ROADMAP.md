@@ -1,5 +1,8 @@
 # Qadaa — Commercial Product Roadmap
 
+## Toolchain baseline
+- Flutter 3.50+ and Dart 3.13+ are required. Material widgets use the official standalone `material_ui` package to avoid the deprecated SDK-bundled Material library.
+
 ## Product principle
 Stabilize the core prayer-tracking experience and its data before monetization. Advertising must never block prayer logging, obscure navigation, or imply religious authority. All prayer estimates are personal planning estimates, not a fatwa.
 
@@ -15,6 +18,7 @@ Acceptance gate: analyze and tests pass; release APK builds; manual install/reop
 
 ## Phase 2 — Complete planning and progress
 - Add daily and weekly summaries based on actual records.
+- Provide a data-driven encouragement screen with a meaningful empty state, daily-goal progress, current consecutive-day streak, active days, weekly activity, and latest recorded prayer in all five supported languages.
 - Add an editable per-day target and a practical backlog plan.
 - Add optional reminders with clear permission handling and no duplicate notifications.
 - Add versioned JSON export/restore for the estimate, daily target, legacy baseline, and timestamped prayer records; validate the complete backup before replacing local data.
@@ -59,6 +63,6 @@ Acceptance gate: test ad IDs in development; verify loading, no-fill, offline, d
 - The core record store supports typed UTC records, legacy-count migration, malformed-history tolerance, and real daily/weekly statistics.
 - A versioned JSON backup format now validates version, planning bounds, record types, timestamps, payload size (1 MiB), record count (10,000), and duplicate prayer/timestamp pairs before restore. Local history reads/writes also enforce size/count limits (4 MiB / 100,000 records). Regression tests cover oversized input, excess records, and duplicate entries. Settings expose copy/export and confirmed restore flows in all five languages.
 - CI run `41147885888` on commit `6d43b00755a2ff556c4e04a744973159a23bdd70` passed all workflow steps: dependency installation, static analysis, unit/widget tests, Android release APK build, and artifact upload. This validates the current feature-branch source in CI, not physical-device behavior.
-- The UI still uses a vector fallback until the user supplies the final visual assets. Physical-device review is deliberately deferred until the pre-device phase is complete. Real notification behavior is not implemented; reminder permission, timezone scheduling, rescheduling, and duplicate prevention remain open. Final reference comparison also remains pending.
+- The UI still uses a vector fallback until the user supplies the final visual assets. The encouragement tab now derives progress from saved prayer records and has localized empty / goal-complete states with widget coverage. Physical-device review is deliberately deferred until the pre-device phase is complete. Real notification behavior is not implemented; reminder permission, timezone scheduling, rescheduling, and duplicate prevention remain open. Final reference comparison also remains pending.
 - The estimate remains a simplified `years × 365 × 5` planning approximation, not a personalized religious calculation or fatwa.
 - Do not claim commercial readiness until device acceptance, backup restore on-device, accessibility review, privacy/store disclosures, and release signing are verified.

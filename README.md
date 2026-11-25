@@ -10,7 +10,7 @@ Android-only Flutter app to help users estimate and track missed obligatory pray
 - Android launcher icon aligned with the Qadaa brand
 
 ## Build
-Requires Flutter 3.29+ and Java 17.
+Requires Flutter 3.50+ (Dart 3.13+) and Java 17. The app uses Flutter's maintained standalone `material_ui` package.
 
 ```bash
 flutter pub get
@@ -28,6 +28,10 @@ The committed implementation plan and release gates live in [docs/COMMERCIAL_ROA
 ## Prayer records
 
 New qadaa entries are stored locally with a prayer type and UTC timestamp. Existing installations that only stored a completed count are migrated into a legacy progress baseline so that their count is not discarded. Settings provide a versioned JSON backup that includes the estimate, daily target, legacy baseline, and prayer history; restore validates the entire payload and requires confirmation before replacing local data. Backup import is limited to 1 MiB and 10,000 records, and duplicate prayer/timestamp pairs are rejected. Local history has a separate 4 MiB / 100,000-record ceiling. The estimate still uses a configurable `years × 365 × 5` approximation and must not be presented as a religious ruling.
+
+## Progress and encouragement
+
+The encouragement tab is driven by the saved prayer history. It shows the number of individually recorded prayers, active calendar days, the current consecutive-day streak (counting a streak through yesterday when no prayer has yet been logged today), this week's records, today's progress against the editable target, and the latest recorded prayer with its local date. Empty history and completed daily-target states have separate messages in Arabic, Spanish, English, French, and German.
 
 ## Monetization
 

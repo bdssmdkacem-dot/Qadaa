@@ -18,19 +18,24 @@ jobs:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.29.3'
+          flutter-version: '3.50.1'
           channel: stable
           cache: true
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
-      - run: flutter create --platforms=android --project-name qadaa --org com.qadaa .
+      - name: Generate Android platform files when absent
+        shell: bash
+        run: |
+          if [ ! -f android/app/src/main/AndroidManifest.xml ]; then
+            flutter create --platforms=android --project-name qadaa --org com.qadaa .
+          fi
       - name: Apply Qadaa launcher icon
         run: sed -i 's#android:icon="@mipmap/ic_launcher"#android:icon="@drawable/qadaa_icon"#' android/app/src/main/AndroidManifest.xml
       - run: flutter pub get
-      - run: flutter analyze
-      - run: flutter test
+      - run: flutter analyze --fatal-infos
+      - run: flutter test --reporter expanded
       - run: flutter build apk --release
       - uses: actions/upload-artifact@v4
         with:
