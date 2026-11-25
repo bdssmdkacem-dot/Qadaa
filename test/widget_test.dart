@@ -334,7 +334,7 @@ void main() {
     expect(find.text('3 days'), findsNWidgets(2));
     expect(find.text('4'), findsWidgets);
     expect(find.text('2 / 2'), findsOneWidget);
-    expect(find.textContaining('Isha ·'), findsOneWidget);
+    expect(find.textContaining('Dhuhr ·'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
