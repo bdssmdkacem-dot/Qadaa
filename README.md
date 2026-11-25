@@ -10,7 +10,7 @@ Android-only Flutter app to help users estimate and track missed obligatory pray
 - Android launcher icon aligned with the Qadaa brand
 
 ## Build
-Requires Flutter 3.29+ and Java 17.
+Requires Flutter 3.50+ (Dart 3.13+) and Java 17. The app uses Flutter's maintained standalone `material_ui` package.
 
 ```bash
 flutter pub get
