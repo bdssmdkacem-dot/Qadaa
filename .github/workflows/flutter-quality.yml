@@ -52,14 +52,13 @@ jobs:
         run: |
           python3 - <<'PY'
           from pathlib import Path
-          import re
 
           manifest = Path("android/app/src/main/AndroidManifest.xml")
           text = manifest.read_text()
           if "android.permission.RECEIVE_BOOT_COMPLETED" not in text:
               text = text.replace(
                   "<application",
-                  '    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />\\n\\n    <application',
+                  '<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />\\n    <application',
                   1,
               )
           receivers = """
@@ -88,26 +87,23 @@ jobs:
           g = gradle.read_text()
           g = g.replace("compileSdk = flutter.compileSdkVersion", "compileSdk = 37")
           if "isCoreLibraryDesugaringEnabled" not in g:
-              g = re.sub(r"(compileOptions\\s*\\{)", r"\\1\\n        isCoreLibraryDesugaringEnabled = true", g, count=1)
+              g = g.replace(
+                  "compileOptions {",
+                  "compileOptions {\\n        isCoreLibraryDesugaringEnabled = true",
+                  1,
+              )
           if "coreLibraryDesugaring(" not in g:
               if "dependencies {" in g:
-                  g = g.replace("dependencies {", 'dependencies {\\n    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")', 1)
+                  g = g.replace(
+                      "dependencies {",
+                      'dependencies {\\n    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")',
+                      1,
+                  )
               else:
                   g += '\\ndependencies {\\n    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")\\n}\\n'
-          if "compileSdk = 37" not in g or "coreLibraryDesugaring(" not in g:
+          if "compileSdk = 37" not in g or "isCoreLibraryDesugaringEnabled" not in g or "coreLibraryDesugaring(" not in g:
               raise SystemExit("Notification Gradle configuration could not be applied")
           gradle.write_text(g)
-
-          settings = Path("android/settings.gradle.kts")
-          if settings.exists():
-              st = settings.read_text()
-              st = re.sub(
-                  r'(id\\(["\\']com\\.android\\.application["\\']\\) version )["\\'][^"\\']+["\\']',
-                  r'\\1"9.1.1"',
-                  st,
-                  count=1,
-              )
-              settings.write_text(st)
           PY
 
       - name: Install dependencies
