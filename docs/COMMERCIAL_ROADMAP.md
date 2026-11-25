@@ -1,5 +1,8 @@
 # Qadaa — Commercial Product Roadmap
 
+## Toolchain baseline
+- Flutter 3.50+ and Dart 3.13+ are required. Material widgets use the official standalone `material_ui` package to avoid the deprecated SDK-bundled Material library.
+
 ## Product principle
 Stabilize the core prayer-tracking experience and its data before monetization. Advertising must never block prayer logging, obscure navigation, or imply religious authority. All prayer estimates are personal planning estimates, not a fatwa.
 
