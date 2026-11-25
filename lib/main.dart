@@ -1,6 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'qadaa_data.dart';
+import 'qadaa_reminders.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const forest = Color(0xFF145B49);
@@ -11,19 +12,19 @@ const ink = Color(0xFF173E34);
 
 const translations = <String, Map<String, String>>{
   'ar': {
-    'welcome':'مرحبًا بك في قضاء','intro':'رفيقك لتنظيم قضاء الصلوات الفائتة','choose':'اختر لغة التطبيق','continue':'المتابعة','home':'الرئيسية','plan':'الخطة اليومية','stats':'الإحصائيات','encouragement':'التشجيع','settings':'الإعدادات','missed':'الصلوات الفائتة','estimate':'تقدير الفوائت','completed':'تم قضاؤها','remaining':'المتبقي','total':'الإجمالي التقديري','progress':'نسبة الإنجاز','years':'سنوات الفوائت','save':'حفظ التقدير','daily':'الهدف اليومي','prayers':'صلوات','savePlan':'حفظ الخطة','log':'تسجيل صلاة تم قضاؤها','motivation':'خطوة ثابتة كل يوم خير من الانقطاع.','verse':'﴿ وَأَقِمِ الصَّلَاةَ لِذِكْرِي ﴾','verseRef':'طه: 14','subtitle':'ابدأ بخطوة صغيرة، واستمر بثبات','language':'اللغة','note':'هذا تقدير للتنظيم الشخصي، وليس فتوى شرعية.','edit':'تعديل','notifications':'التنبيهات','welcomeBack':'السلام عليكم','fajr':'الفجر','dhuhr':'الظهر','asr':'العصر','maghrib':'المغرب','isha':'العشاء','recentRecords':'آخر الصلوات المسجلة','fiveDaily':'الصلوات الخمس اليومية','target':'الهدف','days':'أيام','today':'اليوم','thisWeek':'هذا الأسبوع','byPrayer':'حسب الصلاة','dailyProgress':'إنجاز اليوم','planRemaining':'المدة التقريبية المتبقية','atTarget':'وفق هدفك اليومي','noData':'ابدأ بإدخال تقديرك للسنوات التي فاتتك فيها الصلاة.', 'backup':'النسخ الاحتياطي', 'exportBackup':'نسخ بياناتي', 'importBackup':'استعادة نسخة', 'backupHint':'احتفظ بنسخة من سجل صلواتك وخطتك. تُحفظ البيانات على جهازك.', 'pasteBackup':'الصق محتوى نسخة قضاء هنا', 'backupCopied':'تم نسخ النسخة الاحتياطية', 'backupRestored':'تمت استعادة البيانات', 'backupInvalid':'النسخة غير صالحة أو غير مدعومة', 'restoreConfirm':'ستستبدل الاستعادة البيانات الحالية. هل تريد المتابعة؟', 'cancel':'إلغاء', 'restore':'استعادة', 'privacyLocal':'بياناتك محفوظة محليًا على هذا الجهاز.', 'encouragementMessage':"كل صلاة تسجلها خطوة ثابتة إلى الأمام. تابع بالقدر الذي تستطيع، دون ضغط أو مقارنة.", 'encouragementEmpty':"لم تسجل صلاة قضاء بعد. ابدأ بتسجيل أول صلاة أنجزتها ليظهر تقدمك هنا.", 'goalReached':"أكملت هدفك اليومي. أحسنت، حافظ على التوازن والاستمرار.", 'currentStreak':"أيام الاستمرار", 'activeDays':"أيام النشاط", 'lastPrayer':"آخر صلاة مسجلة", 'noPrayerYet':"لا توجد صلاة مسجلة بعد", 'todayTarget':"إنجاز الهدف اليومي", 'weeklyRecords':"صلوات هذا الأسبوع", 'recordedTotal':"الصلوات المسجلة"
+    'welcome':'مرحبًا بك في قضاء','intro':'رفيقك لتنظيم قضاء الصلوات الفائتة','choose':'اختر لغة التطبيق','continue':'المتابعة','home':'الرئيسية','plan':'الخطة اليومية','stats':'الإحصائيات','encouragement':'التشجيع','settings':'الإعدادات','missed':'الصلوات الفائتة','estimate':'تقدير الفوائت','completed':'تم قضاؤها','remaining':'المتبقي','total':'الإجمالي التقديري','progress':'نسبة الإنجاز','years':'سنوات الفوائت','save':'حفظ التقدير','daily':'الهدف اليومي','prayers':'صلوات','savePlan':'حفظ الخطة','log':'تسجيل صلاة تم قضاؤها','motivation':'خطوة ثابتة كل يوم خير من الانقطاع.','verse':'﴿ وَأَقِمِ الصَّلَاةَ لِذِكْرِي ﴾','verseRef':'طه: 14','subtitle':'ابدأ بخطوة صغيرة، واستمر بثبات','language':'اللغة','note':'هذا تقدير للتنظيم الشخصي، وليس فتوى شرعية.','edit':'تعديل','notifications':'التنبيهات','reminderDescription':'تذكير يومي لطيف في الوقت الذي تختاره.','reminderTime':'وقت التذكير','reminderBody':'حان وقت متابعة خطة قضاء الصلوات بالقدر الذي يناسبك.','permissionDenied':'لم تسمح بإشعارات قضاء. يمكنك تفعيلها من إعدادات الجهاز.','reminderSaved':'تم حفظ التذكير اليومي.''welcomeBack':'السلام عليكم','fajr':'الفجر','dhuhr':'الظهر','asr':'العصر','maghrib':'المغرب','isha':'العشاء','recentRecords':'آخر الصلوات المسجلة','fiveDaily':'الصلوات الخمس اليومية','target':'الهدف','days':'أيام','today':'اليوم','thisWeek':'هذا الأسبوع','byPrayer':'حسب الصلاة','dailyProgress':'إنجاز اليوم','planRemaining':'المدة التقريبية المتبقية','atTarget':'وفق هدفك اليومي','noData':'ابدأ بإدخال تقديرك للسنوات التي فاتتك فيها الصلاة.', 'backup':'النسخ الاحتياطي', 'exportBackup':'نسخ بياناتي', 'importBackup':'استعادة نسخة', 'backupHint':'احتفظ بنسخة من سجل صلواتك وخطتك. تُحفظ البيانات على جهازك.', 'pasteBackup':'الصق محتوى نسخة قضاء هنا', 'backupCopied':'تم نسخ النسخة الاحتياطية', 'backupRestored':'تمت استعادة البيانات', 'backupInvalid':'النسخة غير صالحة أو غير مدعومة', 'restoreConfirm':'ستستبدل الاستعادة البيانات الحالية. هل تريد المتابعة؟', 'cancel':'إلغاء', 'restore':'استعادة', 'privacyLocal':'بياناتك محفوظة محليًا على هذا الجهاز.', 'encouragementMessage':"كل صلاة تسجلها خطوة ثابتة إلى الأمام. تابع بالقدر الذي تستطيع، دون ضغط أو مقارنة.", 'encouragementEmpty':"لم تسجل صلاة قضاء بعد. ابدأ بتسجيل أول صلاة أنجزتها ليظهر تقدمك هنا.", 'goalReached':"أكملت هدفك اليومي. أحسنت، حافظ على التوازن والاستمرار.", 'currentStreak':"أيام الاستمرار", 'activeDays':"أيام النشاط", 'lastPrayer':"آخر صلاة مسجلة", 'noPrayerYet':"لا توجد صلاة مسجلة بعد", 'todayTarget':"إنجاز الهدف اليومي", 'weeklyRecords':"صلوات هذا الأسبوع", 'recordedTotal':"الصلوات المسجلة"
   },
   'es': {
-    'welcome':'Te damos la bienvenida a Qadaa','intro':'Tu compañero para organizar las oraciones pendientes','choose':'Elige el idioma','continue':'Continuar','home':'Inicio','plan':'Plan diario','stats':'Estadísticas','encouragement':'Motivación','settings':'Ajustes','missed':'Oraciones pendientes','estimate':'Calcular pendientes','completed':'Realizadas','remaining':'Pendientes','total':'Total estimado','progress':'Progreso','years':'Años estimados','save':'Guardar estimación','daily':'Objetivo diario','prayers':'oraciones','savePlan':'Guardar plan','log':'Registrar una oración realizada','motivation':'Un paso constante cada día es mejor que rendirse.','verse':'«Establece la oración para recordarme»','verseRef':'Ta-Ha 20:14','subtitle':'Empieza poco a poco y continúa con constancia','language':'Idioma','note':'Es una estimación organizativa, no una opinión religiosa.','edit':'Editar','notifications':'Notificaciones','welcomeBack':'Bienvenido','fajr':'Fajr','dhuhr':'Dhuhr','asr':'Asr','maghrib':'Maghrib','isha':'Isha','recentRecords':'Registros recientes','fiveDaily':'Las cinco oraciones diarias','target':'Objetivo','days':'días','today':'Hoy','thisWeek':'Esta semana','byPrayer':'Por oración','dailyProgress':'Progreso de hoy','planRemaining':'Tiempo restante estimado','atTarget':'Según tu objetivo diario','noData':'Introduce una estimación de los años de oraciones pendientes.', 'backup':'Copia de seguridad', 'exportBackup':'Copiar mis datos', 'importBackup':'Restaurar copia', 'backupHint':'Guarda una copia de tu historial de oraciones y tu plan. Los datos permanecen en tu dispositivo.', 'pasteBackup':'Pega aquí la copia de Qadaa', 'backupCopied':'Copia de seguridad copiada', 'backupRestored':'Datos restaurados', 'backupInvalid':'La copia no es válida o no es compatible', 'restoreConfirm':'La restauración sustituirá los datos actuales. ¿Continuar?', 'cancel':'Cancelar', 'restore':'Restaurar', 'privacyLocal':'Tus datos se guardan localmente en este dispositivo.', 'encouragementMessage':"Cada oración que registras es un paso adelante. Continúa a tu ritmo, sin presión ni comparaciones.", 'encouragementEmpty':"Todavía no has registrado ninguna oración recuperada. Registra la primera para ver tu progreso aquí.", 'goalReached':"Has alcanzado tu objetivo diario. ¡Bien hecho! Mantén un ritmo equilibrado.", 'currentStreak':"Racha actual", 'activeDays':"Días activos", 'lastPrayer':"Última oración registrada", 'noPrayerYet':"Aún no hay oraciones registradas", 'todayTarget':"Objetivo diario", 'weeklyRecords':"Oraciones de esta semana", 'recordedTotal':"Oraciones registradas"
+    'welcome':'Te damos la bienvenida a Qadaa','intro':'Tu compañero para organizar las oraciones pendientes','choose':'Elige el idioma','continue':'Continuar','home':'Inicio','plan':'Plan diario','stats':'Estadísticas','encouragement':'Motivación','settings':'Ajustes','missed':'Oraciones pendientes','estimate':'Calcular pendientes','completed':'Realizadas','remaining':'Pendientes','total':'Total estimado','progress':'Progreso','years':'Años estimados','save':'Guardar estimación','daily':'Objetivo diario','prayers':'oraciones','savePlan':'Guardar plan','log':'Registrar una oración realizada','motivation':'Un paso constante cada día es mejor que rendirse.','verse':'«Establece la oración para recordarme»','verseRef':'Ta-Ha 20:14','subtitle':'Empieza poco a poco y continúa con constancia','language':'Idioma','note':'Es una estimación organizativa, no una opinión religiosa.','edit':'Editar','notifications':'Notificaciones','reminderDescription':'Un recordatorio diario a la hora que elijas.','reminderTime':'Hora del recordatorio','reminderBody':'Es hora de continuar tu plan de recuperación a tu propio ritmo.','permissionDenied':'No se concedió permiso para las notificaciones. Puedes activarlo en los ajustes del dispositivo.','reminderSaved':'Recordatorio diario guardado.''welcomeBack':'Bienvenido','fajr':'Fajr','dhuhr':'Dhuhr','asr':'Asr','maghrib':'Maghrib','isha':'Isha','recentRecords':'Registros recientes','fiveDaily':'Las cinco oraciones diarias','target':'Objetivo','days':'días','today':'Hoy','thisWeek':'Esta semana','byPrayer':'Por oración','dailyProgress':'Progreso de hoy','planRemaining':'Tiempo restante estimado','atTarget':'Según tu objetivo diario','noData':'Introduce una estimación de los años de oraciones pendientes.', 'backup':'Copia de seguridad', 'exportBackup':'Copiar mis datos', 'importBackup':'Restaurar copia', 'backupHint':'Guarda una copia de tu historial de oraciones y tu plan. Los datos permanecen en tu dispositivo.', 'pasteBackup':'Pega aquí la copia de Qadaa', 'backupCopied':'Copia de seguridad copiada', 'backupRestored':'Datos restaurados', 'backupInvalid':'La copia no es válida o no es compatible', 'restoreConfirm':'La restauración sustituirá los datos actuales. ¿Continuar?', 'cancel':'Cancelar', 'restore':'Restaurar', 'privacyLocal':'Tus datos se guardan localmente en este dispositivo.', 'encouragementMessage':"Cada oración que registras es un paso adelante. Continúa a tu ritmo, sin presión ni comparaciones.", 'encouragementEmpty':"Todavía no has registrado ninguna oración recuperada. Registra la primera para ver tu progreso aquí.", 'goalReached':"Has alcanzado tu objetivo diario. ¡Bien hecho! Mantén un ritmo equilibrado.", 'currentStreak':"Racha actual", 'activeDays':"Días activos", 'lastPrayer':"Última oración registrada", 'noPrayerYet':"Aún no hay oraciones registradas", 'todayTarget':"Objetivo diario", 'weeklyRecords':"Oraciones de esta semana", 'recordedTotal':"Oraciones registradas"
   },
   'en': {
-    'welcome':'Welcome to Qadaa','intro':'Your companion for organizing missed prayers','choose':'Choose your language','continue':'Continue','home':'Home','plan':'Daily plan','stats':'Statistics','encouragement':'Encouragement','settings':'Settings','missed':'Missed prayers','estimate':'Estimate missed prayers','completed':'Completed','remaining':'Remaining','total':'Estimated total','progress':'Progress','years':'Estimated years','save':'Save estimate','daily':'Daily target','prayers':'prayers','savePlan':'Save plan','log':'Log a completed prayer','motivation':'A steady step each day is better than stopping.','verse':'“Establish prayer for My remembrance”','verseRef':'Ta-Ha 20:14','subtitle':'Start small and keep moving forward','language':'Language','note':'An organizational estimate, not a religious ruling.','edit':'Edit','notifications':'Notifications','welcomeBack':'Welcome','fajr':'Fajr','dhuhr':'Dhuhr','asr':'Asr','maghrib':'Maghrib','isha':'Isha','recentRecords':'Recent prayer records','fiveDaily':'The five daily prayers','target':'Target','days':'days','today':'Today','thisWeek':'This week','byPrayer':'By prayer','dailyProgress':'Today’s progress','planRemaining':'Estimated time remaining','atTarget':'At your daily target','noData':'Enter an estimate of the years of missed prayers.', 'backup':'Backup', 'exportBackup':'Copy my data', 'importBackup':'Restore backup', 'backupHint':'Keep a copy of your prayer history and plan. Your data stays on this device.', 'pasteBackup':'Paste your Qadaa backup here', 'backupCopied':'Backup copied', 'backupRestored':'Data restored', 'backupInvalid':'This backup is invalid or unsupported', 'restoreConfirm':'Restoring will replace current data. Continue?', 'cancel':'Cancel', 'restore':'Restore', 'privacyLocal':'Your data is stored locally on this device.', 'encouragementMessage':"Every prayer you record is a steady step forward. Keep a pace that works for you, without pressure or comparison.", 'encouragementEmpty':"You have not recorded a make-up prayer yet. Log your first completed prayer to see your progress here.", 'goalReached':"You reached your daily target. Well done—keep a balanced, steady pace.", 'currentStreak':"Current streak", 'activeDays':"Active days", 'lastPrayer':"Last recorded prayer", 'noPrayerYet':"No prayer recorded yet", 'todayTarget':"Daily target progress", 'weeklyRecords':"Prayers this week", 'recordedTotal':"Prayers recorded"
+    'welcome':'Welcome to Qadaa','intro':'Your companion for organizing missed prayers','choose':'Choose your language','continue':'Continue','home':'Home','plan':'Daily plan','stats':'Statistics','encouragement':'Encouragement','settings':'Settings','missed':'Missed prayers','estimate':'Estimate missed prayers','completed':'Completed','remaining':'Remaining','total':'Estimated total','progress':'Progress','years':'Estimated years','save':'Save estimate','daily':'Daily target','prayers':'prayers','savePlan':'Save plan','log':'Log a completed prayer','motivation':'A steady step each day is better than stopping.','verse':'“Establish prayer for My remembrance”','verseRef':'Ta-Ha 20:14','subtitle':'Start small and keep moving forward','language':'Language','note':'An organizational estimate, not a religious ruling.','edit':'Edit','notifications':'Notifications','reminderDescription':'A gentle daily reminder at a time you choose.','reminderTime':'Reminder time','reminderBody':'It’s time to continue your Qadaa plan at your own pace.','permissionDenied':'Qadaa notifications were not allowed. You can enable them in device settings.','reminderSaved':'Daily reminder saved.''welcomeBack':'Welcome','fajr':'Fajr','dhuhr':'Dhuhr','asr':'Asr','maghrib':'Maghrib','isha':'Isha','recentRecords':'Recent prayer records','fiveDaily':'The five daily prayers','target':'Target','days':'days','today':'Today','thisWeek':'This week','byPrayer':'By prayer','dailyProgress':'Today’s progress','planRemaining':'Estimated time remaining','atTarget':'At your daily target','noData':'Enter an estimate of the years of missed prayers.', 'backup':'Backup', 'exportBackup':'Copy my data', 'importBackup':'Restore backup', 'backupHint':'Keep a copy of your prayer history and plan. Your data stays on this device.', 'pasteBackup':'Paste your Qadaa backup here', 'backupCopied':'Backup copied', 'backupRestored':'Data restored', 'backupInvalid':'This backup is invalid or unsupported', 'restoreConfirm':'Restoring will replace current data. Continue?', 'cancel':'Cancel', 'restore':'Restore', 'privacyLocal':'Your data is stored locally on this device.', 'encouragementMessage':"Every prayer you record is a steady step forward. Keep a pace that works for you, without pressure or comparison.", 'encouragementEmpty':"You have not recorded a make-up prayer yet. Log your first completed prayer to see your progress here.", 'goalReached':"You reached your daily target. Well done—keep a balanced, steady pace.", 'currentStreak':"Current streak", 'activeDays':"Active days", 'lastPrayer':"Last recorded prayer", 'noPrayerYet':"No prayer recorded yet", 'todayTarget':"Daily target progress", 'weeklyRecords':"Prayers this week", 'recordedTotal':"Prayers recorded"
   },
   'fr': {
-    'welcome':'Bienvenue sur Qadaa','intro':'Votre compagnon pour organiser les prières à rattraper','choose':'Choisissez la langue','continue':'Continuer','home':'Accueil','plan':'Plan quotidien','stats':'Statistiques','encouragement':'Encouragement','settings':'Paramètres','missed':'Prières à rattraper','estimate':'Estimer les prières','completed':'Effectuées','remaining':'Restantes','total':'Total estimé','progress':'Progression','years':'Années estimées','save':'Enregistrer','daily':'Objectif quotidien','prayers':'prières','savePlan':'Valider le plan','log':'Enregistrer une prière effectuée','motivation':'Un petit pas chaque jour vaut mieux que l’abandon.','verse':'« Accomplis la prière pour te souvenir de Moi »','verseRef':'Taha : 14','subtitle':'Commencez doucement, avancez avec constance','language':'Langue','note':'Estimation d’organisation, pas un avis religieux.','edit':'Modifier','notifications':'Notifications','welcomeBack':'Bienvenue','fajr':'Fajr','dhuhr':'Dhouhr','asr':'Asr','maghrib':'Maghrib','isha':'Icha','recentRecords':'Prières récemment enregistrées','fiveDaily':'Les cinq prières quotidiennes','target':'Objectif','days':'jours','today':'Aujourd’hui','thisWeek':'Cette semaine','byPrayer':'Par prière','dailyProgress':'Progrès du jour','planRemaining':'Durée restante estimée','atTarget':'Avec votre objectif quotidien','noData':'Saisissez une estimation des années de prières à rattraper.', 'backup':'Sauvegarde', 'exportBackup':'Copier mes données', 'importBackup':'Restaurer une sauvegarde', 'backupHint':'Conservez une copie de votre historique de prières et de votre plan. Vos données restent sur cet appareil.', 'pasteBackup':'Collez votre sauvegarde Qadaa ici', 'backupCopied':'Sauvegarde copiée', 'backupRestored':'Données restaurées', 'backupInvalid':'Cette sauvegarde est invalide ou non prise en charge', 'restoreConfirm':'La restauration remplacera les données actuelles. Continuer ?', 'cancel':'Annuler', 'restore':'Restaurer', 'privacyLocal':'Vos données sont stockées localement sur cet appareil.', 'encouragementMessage':"Chaque prière enregistrée est un pas en avant. Avancez à votre rythme, sans pression ni comparaison.", 'encouragementEmpty':"Vous n’avez pas encore enregistré de prière de rattrapage. Enregistrez-en une pour voir votre progression ici.", 'goalReached':"Votre objectif quotidien est atteint. Bravo, gardez un rythme régulier et équilibré.", 'currentStreak':"Série actuelle", 'activeDays':"Jours actifs", 'lastPrayer':"Dernière prière enregistrée", 'noPrayerYet':"Aucune prière enregistrée pour le moment", 'todayTarget':"Progression de l’objectif quotidien", 'weeklyRecords':"Prières cette semaine", 'recordedTotal':"Prières enregistrées"
+    'welcome':'Bienvenue sur Qadaa','intro':'Votre compagnon pour organiser les prières à rattraper','choose':'Choisissez la langue','continue':'Continuer','home':'Accueil','plan':'Plan quotidien','stats':'Statistiques','encouragement':'Encouragement','settings':'Paramètres','missed':'Prières à rattraper','estimate':'Estimer les prières','completed':'Effectuées','remaining':'Restantes','total':'Total estimé','progress':'Progression','years':'Années estimées','save':'Enregistrer','daily':'Objectif quotidien','prayers':'prières','savePlan':'Valider le plan','log':'Enregistrer une prière effectuée','motivation':'Un petit pas chaque jour vaut mieux que l’abandon.','verse':'« Accomplis la prière pour te souvenir de Moi »','verseRef':'Taha : 14','subtitle':'Commencez doucement, avancez avec constance','language':'Langue','note':'Estimation d’organisation, pas un avis religieux.','edit':'Modifier','notifications':'Notifications','reminderDescription':'Un rappel quotidien à l’heure de votre choix.','reminderTime':'Heure du rappel','reminderBody':'Il est temps de poursuivre votre plan de rattrapage à votre rythme.','permissionDenied':'Les notifications Qadaa ne sont pas autorisées. Vous pouvez les activer dans les paramètres de l’appareil.','reminderSaved':'Rappel quotidien enregistré.''welcomeBack':'Bienvenue','fajr':'Fajr','dhuhr':'Dhouhr','asr':'Asr','maghrib':'Maghrib','isha':'Icha','recentRecords':'Prières récemment enregistrées','fiveDaily':'Les cinq prières quotidiennes','target':'Objectif','days':'jours','today':'Aujourd’hui','thisWeek':'Cette semaine','byPrayer':'Par prière','dailyProgress':'Progrès du jour','planRemaining':'Durée restante estimée','atTarget':'Avec votre objectif quotidien','noData':'Saisissez une estimation des années de prières à rattraper.', 'backup':'Sauvegarde', 'exportBackup':'Copier mes données', 'importBackup':'Restaurer une sauvegarde', 'backupHint':'Conservez une copie de votre historique de prières et de votre plan. Vos données restent sur cet appareil.', 'pasteBackup':'Collez votre sauvegarde Qadaa ici', 'backupCopied':'Sauvegarde copiée', 'backupRestored':'Données restaurées', 'backupInvalid':'Cette sauvegarde est invalide ou non prise en charge', 'restoreConfirm':'La restauration remplacera les données actuelles. Continuer ?', 'cancel':'Annuler', 'restore':'Restaurer', 'privacyLocal':'Vos données sont stockées localement sur cet appareil.', 'encouragementMessage':"Chaque prière enregistrée est un pas en avant. Avancez à votre rythme, sans pression ni comparaison.", 'encouragementEmpty':"Vous n’avez pas encore enregistré de prière de rattrapage. Enregistrez-en une pour voir votre progression ici.", 'goalReached':"Votre objectif quotidien est atteint. Bravo, gardez un rythme régulier et équilibré.", 'currentStreak':"Série actuelle", 'activeDays':"Jours actifs", 'lastPrayer':"Dernière prière enregistrée", 'noPrayerYet':"Aucune prière enregistrée pour le moment", 'todayTarget':"Progression de l’objectif quotidien", 'weeklyRecords':"Prières cette semaine", 'recordedTotal':"Prières enregistrées"
   },
   'de': {
-    'welcome':'Willkommen bei Qadaa','intro':'Dein Begleiter zum Nachholen versäumter Gebete','choose':'Sprache auswählen','continue':'Weiter','home':'Startseite','plan':'Tagesplan','stats':'Statistik','encouragement':'Motivation','settings':'Einstellungen','missed':'Versäumte Gebete','estimate':'Gebete schätzen','completed':'Nachgeholt','remaining':'Offen','total':'Geschätzte Gesamtzahl','progress':'Fortschritt','years':'Geschätzte Jahre','save':'Schätzung speichern','daily':'Tagesziel','prayers':'Gebete','savePlan':'Plan speichern','log':'Nachgeholtes Gebet erfassen','motivation':'Ein beständiger Schritt jeden Tag ist besser als aufzugeben.','verse':'„Verrichte das Gebet zu Meinem Gedenken“','verseRef':'Ta-Ha 20:14','subtitle':'Fange klein an und bleibe beständig','language':'Sprache','note':'Eine organisatorische Schätzung, keine religiöse Rechtsauskunft.','edit':'Bearbeiten','notifications':'Benachrichtigungen','welcomeBack':'Willkommen','fajr':'Fadschr','dhuhr':'Dhuhr','asr':'Asr','maghrib':'Maghrib','isha':'Ischa','recentRecords':'Zuletzt erfasste Gebete','fiveDaily':'Die fünf täglichen Gebete','target':'Ziel','days':'Tage','today':'Heute','thisWeek':'Diese Woche','byPrayer':'Nach Gebet','dailyProgress':'Heutiger Fortschritt','planRemaining':'Geschätzte Restdauer','atTarget':'Bei deinem Tagesziel','noData':'Gib eine Schätzung der Jahre mit versäumten Gebeten ein.', 'backup':'Datensicherung', 'exportBackup':'Meine Daten kopieren', 'importBackup':'Sicherung wiederherstellen', 'backupHint':'Bewahre eine Kopie deines Gebetsverlaufs und Plans auf. Deine Daten bleiben auf diesem Gerät.', 'pasteBackup':'Füge hier deine Qadaa-Sicherung ein', 'backupCopied':'Sicherung kopiert', 'backupRestored':'Daten wiederhergestellt', 'backupInvalid':'Diese Sicherung ist ungültig oder wird nicht unterstützt', 'restoreConfirm':'Beim Wiederherstellen werden aktuelle Daten ersetzt. Fortfahren?', 'cancel':'Abbrechen', 'restore':'Wiederherstellen', 'privacyLocal':'Deine Daten werden lokal auf diesem Gerät gespeichert.'
+    'welcome':'Willkommen bei Qadaa','intro':'Dein Begleiter zum Nachholen versäumter Gebete','choose':'Sprache auswählen','continue':'Weiter','home':'Startseite','plan':'Tagesplan','stats':'Statistik','encouragement':'Motivation','settings':'Einstellungen','missed':'Versäumte Gebete','estimate':'Gebete schätzen','completed':'Nachgeholt','remaining':'Offen','total':'Geschätzte Gesamtzahl','progress':'Fortschritt','years':'Geschätzte Jahre','save':'Schätzung speichern','daily':'Tagesziel','prayers':'Gebete','savePlan':'Plan speichern','log':'Nachgeholtes Gebet erfassen','motivation':'Ein beständiger Schritt jeden Tag ist besser als aufzugeben.','verse':'„Verrichte das Gebet zu Meinem Gedenken“','verseRef':'Ta-Ha 20:14','subtitle':'Fange klein an und bleibe beständig','language':'Sprache','note':'Eine organisatorische Schätzung, keine religiöse Rechtsauskunft.','edit':'Bearbeiten','notifications':'Benachrichtigungen','reminderDescription':'Eine tägliche Erinnerung zu deiner gewählten Zeit.','reminderTime':'Erinnerungszeit','reminderBody':'Setze deinen Qadaa-Plan in deinem eigenen Tempo fort.','permissionDenied':'Qadaa-Benachrichtigungen wurden nicht erlaubt. Du kannst sie in den Geräteeinstellungen aktivieren.','reminderSaved':'Tägliche Erinnerung gespeichert.''welcomeBack':'Willkommen','fajr':'Fadschr','dhuhr':'Dhuhr','asr':'Asr','maghrib':'Maghrib','isha':'Ischa','recentRecords':'Zuletzt erfasste Gebete','fiveDaily':'Die fünf täglichen Gebete','target':'Ziel','days':'Tage','today':'Heute','thisWeek':'Diese Woche','byPrayer':'Nach Gebet','dailyProgress':'Heutiger Fortschritt','planRemaining':'Geschätzte Restdauer','atTarget':'Bei deinem Tagesziel','noData':'Gib eine Schätzung der Jahre mit versäumten Gebeten ein.', 'backup':'Datensicherung', 'exportBackup':'Meine Daten kopieren', 'importBackup':'Sicherung wiederherstellen', 'backupHint':'Bewahre eine Kopie deines Gebetsverlaufs und Plans auf. Deine Daten bleiben auf diesem Gerät.', 'pasteBackup':'Füge hier deine Qadaa-Sicherung ein', 'backupCopied':'Sicherung kopiert', 'backupRestored':'Daten wiederhergestellt', 'backupInvalid':'Diese Sicherung ist ungültig oder wird nicht unterstützt', 'restoreConfirm':'Beim Wiederherstellen werden aktuelle Daten ersetzt. Fortfahren?', 'cancel':'Abbrechen', 'restore':'Wiederherstellen', 'privacyLocal':'Deine Daten werden lokal auf diesem Gerät gespeichert.'
  , 'encouragementMessage':"Jedes erfasste Gebet ist ein stetiger Schritt nach vorn. Gehe dein eigenes Tempo – ohne Druck und Vergleiche.", 'encouragementEmpty':"Du hast noch kein nachgeholtes Gebet erfasst. Erfasse dein erstes Gebet, um deinen Fortschritt hier zu sehen.", 'goalReached':"Du hast dein Tagesziel erreicht. Gut gemacht – bleib in einem ausgewogenen Tempo beständig.", 'currentStreak':"Aktuelle Serie", 'activeDays':"Aktive Tage", 'lastPrayer':"Zuletzt erfasstes Gebet", 'noPrayerYet':"Noch kein Gebet erfasst", 'todayTarget':"Fortschritt beim Tagesziel", 'weeklyRecords':"Gebete diese Woche", 'recordedTotal':"Erfasste Gebete"
   }
 };
@@ -249,7 +250,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   int tab = 0;
   int years = 0;
   int legacyCompleted = 0;
@@ -257,6 +258,9 @@ class _HomePageState extends State<HomePage> {
   int get completed => legacyCompleted + records.length;
   int dailyTarget = 5;
   bool loading = true;
+  bool reminderEnabled = false;
+  int reminderHour = 20;
+  int reminderMinute = 0;
 
   String get lang => widget.language;
   String t(String key) => tr(lang, key);
@@ -267,6 +271,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _loadData();
   }
 
@@ -279,8 +284,78 @@ class _HomePageState extends State<HomePage> {
       legacyCompleted = snapshot.legacyCompleted.clamp(0, 1000000000).toInt();
       records = snapshot.records;
       dailyTarget = (prefs.getInt('qadaa.dailyTarget') ?? 5).clamp(1, 20).toInt();
+      reminderEnabled = prefs.getBool('qadaa.reminder.enabled') ?? false;
+      reminderHour = (prefs.getInt('qadaa.reminder.hour') ?? 20).clamp(0, 23).toInt();
+      reminderMinute = (prefs.getInt('qadaa.reminder.minute') ?? 0).clamp(0, 59).toInt();
       loading = false;
     });
+    if (reminderEnabled) await _refreshReminder();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed && reminderEnabled) {
+      _refreshReminder();
+    }
+  }
+
+  Future<void> _refreshReminder() async {
+    final prefs = await SharedPreferences.getInstance();
+    await QadaaReminderService.instance.refreshDailyReminder(
+      enabled: reminderEnabled,
+      storedTime: '${reminderHour.toString().padLeft(2, '0')}:${reminderMinute.toString().padLeft(2, '0')}',
+      title: t('notifications'),
+      body: t('reminderBody'),
+    );
+    await prefs.setString('qadaa.reminder.timezoneCheckedAt', DateTime.now().toUtc().toIso8601String());
+  }
+
+  Future<void> _setReminderEnabled(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    if (!value) {
+      await QadaaReminderService.instance.disableDailyReminder();
+      await prefs.setBool('qadaa.reminder.enabled', false);
+      if (mounted) setState(() => reminderEnabled = false);
+      return;
+    }
+    final granted = await QadaaReminderService.instance.enableDailyReminder(
+      time: ReminderTime(hour: reminderHour, minute: reminderMinute),
+      title: t('notifications'),
+      body: t('reminderBody'),
+    );
+    if (!mounted) return;
+    if (!granted) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(t('permissionDenied'))));
+      return;
+    }
+    await prefs.setBool('qadaa.reminder.enabled', true);
+    await prefs.setInt('qadaa.reminder.hour', reminderHour);
+    await prefs.setInt('qadaa.reminder.minute', reminderMinute);
+    setState(() => reminderEnabled = true);
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(t('reminderSaved'))));
+  }
+
+  Future<void> _chooseReminderTime() async {
+    final chosen = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay(hour: reminderHour, minute: reminderMinute),
+    );
+    if (chosen == null) return;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('qadaa.reminder.hour', chosen.hour);
+    await prefs.setInt('qadaa.reminder.minute', chosen.minute);
+    if (!mounted) return;
+    setState(() {
+      reminderHour = chosen.hour;
+      reminderMinute = chosen.minute;
+    });
+    if (reminderEnabled) await _refreshReminder();
   }
 
   Future<void> _saveData() async {
@@ -489,6 +564,25 @@ class _HomePageState extends State<HomePage> {
         trailing: const Icon(Icons.chevron_right_rounded),
         onTap: _changeLanguage,
       )),
+      const SizedBox(height: 18),
+      Card(color: Colors.white, child: Column(children: [
+        SwitchListTile(
+          key: const ValueKey('daily-reminder-switch'),
+          secondary: const Icon(Icons.notifications_active_outlined, color: forest),
+          title: Text(t('notifications')),
+          subtitle: Text(t('reminderDescription')),
+          value: reminderEnabled,
+          onChanged: _setReminderEnabled,
+        ),
+        ListTile(
+          key: const ValueKey('daily-reminder-time'),
+          leading: const Icon(Icons.schedule_rounded, color: forest),
+          title: Text(t('reminderTime')),
+          trailing: Text(TimeOfDay(hour: reminderHour, minute: reminderMinute).format(context),
+              style: const TextStyle(fontWeight: FontWeight.w800, color: forest)),
+          onTap: _chooseReminderTime,
+        ),
+      ])),
       const SizedBox(height: 18),
       Text(t('backup'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: forest)),
       const SizedBox(height: 6),
