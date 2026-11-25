@@ -1,8 +1,5 @@
-gradle-wrapper.jar
 /.gradle
 /captures/
-/gradlew
-/gradlew.bat
 /local.properties
 GeneratedPluginRegistrant.java
 .cxx/
@@ -12,3 +9,8 @@ GeneratedPluginRegistrant.java
 key.properties
 **/*.keystore
 **/*.jks
+
+# Commit the Gradle wrapper so a clean clone can build Android without regenerating it.
+!/gradle/wrapper/gradle-wrapper.jar
+!/gradlew
+!/gradlew.bat
