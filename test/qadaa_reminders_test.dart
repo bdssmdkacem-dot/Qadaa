@@ -23,7 +23,7 @@ void main() {
 
     test('chooses the next same-day occurrence in the selected IANA zone', () {
       final riyadh = tz.getLocation('Asia/Riyadh');
-      final time = ReminderTime(hour: 8, minute: 30);
+      const time = ReminderTime(hour: 8, minute: 30);
       final next = time.nextOccurrence(riyadh, DateTime.utc(2026, 11, 25, 4));
       expect(next.year, 2026);
       expect(next.month, 11);
