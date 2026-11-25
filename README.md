@@ -29,6 +29,10 @@ The committed implementation plan and release gates live in [docs/COMMERCIAL_ROA
 
 New qadaa entries are stored locally with a prayer type and UTC timestamp. Existing installations that only stored a completed count are migrated into a legacy progress baseline so that their count is not discarded. Settings provide a versioned JSON backup that includes the estimate, daily target, legacy baseline, and prayer history; restore validates the entire payload and requires confirmation before replacing local data. Backup import is limited to 1 MiB and 10,000 records, and duplicate prayer/timestamp pairs are rejected. Local history has a separate 4 MiB / 100,000-record ceiling. The estimate still uses a configurable `years × 365 × 5` approximation and must not be presented as a religious ruling.
 
+## Progress and encouragement
+
+The encouragement tab is driven by the saved prayer history. It shows the number of individually recorded prayers, active calendar days, the current consecutive-day streak (counting a streak through yesterday when no prayer has yet been logged today), this week's records, today's progress against the editable target, and the latest recorded prayer with its local date. Empty history and completed daily-target states have separate messages in Arabic, Spanish, English, French, and German.
+
 ## Monetization
 
 Planned formats are an adaptive banner first, then an optional clearly labelled native placement and/or a non-essential rewarded placement only after core functionality and privacy checks pass. A paid ad-free option can be evaluated later. Ads must never block prayer logging or be shown on the first-run language selection screen. See the roadmap for the supplied AdMob IDs and acceptance gates.
