@@ -923,21 +923,7 @@ class _HomePageState extends State<HomePage> {
     )),
   );
 
-  Widget _simple(String title, IconData icon, String heading, String value, String body, VoidCallback action) => Center(
-    child: SingleChildScrollView(padding: const EdgeInsets.all(24), child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      CircleAvatar(radius: 44, backgroundColor: const Color(0xFFE4EFE5), child: Icon(icon, color: forest, size: 44)),
-      const SizedBox(height: 20),
-      Text(title, textAlign: TextAlign.center, style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w900, color: forest)),
-      const SizedBox(height: 16),
-      Text(heading, textAlign: TextAlign.center, style: const TextStyle(color: ink)),
-      const SizedBox(height: 8),
-      Text(value, textAlign: TextAlign.center, style: const TextStyle(fontSize: 21, fontWeight: FontWeight.w900, color: green)),
-      const SizedBox(height: 10),
-      Text(body, textAlign: TextAlign.center, style: const TextStyle(height: 1.6, color: ink)),
-      const SizedBox(height: 22),
-      FilledButton(onPressed: action, style: FilledButton.styleFrom(backgroundColor: forest), child: Text(t('edit'))),
-    ])),
-  );
+
 }
 
 class SceneryPainter extends CustomPainter {
